@@ -10,10 +10,7 @@ decon.pdf: decon.tex crisdefs.tex figures/*.pdf decon.bib Makefile
 	rm decon.pdf 2> /dev/null || true
 
 show: decon.pdf
-	evince decon.pdf
-
-install: decon.pdf
-	cp -a decon.pdf ../..
+	evince decon.pdf 2> /dev/null &
 
 clean:
 	rm decon.log decon.aux decon.toc decon.vrb decon.bbl \

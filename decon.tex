@@ -5,7 +5,7 @@
 \input{crisdefs.tex}
 
 \title{AIRS Deconvolution and Translation \\
-  from AIRS to CrIS IR Sounders \\
+  from the AIRS to CrIS IR Sounders \\
   \vspace{3mm}
   {****} DRAFT {****}\\
 }
@@ -23,83 +23,47 @@
 
 \section{Introduction}
 
-Upwelling infrared radiation as measured by the {\airs}
-\cite{airs1}, {\iasi} \cite{iasi1}, and {\cris} \cite{cris1,cris2}
-sounders is a significant part of the long term climate record.  We
-would like to treat this information as a single data set but the
-instruments have different spectral resolutions, channel response
-functions, and band spans.  As a significant step in addressing this
-problem we consider several channel radiance translations---{\iasi}
-to high resolution {\cris}, {\iasi} to {\airs}, {\airs} to standard
-resolution {\cris}, and high resolution {\cris} to {\airs}.
+Upwelling infrared radiation as measured by the {\airs} \cite{airs1}
+and {\cris} \cite{cris1,cris2} sounders is a significant part of the
+long term climate record.  We would like to treat this information as
+a single data set but the instruments have different spectral
+resolutions, channel response functions, and band spans.  As a step
+in addressing this problem we consider the translation of channel
+radiances from {\airs} to standard resolution {\cris}.
 
-Translation from {\airs} to {\cris} presents a special challenge
-because {\cris} and {\iasi} are Michaelson interferometers with
-parametrized response functions, while {\airs} is a grating
-spectrometer with channel center frequencies and individually
-tabulated spectral response functions determined by the focal plane
-geometery.  In section \ref{decon} we show how to take advantage of
-detailed knowledge of the {\airs} spectral response functions (SRFs)
-to deconvolve {\airs} channel radiances to a resolution-enhanced
-intermediate representation.
+Translation from {\airs} to {\cris} involves more that simple
+resampling for two reasons.  First, {\airs} is a grating spectrometer
+with a distinct response function for each channel determined by the
+focal plane geometery, while {\cris} is a Michaelson interferometer
+with a sinc ILS after calibration and corrections.  Second, we can
+take advantage of our detailed knowledge of the {\airs} spectral
+response functions (SRFs) and their overlap to deconvolve channel
+radiances to a resolution-enhanced intermediate representation.
 
-The translations presented here are validated by comparison with
-calculated reference truth.  For example to test the {\iasi} to
-{\airs} translation we start with 49 fitting profiles spanning a
-significant range of atmospheric conditions \cite{sarta1,sarta2}.
+The {\airs} to {\cris} translation then consists of two steps,
+deconvolution of the {\airs} channel radiances to an intermediate
+grid, typically $0.1$~\wn, the approximate resolution of the
+tabulated {\airs} SRFs, followed by reconvolution to the {\cris} 
+user grid.  In section \ref{airs2cris} the reconvolution as more
+conventional resampling, together with channel intersection and
+bandpass filtering.  In section \ref{statfix} we show how to further
+improve residuals by adding a statistically based correction.
+
+Translations are validated by comparison with calculated reference
+truth.  To test the {\airs} to {\cris} translation we start with
+profiles spanning a significant range of atmospheric conditions.
 Upwelling radiance is calculated at a 0.0025 {\wn} grid with kcarta
-\cite{kcarta1} over a band spanning the {\airs} and {\iasi} response
+\cite{kcarta1} over a band spanning the {\airs} and {\cris} response
 functions.  ``True {\airs}'' is calculated from this by convolving
-the kcarta radiances with {\airs} SRFs, and ``true {\iasi}'' by
-convolving kcarta radiances to the {\iasi} instrument
-specifications.  {\iasi} is then translated to {\airs} (we call this
-``{\iasi} {\airs}'') and compared with true {\airs}.  This sort of
-validation assumes perfect knowledge of the {\airs} and {\iasi}
-instrument response functions and so gives only a lower bound on
-residuals, and on how well the translations can work in practice.
-The better we know the response functions, the closer practical
-translations can approach these limits.
+the kcarta radiances with the tabulated {\airs} SRFs, and ``true
+{\cris}'' by convolving kcarta radiances to the {\cris} instrument
+specifications.  {\airs} is then translated to {\cris} to get
+``{\airs} {\cris}'' and compared with true {\cris}.  Details are
+presented in sections \ref{airs2cris} and \ref{statfix}
 
-The conversions here are presented in order of the size of the
-residuals, with {\iasi} to high resolution {\cris} most accurate and
-high resolution {\cris} to {\airs} the least.  After the sections on
-translation, the {\airs} deconvolution is examined in greater
-detail.  This report is the theoretical basis document for the
-sounder radiance translations implemented in the airs\_decon and
-iasi\_deon git repositories.  In addition to the translations, the
-repositories include the test and validation code used to produce
-the results shown here.  They are available at github,
-\begin{verbatim}
-  https://github.com/strow/airs_deconv.git
-  https://github.com/strow/iasi_decon.git
-\end{verbatim}
-
+\FloatBarrier
 \section{AIRS Deconvolution}
 \label{decon}
-
-\renewcommand{\vec}[1]{\mathbf{#1}}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_sample_SRFs.pdf}
-  \caption{sample adjacent {\airs} spectral response functions}
-  \label{srfs1}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_decon_res.pdf}
-  \caption{deconvolved {\airs} and kcarta 0.0025 {\wn} radiances
-    convolved to a sinc ILS at 0.2 {\wn}}
-  \label{dsinc}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_decon_basis.pdf}
-  \caption{sample basis function for deconvolved {\airs} radiances}
-  \label{dbasis}
-\end{figure}
 
 The {\airs} spectral response functions model channel response as a
 function of frequency and associate channels with nominal center
@@ -108,6 +72,29 @@ response function or {\srf} $\sigma_i(v)$ such that the channel
 radiance $c_i = \int \sigma_i(v)r(v)\,dv$, where $r$ is radiance at
 frequency $v$.  The center or peak of $\sigma_i$ is the nominal
 channel frequency.
+
+\begin{figure} % source plot_SRFs.m
+  \centering
+  \includegraphics[height=8cm]{figures/airs_sample_SRFs.pdf}
+  \caption{sample adjacent {\airs} spectral response functions}
+  \label{srfs1}
+\end{figure}
+
+\begin{figure} % source cris_test7.m
+  \centering
+  \includegraphics[height=8cm]{figures/airs_decon_res.pdf}
+  \caption{detail of deconvolved {\airs} and kcarta 0.0025 {\wn}
+    radiances convolved to a sinc ILS at 0.2 {\wn}}
+  \label{dsinc}
+\end{figure}
+
+\begin{figure} % source plot_SRFs.m
+  \centering
+  \includegraphics[height=8cm]{figures/airs_decon_basis.pdf}
+  \caption{sample basis function for the deconvolved {\airs}
+    radiances}
+  \label{dbasis}
+\end{figure}
 
 Figure \ref{srfs1} shows a typical subset of {\airs} SRFs.  Note the
 significant overlap in the wings.  This allows the deconvolution to
@@ -177,14 +164,11 @@ deconvolution, that is, a column of the pseudo-inverse $S_b^{-1}$.
 \label{airs2cris}
 
 For the {\cris} standard resolution mode the channel spacing is
-0.625 {\wn} for the LW, 1.25 {\wn} for the MW, and 2.5 {\wn} for the
-SW bands.  The {\iasi} deconvolution was the key step in the {\iasi}
-to {\cris} and {\iasi} to {\airs} translations.  Similarly, {\airs}
-deconvolution is central to the {\airs} to {\cris} translation and
-is presented in detail in section \ref{decon}.  The first step in
-the {\airs} L1c to {\cris} translation is to deconvolve the {\airs}
-channel radiances to a 0.1 {\wn} intermediate grid, the nominal
-{\airs} SRF resolution.  Then for each {\cris} band,
+$0.625$ {\wn} for the LW, 1.25 {\wn} for the MW, and 2.5 {\wn} for
+the SW bands.  The first step in the {\airs} L1c to {\cris}
+translation is to deconvolve the {\airs} channel radiances to a 0.1
+{\wn} intermediate grid, the nominal {\airs} SRF resolution.  Then
+for each {\cris} band,
 
 \begin{itemize}
   \item find the {\airs} and {\cris} band intersection
@@ -197,74 +181,75 @@ channel radiances to a 0.1 {\wn} intermediate grid, the nominal
 
 \end{itemize}
 
-Figure \ref{aclws} shows true {\cris}, true {\airs}, deconvolved
-{\airs}, and {\airs} {\cris}.  At this level of detail we mainly see
-the greater fine structure in the deconvolution.  Figure \ref{aclwz}
-shows details from 660 to 680 {\wn}.  Note the similarity to the
-{\iasi} deconvolution in figure \ref{iazoom}.  The remaining figures
-show true {\cris} minus {\airs} {\cris} for the 49 fitting profiles,
-with and without Hamming apodization for each of the {\cris} bands.
-The residuals are significantly reduced with apodization but are
-larger than for the {\iasi} to {\cris} translation.
+Translations are validated by comparison with calculated reference
+truth.  For the results presented in this section we start with 49
+fitting profiles spanning a significant range of atmospheric
+conditions \cite{sarta1,sarta2}.  Upwelling radiance is calculated at
+a 0.0025 {\wn} grid with kcarta \cite{kcarta1} over a band spanning
+the {\airs} and {\cris} response functions.  ``True {\airs}'' is
+calculated from this by convolving the kcarta radiances with {\airs}
+SRFs, and ``true {\cris}'' by convolving kcarta radiances to the
+{\cris} instrument specifications.  {\airs} is then translated to
+{\cris} (we call this ``{\airs} {\cris}'') and compared with true
+{\cris}.  This sort of validation assumes perfect knowledge of the
+{\airs} and {\cris} instrument response functions and so gives only a
+lower bound on residuals, and on how well the translations can work
+in practice.  The better we know the response functions, the closer
+practical translations can approach these limits.
 
-\begin{figure}
+Figure \ref{aclws} shows true {\cris}, true {\airs}, deconvolved
+{\airs}, and {\airs} {\cris}.  In the first subplot we mainly see the
+greater fine structure in the deconvolution.  The second subplot
+shows details from 660 to 680 {\wn}.  The remaining figures show true
+{\cris} minus {\airs} {\cris} for the 49 fitting profiles, with and
+without Hamming apodization, for each of the {\cris} bands.  The
+residuals are significantly reduced with apodization.
+
+\begin{figure} % source a2cris_test1
   \centering
   \includegraphics[height=8cm]{figures/a2cris_spec_LW.pdf}
   \caption{true {\cris}, true {\airs}, deconvolved {\airs}, and
-    {\airs} {\cris} }
+    {\airs} {\cris}}
   \label{aclws}
 \end{figure}
 
-\begin{figure}
+\begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_LW_noap.pdf}
-  \caption{Mean and standard deviation of unapodized {\airs} {\cris}
-    minus true {\cris}, for the {\cris} LW band }
+  \includegraphics[height=8cm]{figures/a2cris_diff_LW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
+    band}
   \label{aclwd}
 \end{figure}
 
-\begin{figure}
+\begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_LW_hamm.pdf}
-  \caption{Mean and standard deviation of Hamming apodized {\airs}
-      {\cris} minus true {\cris}, for the {\cris} LW band }
-  \label{aclwdh}
+  \includegraphics[height=8cm]{figures/a2cris_diff_MW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
+    band}
+  \label{aclwd}
 \end{figure}
 
-\begin{figure}
+\begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_MW_noap.pdf}
-  \caption{Mean and standard deviation of unapodized {\airs} {\cris}
-    minus true {\cris}, for the {\cris} MW band }
-  \label{acmwd}
+  \includegraphics[height=8cm]{figures/a2cris_diff_SW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
+    band}
+  \label{aclwd}
 \end{figure}
 
-\begin{figure}
+\begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_MW_hamm.pdf}
-  \caption{Mean and standard deviation of Hamming apodized {\airs}
-      {\cris} minus true {\cris}, for the {\cris} MW band }
-  \label{acmwdh}
+  \includegraphics[height=8cm]{figures/a2cris_interp_LW.pdf}
+  \caption{spline interpolation, interpolation with convolution, 
+    and deconvolution with convolution for the {\cris} LW band}
+  \label{intpLW}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_SW_noap.pdf}
-  \caption{Mean and standard deviation of unapodized {\airs} {\cris}
-    minus true {\cris}, for the {\cris} SW band }
-  \label{acswd}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_cris_diff_SW_hamm.pdf}
-  \caption{Mean and standard deviation of Hamming apodized {\airs}
-      {\cris} minus true {\cris}, for the {\cris} SW band }
-  \label{acswdh}
-\end{figure}
-
-For the {\airs} to {\cris} translation deconvolution works better
-than both simple interpolation and interpolation (rather than
+Deconvolution works better for the {\airs} to {\cris} 
+translation than either interpolation or interpolation (rather than
 deconvolution) to an intermediate grid followed by convolution to
 {\cris} radiances.  For the first case we start with true {\airs} and
 interpolate radiances directly to the {\cris} user grid with a cubic
@@ -272,41 +257,19 @@ spline.  For the second we interpolate true {\airs} to the 0.1 {\wn}
 intermediate grid with a cubic spline and then convolve this to the
 use {\cris} user grid.
 
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_cris_intp_LW.pdf}
-  \caption{simple interpolation and interpolation with convolution, 
-    for the {\cris} LW band}
-  \label{intpLW}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_cris_intp_MW.pdf}
-  \caption{simple interpolation and interpolation with convolution, 
-    for the {\cris} MW band}
-  \label{intpMW}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[height=8cm]{figures/airs_cris_intp_SW.pdf}
-  \caption{simple interpolation and interpolation with convolution, 
-    for the {\cris} SW band}
-  \label{intpSW}
-\end{figure}
-
-Figure \ref{intpLW} shows interpolated {\cris} minus true {\cris}
-for both interpolation tests for the LW band, without any
-apodization.  While the two-step interpolation works a little better
-than the simple spline, both residuals are significantly larger than
-for the translation with deconvolution shown in figure \ref{aclwd}.
-Figures \ref{intpMW} and \ref{intpSW} show similar results for the
-MW and SW bands.  Deconvolution is significantly better for the MW,
-(figure \ref{acmwd}) while the comparison is less clear for the SW
-(figure \ref{acswd}).  Comparisons with Hamming apodization show the
+Figure \ref{intpLW} shows interpolated {\cris} minus true {\cris} 
+for the LW band, without any apodization.  While the two-step
+interpolation works a little better than the simple spline, both
+residuals are significantly larger than for the translation with
+deconvolution.  Results for the MW and SW are similar.  Deconvolution
+is significantly better for the MW, while the comparison is less
+clear for the SW.  Comparisons with Hamming apodization show the
 residuals with deconvolution are significantly less for all three
 bands.
+
+\FloatBarrier
+\section{Statisitcal Refinement}
+\label{statfix}
 
 \FloatBarrier
 \bibliographystyle{abbrv}
