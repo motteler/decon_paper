@@ -4,10 +4,10 @@ This is the AIRS decon and AIRS to CrIS translation writeup.
 To start with this is just a copy of the doc/decon ATBD from the
 airs_decon repo.
 
-proposed outline
+outline
 
   intro
-  translation and deconvolution 
+  airs deconvolution 
   airs to cris translation
   statistical correction
   applications

@@ -32,34 +32,22 @@ in addressing this problem we consider the translation of channel
 radiances from {\airs} to standard resolution {\cris}.
 
 Translation from {\airs} to {\cris} involves more that simple
-resampling for two reasons.  First, {\airs} is a grating spectrometer
-with a distinct response function for each channel determined by the
-focal plane geometery, while {\cris} is a Michaelson interferometer
-with a sinc ILS after calibration and corrections.  Second, we can
-take advantage of our detailed knowledge of the {\airs} spectral
-response functions (SRFs) and their overlap to deconvolve channel
-radiances to a resolution-enhanced intermediate representation.
+resampling.  {\airs} is a grating spectrometer with a distinct
+response function for each channel determined by the focal plane
+geometery, while {\cris} is a Michaelson interferometer with a sinc
+ILS after calibration and corrections.  In section \ref{decon} we
+show how to take advantage of our detailed knowledge of the {\airs}
+spectral response functions (SRFs) and their overlap to deconvolve
+channel radiances to a resolution-enhanced intermediate
+representation, typically $0.1$~\wn, the approximate resolution of
+the tabulated {\airs} SRFs.
 
 The {\airs} to {\cris} translation then consists of two steps,
-deconvolution of the {\airs} channel radiances to an intermediate
-grid, typically $0.1$~\wn, the approximate resolution of the
-tabulated {\airs} SRFs, followed by reconvolution to the {\cris} 
-user grid.  In section \ref{airs2cris} the reconvolution as more
-conventional resampling, together with channel intersection and
-bandpass filtering.  In section \ref{statfix} we show how to further
-improve residuals by adding a statistically based correction.
-
-Translations are validated by comparison with calculated reference
-truth.  To test the {\airs} to {\cris} translation we start with
-profiles spanning a significant range of atmospheric conditions.
-Upwelling radiance is calculated at a 0.0025 {\wn} grid with kcarta
-\cite{kcarta1} over a band spanning the {\airs} and {\cris} response
-functions.  ``True {\airs}'' is calculated from this by convolving
-the kcarta radiances with the tabulated {\airs} SRFs, and ``true
-{\cris}'' by convolving kcarta radiances to the {\cris} instrument
-specifications.  {\airs} is then translated to {\cris} to get
-``{\airs} {\cris}'' and compared with true {\cris}.  Details are
-presented in sections \ref{airs2cris} and \ref{statfix}
+deconvolution of the {\airs} channel radiances to the intermediate
+grid, typically $0.1$~\wn, followed by reconvolution to the {\cris}
+user grid.  Section \ref{airs2cris} gives the details.  In section
+\ref{statfix} we show how to further improve residuals by adding a
+statistically based correction.
 
 \FloatBarrier
 \section{AIRS Deconvolution}
@@ -164,11 +152,11 @@ deconvolution, that is, a column of the pseudo-inverse $S_b^{-1}$.
 \label{airs2cris}
 
 For the {\cris} standard resolution mode the channel spacing is
-$0.625$ {\wn} for the LW, 1.25 {\wn} for the MW, and 2.5 {\wn} for
+$0.625$ {\wn} for the LW, 1.25~{\wn} for the MW, and 2.5~{\wn} for
 the SW bands.  The first step in the {\airs} L1c to {\cris}
-translation is to deconvolve the {\airs} channel radiances to a 0.1
-{\wn} intermediate grid, the nominal {\airs} SRF resolution.  Then
-for each {\cris} band,
+translation is to deconvolve the {\airs} channel radiances to the
+0.1~{\wn} intermediate grid, the nominal {\airs} SRF resolution.
+Then for each {\cris} band, we
 
 \begin{itemize}
   \item find the {\airs} and {\cris} band intersection
@@ -184,33 +172,42 @@ for each {\cris} band,
 Translations are validated by comparison with calculated reference
 truth.  For the results presented in this section we start with 49
 fitting profiles spanning a significant range of atmospheric
-conditions \cite{sarta1,sarta2}.  Upwelling radiance is calculated at
-a 0.0025 {\wn} grid with kcarta \cite{kcarta1} over a band spanning
-the {\airs} and {\cris} response functions.  ``True {\airs}'' is
-calculated from this by convolving the kcarta radiances with {\airs}
-SRFs, and ``true {\cris}'' by convolving kcarta radiances to the
-{\cris} instrument specifications.  {\airs} is then translated to
-{\cris} (we call this ``{\airs} {\cris}'') and compared with true
-{\cris}.  This sort of validation assumes perfect knowledge of the
-{\airs} and {\cris} instrument response functions and so gives only a
-lower bound on residuals, and on how well the translations can work
-in practice.  The better we know the response functions, the closer
-practical translations can approach these limits.
+conditions \cite{sarta1,sarta2}.  Upwelling radiance is calculated
+at a 0.0025 {\wn} grid with kcarta \cite{kcarta1} over a band
+spanning the {\airs} and {\cris} response functions.  ``True
+{\airs}'' is calculated from this by convolving the kcarta radiances
+with {\airs} SRFs, and ``true {\cris}'' by convolving kcarta
+radiances to the {\cris} instrument specifications.  {\airs} is then
+translated to {\cris} to get ``{\airs} {\cris}'', and this is
+compared with true {\cris}.  This validation assumes perfect
+knowledge of the {\airs} and {\cris} instrument response functions
+and so gives only a lower bound on residuals, and on how well the
+translations can work in practice.  The better we know the response
+functions, the closer real translations can approach these limits.
 
-Figure \ref{aclws} shows true {\cris}, true {\airs}, deconvolved
-{\airs}, and {\airs} {\cris}.  In the first subplot we mainly see the
-greater fine structure in the deconvolution.  The second subplot
-shows details from 660 to 680 {\wn}.  The remaining figures show true
-{\cris} minus {\airs} {\cris} for the 49 fitting profiles, with and
-without Hamming apodization, for each of the {\cris} bands.  The
-residuals are significantly reduced with apodization.
+Figure \ref{specLW} shows true {\cris}, true {\airs}, deconvolved
+{\airs}, and {\airs} {\cris}.  In the first subplot we mainly see
+the greater fine structure in the deconvolution.  The second subplot
+shows details from 660 to 680 {\wn}.  
+
+Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
+and standard deviation of true {\cris} minus {\airs} {\cris} for the
+49 fitting profiles, with and without Hamming apodization, for each
+of the {\cris} bands.  Figures \ref{meanAll} and \ref{stdAll}
+summarize the mean and standard deviation of the residuals for
+Hamming apodized radiances.  The residual has a high frequency
+component with a period of 2 channel steps that is significantly
+reduced by the apodization.  The constant or DC bias (the mean of
+the residuals over frequency) is close to zero for the apodized
+residuals: $0.002$~K for the LW, $-0.005$~K for the MW, and
+$0.001$~K for the SW.
 
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[height=8cm]{figures/a2cris_spec_LW.pdf}
   \caption{true {\cris}, true {\airs}, deconvolved {\airs}, and
     {\airs} {\cris}}
-  \label{aclws}
+  \label{specLW}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
@@ -219,7 +216,7 @@ residuals are significantly reduced with apodization.
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
     band}
-  \label{aclwd}
+  \label{diffLW}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
@@ -228,7 +225,7 @@ residuals are significantly reduced with apodization.
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
     band}
-  \label{aclwd}
+  \label{diffMW}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
@@ -237,7 +234,21 @@ residuals are significantly reduced with apodization.
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
     band}
-  \label{aclwd}
+  \label{diffSW}
+\end{figure}
+
+\begin{figure} % source a2cris_plot2.m
+  \centering
+  \includegraphics[height=8cm]{figures/combo_ap_dif_mean.pdf}
+  \caption{Mean apodized residuals for all three bands}
+  \label{meanAll}
+\end{figure}
+
+\begin{figure} % source a2cris_plot2.m
+  \centering
+  \includegraphics[height=8cm]{figures/combo_ap_dif_std.pdf}
+  \caption{Standard deviation apodized residuals for all three bands}
+  \label{stdAll}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
@@ -248,28 +259,54 @@ residuals are significantly reduced with apodization.
   \label{intpLW}
 \end{figure}
 
-Deconvolution works better for the {\airs} to {\cris} 
-translation than either interpolation or interpolation (rather than
-deconvolution) to an intermediate grid followed by convolution to
-{\cris} radiances.  For the first case we start with true {\airs} and
-interpolate radiances directly to the {\cris} user grid with a cubic
-spline.  For the second we interpolate true {\airs} to the 0.1 {\wn}
-intermediate grid with a cubic spline and then convolve this to the
-use {\cris} user grid.
-
-Figure \ref{intpLW} shows interpolated {\cris} minus true {\cris} 
-for the LW band, without any apodization.  While the two-step
-interpolation works a little better than the simple spline, both
-residuals are significantly larger than for the translation with
-deconvolution.  Results for the MW and SW are similar.  Deconvolution
-is significantly better for the MW, while the comparison is less
-clear for the SW.  Comparisons with Hamming apodization show the
-residuals with deconvolution are significantly less for all three
-bands.
+Deconvolution works better than interpolation for the {\airs} to
+{\cris} translation.  We consider two cases.  For the first, start
+with true {\airs} and interpolate radiances directly to the {\cris}
+user grid with a cubic spline.  For the second, interpolate true
+{\airs} to the 0.1 {\wn} intermediate grid with a cubic spline and
+then convolve this to the use {\cris} user grid.  Figure~\ref{intpLW}
+shows interpolated {\cris} minus true {\cris} for the LW band,
+without apodization.  The two-step interpolation works a little
+better than the simple spline, but both residuals are significantly
+larger than for the translation with deconvolution.  Results for the
+MW are similar, while the unapodized comparison is less clear for the
+SW.  With Hamming apodization, the residuals with deconvolution are
+significantly less than interpolation for all three bands.
 
 \FloatBarrier
 \section{Statisitcal Refinement}
 \label{statfix}
+
+\begin{figure} % source a2cris_stat4.m
+  \centering
+  \includegraphics[height=8cm]{figures/a2cris_stat_LW.pdf}
+  \caption{Mean and standard deviation of LW corrected apodized
+    residuals for the independent subset of the 7377 profile set}
+  \label{statLW}
+\end{figure}
+
+\begin{figure} % source a2cris_stat4.m
+  \centering
+  \includegraphics[height=8cm]{figures/a2cris_coef_LW.pdf}
+  \caption{LW $a$ and $b$ weights for the linear correction $ax+b$}
+  \label{coefLW}
+\end{figure}
+
+\begin{figure} % source a2cris_stat4.m
+  \centering
+  \includegraphics[height=8cm]{figures/a2cris_stat_MW.pdf}
+  \caption{Mean and standard deviation of MW corrected apodized
+    residuals for the independent subset of the 7377 profile set}
+  \label{statMW}
+\end{figure}
+
+\begin{figure} % source a2cris_stat4.m
+  \centering
+  \includegraphics[height=8cm]{figures/a2cris_stat_SW.pdf}
+  \caption{Mean and standard deviation of SW corrected apodized
+    residuals for the independent subset of the 7377 profile set}
+  \label{statSW}
+\end{figure}
 
 \FloatBarrier
 \bibliographystyle{abbrv}
