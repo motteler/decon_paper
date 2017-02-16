@@ -31,6 +31,8 @@ resolutions, channel response functions, and band spans.  As a step
 in addressing this problem we consider the translation of channel
 radiances from {\airs} to standard resolution {\cris}.
 
+[need paragraph on current applications]
+
 Translation from {\airs} to {\cris} involves more that simple
 resampling.  {\airs} is a grating spectrometer with a distinct
 response function for each channel determined by the focal plane
@@ -68,20 +70,20 @@ channel frequency.
   \label{srfs1}
 \end{figure}
 
-\begin{figure} % source cris_test7.m
-  \centering
-  \includegraphics[height=8cm]{figures/airs_decon_res.pdf}
-  \caption{detail of deconvolved {\airs} and kcarta 0.0025 {\wn}
-    radiances convolved to a sinc ILS at 0.2 {\wn}}
-  \label{dsinc}
-\end{figure}
-
 \begin{figure} % source plot_SRFs.m
   \centering
   \includegraphics[height=8cm]{figures/airs_decon_basis.pdf}
   \caption{sample basis function for the deconvolved {\airs}
     radiances}
   \label{dbasis}
+\end{figure}
+
+\begin{figure} % source cris_test7.m
+  \centering
+  \includegraphics[height=8cm]{figures/airs_decon_res.pdf}
+  \caption{detail of deconvolved {\airs} and kcarta 0.0025 {\wn}
+    radiances convolved to a sinc ILS at 0.2 {\wn}}
+  \label{dsinc}
 \end{figure}
 
 Figure \ref{srfs1} shows a typical subset of {\airs} SRFs.  Note the
@@ -139,13 +141,21 @@ and want to find radiances $x$.  Since $n < m < k$, as with $S_k$
 the system will be underdetermined but more manageable because $m$
 is approximately 40 times less than $k$.  We use a Moore-Penrose
 pseudoinverse as $S_b^{-1}$.  Then $x = S_b^{-1} c$ gives us
-deconvolved radiances at the {\srf} tabulation grid. 
+deconvolved radiances at the {\srf} tabulation grid.  Figure
+\ref{dbasis} shows a typical basis function for the {\airs}
+deconvolution, that is, a column of the pseudo-inverse $S_b^{-1}$.
 
 The {\airs} deconvolution gives a significant resolution enhancement.
 Figure \ref{dsinc} shows LW detail of deconvolved {\airs} together
 with kcarta radiances convolved directly to a 0.2 {\wn} sinc ILS.
-Figure \ref{dbasis} shows a typical basis function for the {\airs}
-deconvolution, that is, a column of the pseudo-inverse $S_b^{-1}$.
+This is not to claim that the deconvolution resolution is 0.2~{\wn}
+everywhere, among other things this will depend on the AIRS channel
+spacing.  But it is significantly greater than the {\cris} $0.625$
+{\wn} LW resolution.  
+
+[ need to look at effective deconvolution resolution for the MW and
+  SW bands and to compare this with the $0.625$~{\wn} resolution for
+  the {\cris} high resolution mode for those bands ]
 
 \FloatBarrier
 \section{AIRS to CrIS translation}
@@ -276,6 +286,31 @@ significantly less than interpolation for all three bands.
 \FloatBarrier
 \section{Statisitcal Refinement}
 \label{statfix}
+
+For these tests we start with kcarta radiances calculated from a 
+set of 7377 radiances calculated from mostly cloudy AIRS profiles.
+These are split randomly into dependent and independent sets.  
+Bias or regression coefficients are taken from the dependent set,
+and tests are done on the independent set.  As with the 49 profile
+set ``true {\airs}'' channel radiances are calculated by convolving
+with {\airs} SRFs and ``true {\cris}'' by convolving to the {\cris}
+instrument specifications.
+
+Figure \ref{statLW} is a comparison of bias, linear, and quadratic
+corrections for a representative dependend/independent partition.
+The residuals vary with the partition but the standard deviation is
+consistently significantly less for the linear and quadratic cases.
+The linear and quadratic corrections are nearly identical, the
+quadratic coefficient is very close to zero.  Figure \ref{coefLW}
+shows the weights for the linear fits shown above.  The $a$ weight
+is very close to 1 and the $b$ weight to earlier bias values.
+
+Figures \ref{statMW} and \ref{statSW} show the linear correction 
+is giving a similar significant improvement in the MW standard
+deviation in comparison with the LW, and a small improvement in the
+SW.  As in the LW the mean residuals vary significantly depending on
+the dependent/independent partition, but the standard deviations are
+relatively stable.
 
 \begin{figure} % source a2cris_stat4.m
   \centering
