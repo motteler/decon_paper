@@ -33,18 +33,20 @@ spectral resolutions, channel response functions, and band spans.
 As a step in addressing this problem we consider the translation of
 channel radiances from {\airs} to standard resolution {\cris}.
 
-Translation from {\airs} to {\cris} involves more that simple
+Translation from {\airs} to {\cris} involves more that basic
 resampling.  {\airs} is a grating spectrometer with a distinct
 response function for each channel determined by the focal plane
 geometery, while {\cris} is a Michaelson interferometer with a sinc
-ILS after calibration and corrections.  In section \ref{decon} we
-show how to take advantage of our detailed knowledge of the {\airs}
-spectral response functions (SRFs) and their overlap to deconvolve
-channel radiances to a resolution-enhanced intermediate
-representation, typically a $0.1$~\wn\ grid, the approximate
-resolution of the tabulated {\airs} SRFs.
+response function, after calibration and corrections.  In section
+\ref{decon} we show how to take advantage of our detailed knowledge
+of the {\airs} spectral response functions (SRFs) and their overlap
+to deconvolve channel radiances to a resolution-enhanced
+intermediate representation, typically a $0.1$~\wn\ grid, the
+approximate resolution of the tabulated {\airs} SRFs.  This can be
+reconvolved to an idealized grating instrument, and the resolving
+power of the reconvolution measured.
 
-The {\airs} to {\cris} translation then consists of two steps,
+Similarly, the {\airs} to {\cris} translation consists of two steps,
 deconvolution of the {\airs} channel radiances to the intermediate
 grid, followed by reconvolution to the {\cris} user grid.  Section
 \ref{airs2cris} gives the details and validation tests.  In section
@@ -68,8 +70,8 @@ channel frequency.
   \centering
   \includegraphics[height=7.5cm]{figures/airs_sample_srfs.pdf}
   \caption{sample {\airs} spectral response functions from the low
-    and high ends of the band.   The dashed line is a fitted
-    symmetrical function.}
+    and high ends of the band.   The dashed line is a generalized
+    Gaussian function.}
   \label{srfs1}
 \end{figure}
 
@@ -112,16 +114,18 @@ $n\times k$ array such that $s_{i,j} = \sigma_i(v_j)/w_i$, where
 $w_i = \sum_j \sigma_i(v_j)$, that is where row $i$ is $\sigma_i(v)$
 tabulated at the grid $\vec v$ and normalized so the row sum is 1.
 If the channel centers are in increasing order $S_k$ is banded, and
-if they are not too close the rows are linearly independent.  $S_k$
-is a linear transform whose domain is radiance at the grid $\vec v$
-and whose range is channel radiances.  If $r$ is radiance at the
-grid $\vec v$, then $c = S_k r$ gives a good approximation of the
-channel radiances $c_i = \int\sigma_i(v)r(v)\,dv$.
+if they are not too close (as is the case for a few of the L1b
+channels) the rows are linearly independent.  $S_k$ is a linear
+transform whose domain is radiance at the grid $\vec v$ and whose
+range is channel radiances.  If $r$ is radiance at the grid $\vec
+v$, then $c = S_k r$ gives a good approximation of the channel
+radiances $c_i = \int\sigma_i(v)r(v)\,dv$.
 
 In practice this is how we convolve kcarta or other simulated
-radiances to get {\airs} channel radiances.  We construct $S_k$
-either explicitly or implicitly from {\airs} {\srf} tabulations.
-The matrix $S_k$ in the former case is large but manageable with a
+radiances to get {\airs} channel radiances, for example to get
+reference truth for the tests shown here.  We construct $S_k$ either
+explicitly or implicitly from the {\airs} {\srf} tabulations.  The
+matrix $S_k$ in the former case is large but manageable with a
 banded or sparse representation.
 
 Suppose we have $S_k$ and channel radiances $c$ and want to find
@@ -148,75 +152,94 @@ to find radiances $x$.  Since $n < m < k$, as with $S_k$ the system
 will be underdetermined, but more manageable because $m$ is
 approximately 40 times less than $k$.  After some preliminary tests
 we settled on a Moore-Penrose pseudoinverse for $S_b^{-1}$.  Then $x
-= S_b^{-1} c$ gives us deconvolved radiances at the {\srf}
-tabulation grid.  Figure \ref{dbasis} shows adjacent typical basis
-function for the deconvolution, that is, columns of the
-pseudo-inverse $S_b^{-1}$.  The functions are vaugely sinc-like,
-though the negative excursions are significantly greater.  For each
-channel $c$, the columns show the span of influence of $c$ in the
+= S_b^{-1} c$ gives us deconvolved radiances at the {\srf} tabulation
+grid.  Figure \ref{dbasis} shows adjacent typical basis function for
+the deconvolution, that is, adjacent columns of the pseudo-inverse
+$S_b^{-1}$.  The functions are vaugely sinc-like, though the negative
+excursions are significantly greater.  For each channel $c$, the
+associated column values show the span of influence of $c$ in the
 deconvolution.
 
-The {\airs} deconvolution gives a significant resolution
-enhancement, though at the cost of added artifacts and noise.
-Figure \ref{dspec} shows spectra for a simulated deconvolution
-together with the direct convolution of kcarta 0.0025~\wn\ radiances
-to the 0.1~\wn\ intermediate grid, for fitting profile 1.  The
-deconvolution is done by convolving kcarta radiances to the {\airs}
-L1c channel set to get ``true {\airs}'' and then deconvolving this
-to the 0.1~\wn\ grid, as discussed above.
+The {\airs} deconvolution gives a significant resolution enhancement,
+though at the cost of added artifacts and noise.  Figure \ref{dspec}
+shows spectra for a simulated deconvolution together with the direct
+convolution of kcarta 0.0025~\wn\ radiances to the 0.1~{\wn}
+intermediate grid, for fitting profile 1.  Figure \ref{ddiff} shows
+the mean and standard deviation of the difference of the deconvolved
+minus the directly convolved radiances for all 49 fitting profiles
+\cite{sarta1,sarta2}.  Note that convolution, deconvolution, and
+apodization are done with radiances while spectra are presented and
+statistics done after translation to brightness temperatures.
+The residuals are large and mainly significant for understanding
+limitations of the deconvolution.  We do not propose using the
+deconvolved radiances directly; they are an intermediate step for
+reconvolution to a lower resolution grating instrument as described
+below or to the {\cris} user grid as described in the next section.
 
-The direct convolution is for a hypothetical grating spetrometer
-with a resolving power of 2000, oversampled to the 0.1~\wn\ grid.
-The choice of basis functions for reference truth for the
-intermediate 0.1~\wn\ grid is not obvious, since the deconvolution
-is undoing---at least to some extent---the effects of the {\airs}
-SRF convolutions.  The response function we used for this, and for
-the ``L1d basis'' discussed below, is a generalized Gaussian of the
-form
+The deconvolution is done by first convolving kcarta radiances to the
+{\airs} L1c channel set to get ``true {\airs}'' and then deconvolving
+this to the 0.1~\wn\ grid, as discussed above.  The direct
+convolution is for a hypothetical grating spectrometer with a
+resolving power of 2000, oversampled to the 0.1~\wn\ grid.  The
+choice of basis functions for reference truth for the intermediate
+0.1~\wn\ grid is not obvious, since the deconvolution is undoing---at
+least to some extent---the effects of the {\airs} SRF convolutions.
+The response function we used for this, and for the ``L1d basis''
+discussed below, is a generalized Gaussian of the form
 \[w = \exp\left(-\left(\frac{(x - v_0)^2}{2c^2}\right)^{1.5}\right) \]
-where $c=\fwhm / 2.355$ and $v_0$ is the desired channel center.
-The exponent $1.5$ is chosen to give an approximate match to {\airs}
-SRFs with the same \fwhm, though without the fine structure and
-variation of the latter.  
-
-Figure \ref{srfs1} shows two such functions paired with {\airs} SRFs
-with the same \fwhm.  Figure \ref{ddiff} shows the mean and standard
-deviation of the difference of the deconvolved minus the directly
-convolved radiances for the 49 fitting profiles \cite{sarta1,sarta2},
-after translation to brightness temperatures.  The residuals are
-large and mainly significant for understanding limitations of the
-deconvolution.  The residuals can be reduced dramatically by
-convolving the $0.1$~\wn\ intermediate grid to the channel grid for
-an idealized grating instrument with reduced resolving power.  Define
-an L1d basis with generalized gaussian SRFs, $\fwhm = v /
-\hbox{resolving power}$, and $dv = \fwhm / 2$ with the $dv$-spaced
-channel steps starting at $v_0$.  Note this is not over-sampled, in
-contrast with the regular spacing used for the 0.1~\wn\ intermediate
-grid.
+where $c=\fwhm / 2.355$ and $v_0$ is the desired channel center.  The
+exponent $1.5$ is chosen to give an approximate match to {\airs} SRFs
+with the same \fwhm, though without the fine structure and variation
+of the latter.  Figure \ref{srfs1} shows two such functions paired
+with {\airs} SRFs with the same \fwhm.
 
 % We also tried the generalized Gaussian with a fixed \fwhm\ for
 % values $0.4$, $0.6$, and $0.8$ and a sinc basis with a spacing of
 % $0.2$~\wn, all of which gave larger residuals.  The residual was
 % roughly minimized for the resolving power of 2000 shown here.
 
+The residuals can be reduced dramatically by reconvolving the
+$0.1$~\wn\ intermediate grid to the channel grid for an idealized
+grating instrument with reduced resolving power.  Define an L1d basis
+with the generalized Gaussian response function above, $\fwhm = v /
+\hbox{resolving power}$, and $dv = \fwhm / 2$ with the $dv$-spaced
+channel steps starting at $v_0$.  Note this is not oversampled, in
+contrast with the regular spacing used for the 0.1~\wn\ intermediate
+grid.
+
 Figure \ref{L1d1200} shows residuals for reconvolution to such an L1d
 basis with resolving power of 1200, the nominal {\airs} resolution.
-For this comparison both the reference truth (true L1d) and the
-reconvolution (L1c to L1d) are done to L1d channel sets with the same
-resolving power and starting channel.  An L1d set with a resolving
-power of 1200 gives a significant improvement over the residual for
-an unreconvolved resolving power of 2000.  Figure \ref{L1d700s} shows
-residuals for a resolving power of 700.  This is less than the the
-residual for unapodized {\cris} shown in section \ref{airs2cris} that
-we use as the starting point for our {\airs} to {\cris} translations.
+For this and similar comparisons both the reference truth (``true
+L1d'') and the reconvolution (L1c to L1d) are done to L1d channel
+sets with the same resolving power and starting channel.  An L1d set
+with a resolving power of 1200 gives a significant improvement over
+the residual for the intermediate grid resolving power of 2000.
+Figure \ref{L1d700s} shows residuals for a resolving power of 700.
+This is less than the the residual for unapodized {\cris} shown in
+section \ref{airs2cris} that we use as the starting point for our
+{\airs} to {\cris} translations.  This is only half the best {\airs}
+resolving power of 1400 in the LW.  Resolution is lost in shifting
+channel centers to a single regular function of frequency.  The L1d
+residuals dependend in part on the starting channel, and so on how
+the SRF peaks line up and match with the L1c set.  The residuals
+above are the result of a rough fit for $v_0$.  For a resolving power
+of 1200 this is the first L1c channel, while for 700 it was the first
+channel plus $0.2$~\wn.
 
-This is only half the best {\airs} resolving power of 1400 in the LW.
-Resolution is lost in shifting channel centers.  The L1d residuals
-for a resolving power of 700 and 1200 dependend in part on the
-starting channel, and so on how the SRF peaks line up and match with
-the L1c set.  The residuals above are the result of a rough fit for
-$v_0$.  For a resolving power of 1200 this is the first L1c channel,
-while for 700 it was the first channel plus $0.2$~\wn.
+The L1c to L1d translation can be represented as a single linear
+transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
+transform taking the intermediate grid to L1c and L1d channels and
+$S_c^{-1}$ the pseudo-inverse of $S_c$, that is, the deconvolution
+transform.  We can get such a tranform in other ways, for example by
+regression to find $X$ that minimizes the residual $\|X r_c -
+r_d\|_2$ for L1c and L1d radiance sets $r_c$ and $r_d$.  If $r_c$
+and $r_d$ are $m$ and $n$ by $k$ matrices, then if $k <= m$ we can
+simply solve for $X$.  The system is underdetermined if $k < m$.  In
+this case the residual above is zero.  If $k > m$ we can find $X$ by
+regression.  In initial tests dividing the 49 fitting profiles into
+dependent and independent sets, although the residual for the
+dependent set is zero, the residual for the independent set is
+relatively large.  But this should be checked with larger sets.
 
 Despite the resolution loss, deconvolution is significantly better
 than interpolation for the L1c to L1d translation.  We consider two
