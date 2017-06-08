@@ -250,47 +250,47 @@ synthetic L1c channels.
 \section{AIRS to CrIS translation}
 \label{airs2cris}
 
-Given deconvolution to the $0.1~\wn$ intermediate grid,
-reconvolution to the {\cris} user grid is straightforward.  For
-{\cris} standard resolution the channel spacing is $0.625~\wn$ for
-the LW, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW bands.  For
-each {\cris} band, we (1) find the {\airs} and {\cris} band
+[need intro sentence]
+
+
+Given {\airs} deconvolution to the $0.1~\wn$ intermediate grid,
+reconvolution to the {\cris} user grid is straightforward.  For the
+{\cris} standard resolution mode the channel spacing is $0.625~\wn$
+for the LW, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW bands.
+For each {\cris} band, we (1) find the {\airs} and {\cris} band
 intersection, (2) apply a bandpass filter to the deconvolved {\airs}
 radiances restricting them to the intersection, with a rolloff
 outside the intersection, and (3) reconvolve the filtered spectra to
 the {\cris} user grid with a zero-filled double Fourier transform.
 
-Translations are validated by comparison with calculated reference
+Translations are tested by comparison with calculated reference
 truth.  We start with a set of atmospheric profiles and calculate
 upwelling radiance at a $0.0025~\wn$ grid with kcarta \cite{kcarta1}
 over a band spanning the domains of the {\airs} and {\cris} response
 functions.  ``True {\airs}'' is calculated by convolving the kcarta
 radiances with {\airs} SRFs and ``true {\cris}'' by convolving
-kcarta radiances to a sinc basis at the {\cris} user-grid
-specifications.  True {\airs} is then translated to {\cris} to get
-``{\airs} {\cris}'', and this is compared with true {\cris}.
-Figure~\ref{specLW} shows sample spectra for true {\airs},
-deconvolved {\airs}, true {\cris} and {\airs} {\cris}.  This
-approach assumes perfect knowledge of the {\airs} and {\cris}
-instrument response functions and so gives only a lower bound on
-residuals.  But in practice we know the response functions very well
-\cite{crisval1,airsval1}.
+kcarta radiances to a sinc basis at the {\cris} user-grid.  True
+{\airs} is then translated to {\cris} to get ``{\airs} {\cris}'',
+and this is compared with true {\cris}.  Figure~\ref{specLW} shows
+sample spectra for true {\airs}, deconvolved {\airs}, true {\cris}
+and {\airs} {\cris}.  The difference between true {\cris} and
+{\airs} {\cris} is hard to see at this level of detail, and for the
+remainder of this paper we will mainly be looking at differences.
 
-Results are validated with a set of 49 fitting profiles spanning a
-wide range of clear atmospheric conditions, initially chosen for
-testing radiative transfer codes \cite{sarta1,sarta2}.  The 49
-profile set is largely uncorrelated, in the sense that reducing the
-reconstruction RMS residual to 0.02~K for radiances calculated from
-the profiles requires 48 left-singular vectors.  For statistical
+For most tests we use a set of 49 fitting profiles spanning a wide
+range of clear atmospheric conditions, initially chosen for testing
+radiative transfer codes \cite{sarta1,sarta2}.  The set is largely
+uncorrelated, in the sense that reducing the reconstruction residual
+to 0.02~K for requires 48 left-singular vectors.  (Details of this
+correlation measure are givein in the appendix.)  For statistical
 correction and direct regression (discussed later) we also use a set
 of 7377 radiances calculated from mostly cloudy AIRS profiles
 spanning several consecutive days, as the dependent set.  This set
-is moderately correlated; reducing the reconstruction RMS residual
-to 0.02~K for radiances calculated from the profiles requires 260
-left-singular vectors.  For all cases considered here the 49 profile
-set gives a stricter test than splitting the 7377 profile set into
-dependent and independent sets as residuals with the 49-profile
-set are consistently larger.
+is moderately correlated; reducing the reconstruction residual to
+0.02~K requires 260 left-singular vectors.  For all cases considered
+here the 49 profile set gives a stricter test than splitting the
+7377 profile set into dependent and independent sets as residuals
+with the 49-profile set are consistently larger.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
@@ -378,6 +378,10 @@ small improvement in the SW, where the quadratic correction is
 noticably worse.  Figure \ref{statall} summarized results for the
 linear correction, pairing these with the apodized uncorrected
 residuals.
+
+% Note that convolution, deconvolution, and apodization are done
+% with radiances while spectra are presented and statistics done
+% after translation to brightness temperatures.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
@@ -482,59 +486,49 @@ significantly less than interpolation for all three bands.
 % 
 
 \FloatBarrier
-\section{Translation to an idealized grating instrument}
-\label{alttrans}
+\section{Translation to an idealized grating model}
+\label{airsL1d}
 
-The {\airs} deconvolution can be used for other translations.
-We consider reconvolution to idealized grating instruments with
-resolving power of 1200 and 700.  Define an {\airs} L1d basis with
-the generalized Gaussian response function above, with $\fwhm = v /
-\hbox{resolving power}$ and $dv = \fwhm / 2$, and with the
-$dv$-spaced channel steps starting at $v_0$.  In contrast with the
-regular spacing used for the {0.1~\wn} intermediate grid, this is
-not oversampled.
+The {\airs} deconvolution can be used for other translations.  In
+this section we briefly consider reconvolution to idealized grating
+models with resolving power of 1200 and 700.  Define an {\airs} L1d
+basis with the generalized Gaussian response function above, with
+$\fwhm = v / \hbox{resolving power}$ and $dv = \fwhm / 2$, and with
+the $dv$-spaced channel steps starting at $v_0$.  In contrast with
+the regular spacing used for the {0.1~\wn} intermediate grid, this
+is not oversampled.
 
 % For this and similar comparisons both the reference truth (``true
 % L1d'') and the reconvolution targer (L1c to L1d) are done using the
 % same L1d channel sets--that is, sets with the same resolving power
 % and starting channel.  
 
+As for tests of the {\airs} to {\cris} translation, `true L1c'' is
+calculated by convolving the kcarta radiances with {\airs} L1c SRFs
+and ``true L1D'' by convolving to an L1d basis with the desired
+resolving power and first channel frequency.  L1c is translated to
+L1d by deconvolution followed by reconvolution to the desired L1d
+basis to get ``L1C to D'', and this is compared with true L1d.
+
 Figure \ref{L1d1200} shows residuals for reconvolution to an L1d
 basis with resolving power of 1200, the nominal {\airs} resolution
 and figure \ref{L1d700s} shows residuals for a resolving power of
-700, half the best {\airs} resolving power of 1400 in the LW.  Note
-the different x-axes in the two figures.  The uncorrected residuals
-are for the deconvolution/reconvolution transform ``L1C to D'' minus
-``true L1D'', Resolution is lost in shifting channel centers to a
-single regular function of frequency.  The L1d residuals dependend
-in part on the starting channel, and so on how the SRF peaks line up
-with the L1c set.  The residuals above are the result of a rough fit
-for $v_0$.  For a resolving power of 1200 this gave $v_0$ equal to
-the first L1c channel, while for 700 it was the first L1c channel
-plus $0.2$~\wn.  As with the {\airs} to {\cris} translation,
+700.  Note the different x-axes for the two figures.  Some resolving
+power is sacrificed in shifting channel centers to a single regular
+function of frequency.  The L1d residuals dependend in part on the
+starting channel, and so on how the SRF peaks line up with the L1c
+set.  The residuals above are the result of a rough fit for $v_0$.
+For a resolving power of 1200 this gave $v_0$ equal to the first L1c
+channel, while for 700 it was the first L1c channel plus $0.2$~\wn.
+
+Although some resolving power is lost in the L1c to L1d translation,
+the residuals for a resolving power of 1200 are roughly comparable
+to unapodized {\cris}, and residuals for a resolving power of 700 to
+apodized {\cris}.  As with the {\airs} to {\cris} translation,
 residuals are reduced significantly with a linear correction.
-
-% But the key idea is to fit for a separate linear correction for each
-% channel using a large mostly cloudy dependent set, and then use the
-% 49 profile fitting set---the same set we are using for most other
-% tests here---as the independent set.  The separate functions
-% guarantee no cross correlations are introduced, and the fitting
-% profile test is more strict than for example splitting the cloudy
-% set into dependent and independent sets, in the sense that the
-% fitting profles are less correlated and the residuals for the
-% fitting set are larger.
-
-% Note that convolution, deconvolution, and apodization are done
-% with radiances while spectra are presented and statistics done
-% after translation to brightness temperatures.
-
-% The L1c to L1d translation can be represented as a single linear
-% transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-% transforms taking the intermediate grid to L1c and L1d channels and
-% $S_c^{-1}$ the pseudo-inverse of $S_c$.  We can get such a tranform
-% in other ways, for example by regression to find $X$ that minimizes
-% the residual $\|X r_c - r_d\|_2$ for L1c and L1d radiance sets $r_c$
-% and $r_d$.  We consider this further in section \ref{alttrans}.
+Residuals for L1d with a resolving power of 700 after correction are
+roughly comparable to residuals for apodized {\cris} after a similar
+correction.
 
 \begin{figure} % source L1d_regr1.m
   \centering
@@ -550,7 +544,7 @@ residuals are reduced significantly with a linear correction.
   \includegraphics[height=7.5cm]{figures/L1d_corr_700.pdf}
   \caption{mean and standard deviation over the 49 fitting profiles
     for the L1c to L1d translation minus true L1d for a resolving
-    power of 1200}
+    power of 700}
   \label{L1d700s}
 \end{figure}
 
@@ -619,6 +613,39 @@ channel dependencies in the translation.
 \FloatBarrier
 \section{Applications and conclusions}
 \label{appcon}
+
+\FloatBarrier
+\section{Appendix}
+\label{append}
+
+We can use the basis size needed to get a reconstruction residual
+below some fixed threshold as a measure the correlation of a set of
+radiances.  Let $R$ be an $m$ by $n$ array of radiances with one row
+per channel and one column per observation.  Let $R=U S\,V^T$ be a
+singular value decomposition with the singular values in descending
+order, and $U_k$ the first $k$ columns of $U$.  We can simply take
+the singular values as one measure of correlation; these drop off
+more quickly for more correlated data.
+
+For our applications a more useful measure is the number of basis
+vectors needed for a particular reconstruction residual.  We can
+approximate $R$ with a linear combination of the orthonormal vectors
+$U_k$, as $R\approx U_k U_k^T R$.  The approximation improves as
+$k$ increases and becomes exact for some $k <= m$.  This is useful
+as a form of compression when $k$ is small relative to $n$.  For
+that case we save $U_k$ and $U_k^T R$ separately.  Examples of this
+include IASI radiance data and the kcarta absorption database.
+
+We can think of $k$ as a reconstruction score and for example find
+the smallest $k$ such that $\rms(B^{-1}(R) - B^{-1}(U_k U_k^T R)) <
+0.02$ degrees K, where $B^{-1}$ is the inverse Planck function.  In
+this case $k$ is the number of linearly independent vectors needed
+to represent the radiance data to some particular accuracy, and so a
+measure of the correlation of the data.  For the 49 profile fitting
+set and a residual limit of 0.02~K, we found $k=48$, which we would
+interpret as largely uncorrelated while for the 7377 profile cloudy
+set we found $k=260$, which we would interpret as moderately
+correlated.
 
 \FloatBarrier
 \bibliographystyle{abbrv}
