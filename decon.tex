@@ -66,6 +66,7 @@ In section \ref{dregr} we consider a purely statistical approach to
 such translations.  Section \ref{appcon} discusses applications and
 related and future work.
 
+%---------------------------------------------------------------------
 \FloatBarrier
 \section{AIRS Deconvolution}
 \label{decon}
@@ -259,12 +260,10 @@ The range of influence is significant since for example we may want
 to see which L1d channels are derived in part from the subset of
 synthetic L1c channels.
 
+%---------------------------------------------------------------------
 \FloatBarrier
 \section{AIRS to CrIS translation}
 \label{airs2cris}
-
-[need intro sentence]
-
 
 Given {\airs} deconvolution to the $0.1~\wn$ intermediate grid,
 reconvolution to the {\cris} user grid is straightforward.  For the
@@ -288,22 +287,26 @@ and this is compared with true {\cris}.  Figure~\ref{specLW} shows
 sample spectra for true {\airs}, deconvolved {\airs}, true {\cris}
 and {\airs} {\cris}.  The difference between true {\cris} and
 {\airs} {\cris} is hard to see at this level of detail, and for the
-remainder of this paper we will mainly be looking at differences.
+remainder of this paper we will mainly show differences.
 
 For most tests we use a set of 49 fitting profiles spanning a wide
 range of clear atmospheric conditions, initially chosen for testing
 radiative transfer codes \cite{sarta1,sarta2}.  The set is largely
-uncorrelated, in the sense that reducing the reconstruction residual
-to 0.02~K for requires 48 left-singular vectors.  (Details of this
-correlation measure are givein in the appendix.)  For statistical
-correction and direct regression (discussed later) we also use a set
-of 7377 radiances calculated from mostly cloudy AIRS profiles
-spanning several consecutive days, as the dependent set.  This set
+uncorrelated; reducing the reconstruction residual to 0.02~K for
+requires 48 left-singular vectors.  Details of the correlation
+measure are given in an appendix.  For statistical correction and
+the direct regression discussed in section \ref{dreg} we also use a
+set of 7377 radiances calculated from mostly cloudy AIRS profiles
+spanning several consecutive days as the dependent set.  This set 
 is moderately correlated; reducing the reconstruction residual to
-0.02~K requires 260 left-singular vectors.  For all cases considered
-here the 49 profile set gives a stricter test than splitting the
-7377 profile set into dependent and independent sets as residuals
-with the 49-profile set are consistently larger.
+0.02~K requires 260 left-singular vectors.  Splitting the 7377
+profile set into dependent and independent subsets and comparing
+residuals from the independent subset with residuals from the
+49-profile set, we found residuals from the latter are significantly
+larger, suggesting it makes for a more strict test.  So for results
+shown here the test or independent set is always the 49-profile set,
+while for tests requiring fitting the 7377 profile is used as the
+dependent set.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
@@ -311,9 +314,8 @@ and standard deviation of true {\cris} minus {\airs} {\cris} for the
 of the {\cris} bands.  Figure \ref{meanAll} summarizes these results
 for Hamming apodized radiances.  The residual has a high frequency
 component with a period of 2 channel steps that is significantly
-reduced by the apodization.  The constant or DC bias (the mean of
-the residuals over frequency) is very close to zero for the apodized
-residuals.
+reduced by the apodization.  The constant or DC bias is very close
+to zero for the apodized residuals.
 
 % $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for the
 % SW.
@@ -360,37 +362,39 @@ residuals.
   \label{meanAll}
 \end{figure}
 
-There is some regularity in the residual, including an oscillation
-with period two channel steps.  Up to this point there is no
-statistical component to our translation, beyond finding a good test
-set for validation.  We feel it is important to be clear about any
-steps that require statistical fitting.  That said, a simple linear
-correction can give a significantly further reduction in the
-validation residual.  For the statistical tests we use the set of
-7377 mostly cloudy AIRS profiles as the dependent set and the 49
+Some regularity remains in the apodized residual, including the
+oscillation with a period of two channel steps.  Up to this point
+there is no statistical component to our translation, beyond the
+choice of test set for validation, and the translation to this form
+has been useful in practice \cite{sno1}.  It is important to be
+clear about any steps that require statistical fitting.  That said,
+a simple linear correction can give a significantly further
+reduction in the residuals.  For such tests as noted we use the set
+of 7377 mostly cloudy AIRS profiles as the dependent set and the 49
 profile set the independent or test set.
 
 We compare three such corrections.  These are done with a separate
 regression for each {\cris} channel, and so introduce no
 cross-correlations.  Let $\Ttc_i$ be true {\cris} and $\Tac_i$
 {\airs} to {\cris} brightness temperatures for {\cris} channel $i$,
-both from the dependent set.  For the bias test we subtract the mean
+from the dependent set.  For the bias test we subtract the mean
 residual from the dependent set.  For the linear test we find $a_i$
-and $b_i$ to minimize $||a_i\,\Tac_i + b_i - \Ttc_i||_2$ and for the
-quadratic test weights $c_i$, $a_i$ and $b_i$ to minimize
-$||c_i\,(\Tac_i)^2 + a_i\,\Tac_i + b_i - \Ttc_i||_2$.
+and $b_i$ to minimize $||a_i\,\Tac_i + b_i - \Ttc_i||_2$, and for
+the quadratic test weights $c_i$, $a_i$ and $b_i$ to minimize
+$||c_i\,(\Tac_i)^2 + a_i\,\Tac_i + b_i - \Ttc_i||_2$.  The resulting
+correction is then applied to the independent set, the 49 fitting
+profiles, for comparison with true {\cris} for the independent set.
 
 Figure \ref{statLW} is a comparison of bias, linear, and quadratic
 corrections for the LW band.  The linear and quadratic corrections
-are nearly identical, and the quadratic coefficient is very close 
-to zero.  Figure \ref{coefLW} shows the weights for the linear fits
-from figure \ref{statLW}.  The $a$ weight is very close to 1 and the
-$b$ weight to the bias.  Figures \ref{statMW} and \ref{statSW} show
-the linear correction giving a similar improvement in the MW and a
-small improvement in the SW, where the quadratic correction is
-noticably worse.  Figure \ref{statall} summarized results for the
-linear correction, pairing these with the apodized uncorrected
-residuals.
+are nearly identical, and the quadratic coefficient is very close to
+zero.  Figure \ref{coefLW} shows the weights for the linear fits
+from figure \ref{statLW}.  The $a$ weights are very close to 1 and
+the $b$ weight to the bias.  Figures \ref{statMW} and \ref{statSW}
+show the linear correction giving a similar improvement in the MW
+and a small improvement in the SW, where the quadratic correction is
+noticably worse.  Figure \ref{statall} summarizes results for the
+linear correction, paired with the apodized uncorrected residuals.
 
 % Note that convolution, deconvolution, and apodization are done
 % with radiances while spectra are presented and statistics done
@@ -430,7 +434,8 @@ residuals.
 \begin{figure} % source a2cris_test2.m
   \centering
   \includegraphics[height=7.5cm]{figures/a2cris_regr_all.pdf}
-  \caption{Mean corrected apodized residuals for all three bands.}
+  \caption{Mean corrected and uncorrected apodized residuals for all
+    three bands.}
   \label{statall}
 \end{figure}
 
@@ -447,16 +452,16 @@ radiance (NEdN) as follows.  We start with {\airs} L1c and {\cris}
 NEdN estimates.  The L1c spec is the average over a day (4 Dec 2016)
 of NEdN values from the L1c granules, with gaps for the synthetic
 channels filled in by interpolation.  The {\cris} values are from a
-single {\ccast} \ref{ccast} granule.  The {\cris} values are quite
-stable over time and consistent with other {\cris} NEdN estimates.
-Results are summarized in figure \ref{nedn}.
+single {\ccast} \ref{ccast} granule.  The {\ccast} values are quite
+stable over time and consistent with other {\cris} NEdN estimates
+\cite{zav2013}.  Results are summarized in figure \ref{nedn}.  
 
 Noise with a normal distribution at the {\airs} spec is added to
 true {\airs} and then measured.  The measured {\airs} noise is the
 ``test'' line in the plot.  This is very close to the spec and so
-serves as a sanity check for our methods.  True {\airs} with added
-noise is then translated to {\cris} and the noise of the translation
-is measured.  This is the {\airs} to {\cris} line in the plots.  The
+serves as a check for our methods.  True {\airs} with added noise 
+is then translated to {\cris} and the noise of the translation is
+measured.  This is the {\airs} to {\cris} line in the plots.  The
 unapodized translation tracks the {\airs} noise spec fairly closely
 in the LW and MW, and is a little less in the SW.  Unapodized
 {\airs} to {\cris} noise is a little higher than true {\cris} noise
@@ -478,6 +483,14 @@ while the unapodized comparison is less clear for the SW.  With
 Hamming apodization, the residuals with deconvolution are
 significantly less than interpolation for all three bands.
 
+In section \ref{dregr} we consider translation from {\airs} to
+{\cris} by direct regression.  For that case we let $\rtc$ be true
+{\cris} and $\rta$ true {\airs} radiances from the dependent set,
+find $X$ by regression to minimize $||X \rta - \rtc||_2$, and apply
+$X$ to the independent set.  This can work well, at least for
+minimizing residuals, but introduces unexpected correlations and
+raises concerns about purely statistical corrections.
+
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[height=7.5cm]{figures/a2cris_interp_LW.pdf}
@@ -486,62 +499,46 @@ significantly less than interpolation for all three bands.
   \label{intpLW}
 \end{figure}
 
-% \FloatBarrier
-% \section{Deconvolution to constant resolving power}
-% \label{airsL1d}
-% 
-% Section \ref{decon} raised the question of the inherent resolution
-% of the deconvolution.  There we compared the deconvolution (without
-% reconvolution) to calculated radiances with an oversampled resolving
-% power of 2000.  But the residual was quite large.  
-% 
-% Similar to the situation with convolution to the {\cris} user grid,
-% 
-
+%---------------------------------------------------------------------
 \FloatBarrier
 \section{Translation to an idealized grating model}
 \label{airsL1d}
 
-The {\airs} deconvolution can be used for other translations.  In
-this section we briefly consider reconvolution to idealized grating
-models with resolving power of 1200 and 700.  Define an {\airs} L1d
-basis with the generalized Gaussian response function above, with
-$\fwhm = v / \hbox{resolving power}$ and $dv = \fwhm / 2$, and with
-the $dv$-spaced channel steps starting at $v_0$.  In contrast with
-the regular spacing used for the {0.1~\wn} intermediate grid, this
-is not oversampled.
-
-% For this and similar comparisons both the reference truth (``true
-% L1d'') and the reconvolution targer (L1c to L1d) are done using the
-% same L1d channel sets--that is, sets with the same resolving power
-% and starting channel.  
-
-As for tests of the {\airs} to {\cris} translation, `true L1c'' is
-calculated by convolving the kcarta radiances with {\airs} L1c SRFs
-and ``true L1D'' by convolving to an L1d basis with the desired
-resolving power and first channel frequency.  L1c is translated to
-L1d by deconvolution followed by reconvolution to the desired L1d
-basis to get ``L1C to D'', and this is compared with true L1d.
+The {\airs} deconvolution can be used for other translations.  
+In this section we briefly consider reconvolution to an idealized
+grating model for resolving powers of 700 ane 1200.  Define an
+{\airs} L1d basis with resolving power $R$ from the generalized
+Gaussian response function of section \ref{decon} with $\fwhm = 
+v / R$, $dv = \fwhm / 2$, and with the $dv$-spaced channel steps
+starting at $v_0$.  As with tests of the {\airs} to {\cris}
+translation, ``true L1c'' is calculated by convolving kcarta
+radiances with {\airs} L1c SRFs and ``true L1d'' by convolving with
+an L1d basis at the desired resolving power.  L1c is translated to
+L1d by deconvolution followed by reconvolution to the L1d basis to
+get ``L1c to d'', and this is compared with true L1d.
 
 Figure \ref{L1d1200} shows residuals for reconvolution to an L1d
-basis with resolving power of 1200, the nominal {\airs} resolution
+basis with resolving power of 1200, the nominal {\airs} resolution,
 and figure \ref{L1d700s} shows residuals for a resolving power of
-700.  Note the different x-axes for the two figures.  Some resolving
-power is sacrificed in shifting channel centers to a single regular
-function of frequency.  The L1d residuals dependend in part on the
-starting channel, and so on how the SRF peaks line up with the L1c
-set.  The residuals above are the result of a rough fit for $v_0$.
-For a resolving power of 1200 this gave $v_0$ equal to the first L1c
-channel, while for 700 it was the first L1c channel plus $0.2$~\wn.
+700.  Note the different x-axes for the two figures.  The residuals
+depend in part on the L1d starting channel $v_0$, and so on how the
+SRF peaks line up with the L1c set.  The residuals shown are the
+result of a rough fit for $v_0$.  For a resolving power of 1200 this
+gave $v_0$ equal to the first L1c channel, while for 700 it was the
+first L1c channel plus $0.2$~\wn.
 
-Although some resolving power is lost in the L1c to L1d translation,
-the residuals for a resolving power of 1200 are roughly comparable
-to unapodized {\cris}, and residuals for a resolving power of 700 to
-apodized {\cris}.  As with the {\airs} to {\cris} translation,
-residuals are reduced significantly with a linear correction.
-Residuals for L1d with a resolving power of 700 after correction are
-roughly comparable to residuals for apodized {\cris} after a similar
-correction.
+We see that for both the {\airs} to {\cris} and L1c to L1d
+translations some resolving power is sacrificed in shifting channel
+centers to a single regular function of frequency.  Residuals for a
+resolving power of 1200 (figure \ref{L1d1200}) are roughly
+comparable to unapodized {\cris} (figures \ref{diffLW},
+\ref{diffMW}, and \ref{diffSW}) and residuals for a resolving power
+of 700 (figure \ref{L1d700s}) are roughly comparable to apodized
+{\cris} (figure \ref{statall}).  As with the {\airs} to {\cris}
+translation, L1c to D residuals are significantly reduced with a
+linear correction.  Residuals for L1d with a resolving power of 700
+after correction are roughly comparable to residuals for apodized
+{\cris} after a similar correction.
 
 \begin{figure} % source L1d_regr1.m
   \centering
@@ -561,35 +558,29 @@ correction.
   \label{L1d700s}
 \end{figure}
 
-As with the {\airs} to {\cris} translation, deconvolution is
-significantly better than interpolation for the L1c to L1d
-translation.  We consider two cases.  For the first, start with true
-L1c and interpolate radiances directly to the L1d grid with a cubic
-spline.  For the second, interpolate true L1c to the 0.1 {\wn}
-intermediate grid with a cubic spline and convolve this to the L1d
-channel set.  Figure~\ref{interpL1d} shows interpolated L1d minus
-true L1d.  The two-step interpolation works a little better than the
-simple spline, but is still much larger than the residual for
-translation with deconvolution.
+Also as with the {\airs} to {\cris} translation, deconvolution 
+works significantly better than interpolation, and we consider
+similar cases.  For the first, start with true L1c and interpolate
+radiances directly to the L1d grid with a cubic spline.  For the
+second, interpolate true L1c to the 0.1 {\wn} intermediate grid 
+with a cubic spline and convolve this to the L1d channel set.
+Figure~\ref{interpL1d} shows interpolated L1d minus true L1d.  
+The two-step interpolation works a little better than the simple
+spline, but is still much larger than the residual for translation
+with deconvolution.
 
 The L1c to L1d translation can be represented as a single linear
 transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-transforms taking the intermediate grid to L1c and L1d channels and
-$S_c^{-1}$ the pseudo-inverse of $S_c$, that is, the deconvolution
-transform.  We can get such a tranform in other ways, for example by
-regression to find $X$ that minimizes the residual $\|X r_c -
-r_d\|_2$ for L1c and L1d radiance sets $r_c$ and $r_d$.  If $r_c$ and
-$r_d$ are $m$ and $n$ by $k$ matrices, then if $k <= m$ we can simply
-solve for $X$.  If $k < m$ the system is underdetermined; in this
-case the residual is zero but extrapolation behavior is typically
-poor.  If $k > m$ we can find $X$ by regression, and extrapolation
-behavior can be quite good if we regress against large sets of
-representative data.  In practice this seems to work very well, at
-least for minimizing both dependent and independent set residuals.
-But in contrast with the sharply banded composite transform $S_d\cdot
-S_c^{-1}$ the resulting transform is full of unexpected correlations
-and so may not be suitable for applications where we want to trace
-channel dependencies in the translation.
+transforms taking the intermediate grid to L1c and L1d channels.  
+We can get such a tranform in other ways, for example by regression
+to find $X$ that minimizes the residual $\|X r_c - r_d\|_2$ for L1c
+and L1d radiance sets $r_c$ and $r_d$.  In practice this seems to
+work well, at least for minimizing both dependent and independent
+set residuals.  But in contrast with the sharply banded composite
+transform $S_d\cdot S_c^{-1}$ the resulting transform is full of
+unexpected correlations and so may not be suitable for applications
+where we want to trace channel dependencies.  This is considered in
+more detail in the next section.
 
 \begin{figure} % source L1d_test2.m
   \centering
@@ -600,6 +591,7 @@ channel dependencies in the translation.
   \label{interpL1d}
 \end{figure}
 
+%---------------------------------------------------------------------
 \FloatBarrier
 \section{Direct regression}
 \label{dregr}
@@ -628,6 +620,7 @@ S_c^{-1}$ the resulting transform is full of unexpected correlations
 and so may not be suitable for applications where we want to trace
 channel dependencies in the translation.
 
+%---------------------------------------------------------------------
 \FloatBarrier
 \section{Applications and conclusions}
 \label{appcon}
