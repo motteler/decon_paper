@@ -483,15 +483,6 @@ while the unapodized comparison is less clear for the SW.  With
 Hamming apodization, the residuals with deconvolution are
 significantly less than interpolation for all three bands.
 
-In section \ref{dregr} we consider translation from {\airs} to
-{\cris} by direct regression.  For that case let $\rtc$ be true
-{\cris} and $\rta$ true {\airs} radiances from the dependent set,
-find $X$ by regression to minimize $||X \rta - \rtc||_2$, and apply
-$X$ to the independent set.  This can work well, at least in terms
-of minimizing residuals, but introduces undesired explicit
-correlations.  The correlations can be reduced with principal
-component regression, but at the cost of larger residuals.
-
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[height=7.5cm]{figures/a2cris_interp_LW.pdf}
@@ -508,29 +499,29 @@ component regression, but at the cost of larger residuals.
 % The nominal {\airs} resolution is 1200, though for many modules
 % the real resolving power is higher.
 
-
 The {\airs} deconvolution can be used for other translations.  
 In this section we briefly consider reconvolution to an idealized
 grating model for resolving powers of 700 and 1200.  Define an
 {\airs} L1d basis with resolving power $R$ from the generalized
-Gaussian response function of section \ref{decon} with $\fwhm = v /
-R$, $dv = \fwhm / 2$, and with the $dv$-spaced channel steps
-starting at $v_0$.  As with tests of the {\airs} to {\cris}
-translation, true L1c is calculated by convolving kcarta radiances
-with {\airs} L1c SRFs and true L1d by convolving with an L1d basis
-at the desired resolving power.  L1c is translated to L1d by
-deconvolution followed by reconvolution to the desired L1d basis,
-and this is compared with true L1d.
+Gaussian response function of section \ref{decon} as follows.
+Let $v_0$ be the frequency of the first channel and for $i\ge0$
+$\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} = v_i +
+dv_i$.  As with tests of the {\airs} to {\cris} translation, true
+L1c is calculated by convolving kcarta radiances with {\airs} L1c
+SRFs and true L1d by convolving with an L1d basis at the desired
+resolving power.  L1c is translated to L1d by deconvolution followed
+by reconvolution to the desired L1d basis, and this is compared with
+true L1d.
 
 Figure \ref{L1d1200} shows residuals for reconvolution to an L1d
 basis with resolving power of 1200, the nominal {\airs} resolution,
 and figure \ref{L1d700s} shows residuals for a resolving power of
 700.  Note the different x-axes for the two figures.  The residuals
 depend in part on the L1d starting channel $v_0$, and so on how the
-SRF peaks line up with the L1c set.  The residuals shown are the
-result of a rough fit for $v_0$.  For a resolving power of 1200 this
-gave $v_0$ equal to the first L1c channel, while for 700 it was the
-first L1c channel plus $0.2$~\wn.
+L1c and L1d SRF peaks line up.  The residuals shown are the result
+of a rough fit for $v_0$.  For a resolving power of 1200 this gave
+$v_0$ equal to the first L1c channel, while for 700 it was the first
+L1c channel plus $0.2$~\wn.
 
 We see that for both the {\airs} to {\cris} and L1c to L1d
 translations some resolving power is sacrificed in shifting channel
@@ -540,9 +531,9 @@ comparable to unapodized {\cris} (figures \ref{diffLW},
 \ref{diffMW}, and \ref{diffSW}) and residuals for a resolving power
 of 700 (figure \ref{L1d700s}) are roughly comparable to apodized
 {\cris} (figure \ref{statall}).  As with the {\airs} to {\cris}
-translation, L1c to D residuals are significantly reduced with a
-linear correction.  Residuals for L1d with a resolving power of 700
-after correction are roughly comparable to residuals for apodized
+translation, the L1c to L1d residuals are significantly reduced with
+a linear correction.  Residuals for L1d with a resolving power of
+700 after correction are comparable to residuals for apodized
 {\cris} after a similar correction.
 
 \begin{figure} % source L1d_regr1.m
@@ -563,29 +554,16 @@ after correction are roughly comparable to residuals for apodized
   \label{L1d700s}
 \end{figure}
 
-Also as with the {\airs} to {\cris} translation, deconvolution 
-works significantly better than interpolation, and we consider
-similar cases.  For the first, start with true L1c and interpolate
-radiances directly to the L1d grid with a cubic spline.  For the
-second, interpolate true L1c to the 0.1 {\wn} intermediate grid 
-with a cubic spline and convolve this to the L1d channel set.
-Figure~\ref{interpL1d} shows interpolated L1d minus true L1d.  
-The two-step interpolation works a little better than the simple
-spline, but is still much larger than the residual for translation
-with deconvolution.
-
-The L1c to L1d translation can be represented as a single linear
-transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-transforms taking the intermediate grid to L1c and L1d channels.  
-We can get such a tranform in other ways, for example by regression
-to find $X$ that minimizes the residual $\|X r_c - r_d\|_2$ for L1c
-and L1d radiance sets $r_c$ and $r_d$.  In practice this seems to
-work well, at least for minimizing both dependent and independent
-set residuals.  But in contrast with the sharply banded composite
-transform $S_d\cdot S_c^{-1}$ the resulting transform is full of
-unexpected correlations and so may not be suitable for applications
-where we want to trace channel dependencies.  This is considered in
-more detail in the next section.
+As with the {\airs} to {\cris} translation, deconvolution works
+significantly better than interpolation.  We consider similar cases.
+For the first, start with true L1c and interpolate radiances
+directly to the L1d grid with a cubic spline.  For the second,
+interpolate true L1c to the 0.1 {\wn} intermediate grid with a cubic
+spline and convolve this to the L1d channel set.
+Figure~\ref{interpL1d} shows interpolated L1d minus true L1d.  The
+two-step interpolation works a little better than the simple spline,
+but is still much larger than the residual for translation with
+deconvolution.
 
 \begin{figure} % source L1d_test2.m
   \centering
@@ -598,71 +576,198 @@ more detail in the next section.
 
 %---------------------------------------------------------------------
 \FloatBarrier
-\section{Direct regression}
+\section{Direct and principal component regression}
 \label{dregr}
 
-The corrections of section \ref{airs2cris} and \ref{airsL1d} are
-applied independently to each channel, while in section \ref{dregr}
-we do the translation, including channel shifts, with a single
-larger regression.
-
-The L1c to L1d translation can be represented as a single linear
+The {\airs} L1c to L1d translation can be done with a single linear
 transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-transforms taking the intermediate grid to L1c and L1d channels and
-$S_c^{-1}$ the pseudo-inverse of $S_c$, that is, the deconvolution
-transform.  We can get such a tranform in other ways, for example by
-regression to find $X$ that minimizes the residual $\|X r_c -
-r_d\|_2$ for L1c and L1d radiance sets $r_c$ and $r_d$.  If $r_c$ and
-$r_d$ are $m$ and $n$ by $k$ matrices, then if $k <= m$ we can simply
-solve for $X$.  If $k < m$ the system is underdetermined; in this
-case the residual is zero but extrapolation behavior is typically
-poor.  If $k > m$ we can find $X$ by regression, and extrapolation
-behavior can be quite good if we regress against large sets of
-representative data.  In practice this seems to work very well, at
-least for minimizing both dependent and independent set residuals.
-But in contrast with the sharply banded composite transform $S_d\cdot
-S_c^{-1}$ the resulting transform is full of unexpected correlations
-and so may not be suitable for applications where we want to trace
-channel dependencies in the translation.
+transforms taking the intermediate grid to L1c and L1d channels.
+The {\airs} to {\cris} translation can also be done with a single
+transform if we use a resampling matrix rather than double Fourier
+interpolation.  We can get such a one-step tranform in other ways.
+If $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs} and
+{\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
+r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and
+we solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is in
+contrast with the corrections of section \ref{airs2cris} and
+\ref{airsL1d}.  There regression was used to find linear or
+quadratic correction coefficients independently for each channel.
+In contrast for direct regression each output channel can be a
+linear combination of any number of input channels.
+
+Direct regression minimizes residuals but is prone to over-fitting.
+As with the translation corrections we use the 7377 profile set as
+the dependent and the 49 profile as the independent sets.  Figures
+\ref{dreg1} and \ref{dreg2} show residuals for direct regression and
+the deconvolution translation with statistical correction, both for
+apodized radiances.  These are roughly comparable; the LW residual
+is larger at the low end of the band for direct regression and the
+high end for the deconvolved translation.  Deconvolution does better
+in the MW, and direct regression in the SW.
+
+Unfortunately the regression matrices have significant unwanted
+correlations.  Figures \ref{dreg3}, \ref{dreg4}, and \ref{dreg5} show
+the LW, MW, and SW direct regression matrices.  The LW is marginal,
+the MW looks bad, and the SW looks like garbage.  As noted in section
+\ref{airs2cris} the 7377 profile dependent set is highly correlated;
+the effective dimension is only 260, so our regression is actually
+underdetermined.  The independent set residuals are small because the
+7377 profile set spans the 49 profile test set, in the sense that
+2400 of 7377 left-singular vectors reduces the reconstruction
+residual for the 49 profile set to our 0.02~K threshold.
+
+This is a common problem with regression.  One fix is to add noise.
+Recall that we generate true {\airs} and true {\cris} by convolving
+a common set of high-resolution radiances.  For true {\airs} we can
+simply add noise at the {\airs} NEdN spec.  But if we want true
+{\cris} radiances with noise for testing or regression it does not
+work well to simply add noise at the {\cris} NEdN spec.  This does
+reduce correlations but increases residuals for the independent set
+significantly.  To model NEdN for the AIRS to CrIS translation we
+synthesize noise at the {\airs} NEdN spec, add it to the signal, run
+it through the translation, and measure it.  Similarly, for testing
+or regression it might be better to generate true {\airs}, generate
+noise at the {\airs} NEdN spec, add this to true {\airs}, translate
+the individual noise spectra to {\cris}, and add these to true
+{\cris}.  The problem appears to be getting a reference translation
+for the noise, and we do not pursue that further here.
+
+As an alternative to adding noise, we use a form of principal
+component regression.  As above, $r_a$ and $r_c$ are $m \times k$
+and $n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
+S_a\,V_a^T$ be a singular value decomposition with singular values
+in descending order and $U_a^i$ the first $i$ columns of $U_a$.
+Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
+decomposition with singular values in descending order and $U_c^j$
+the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
+$\hat r_c = (U_c^j)^T r_c$.  This gives $r_a$ and $r_c$ represented
+with respect to the bases $U_a^i$ and $U_c^j$; Since these are
+orthonormal, the transpose is the inverse.  Then as before find $X$
+to minimize $\|X \hat r_a - \hat r_c\|_2$ by solving $\hat r_a^T X^T
+= \hat r_c^T$ for $X$ by regression.  Translating $X$ to act as a
+transform on the original bases for $r_a$ and $r_c$ gives us $R =
+U_c^j X (U_a^i)^T$, our {\airs} to {\cris} transform.  This is
+parameterized by $i$ and $j$, the {\airs} and {\cris} basis sizes.
+
+Figures \ref{dreg6} shows residuals and \ref{dreg7}, \ref{dreg8} and
+\ref{dreg9} the final linear transform $R$ for the {\cris} LW, MW,
+and SW bands.  We have chosen $i = j = 500$ for the LW, $i = 500$
+and $j = 320$ for the MW, and $i = j = 100$ for the SW, to roughly
+balance unwanted correlation with residual size.
+
+Note that this sort of principal component regression is not the
+same as regression after principal component (or singular vector)
+filtering; for that we would take $\bar r_a = U_a^i (U_a^i)^T r_a$,
+$\bar r_c = U_c^j (U_c^j)^T r_c$, find $X$ to minimize $\|X \bar r_a
+- \bar r_c\|_2$, and have no need for a change of bases to apply
+$X$.  In practice this does not work as well as doing regression
+after the change of bases.
+
+\begin{figure} % source slackfigs a2cris_regr4.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/ap_direct_regr.png}
+  \caption{mean residuals for apodized {\airs} to {\cris} direct
+    regression}
+  \label{dreg1}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_test2.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/ap_decon_corr.png}
+  \caption{mean residuals for apodized {\airs} to {\cris}
+    reconvolution with the regression correction}
+  \label{dreg2}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr4.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/full_7377_LW_regr_mat.png}
+  \caption{regression coefficients for the LW direct regression}
+  \label{dreg3}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr4.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/full_7377_MW_regr_mat.png}
+  \caption{regression coefficients for the MW direct regression}
+  \label{dreg4}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr4.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/full_7377_SW_regr_mat.png}
+  \caption{regression coefficients for the SW direct regression}
+  \label{dreg5}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/ap_pc_direct_regr.png}
+  \caption{mean residuals for apodized {\airs} to {\cris} principal
+    component regression}
+  \label{dreg6}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/LW_pc_regr_mat.png}
+  \caption{regression coefficients for the LW principal component
+    regression}
+  \label{dreg7}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/MW_pc_regr_mat.png}
+  \caption{regression coefficients for the MW principal component
+    regression}
+  \label{dreg8}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[height=7.5cm]{slackfigs/SW_pc_regr_mat.png}
+  \caption{regression coefficients for the SW principal component
+    regression}
+  \label{dreg9}
+\end{figure}
 
 %---------------------------------------------------------------------
 \FloatBarrier
-\section{Applications and conclusions}
+\section{Conclusions}
 \label{appcon}
 
-[some notes on SNOs from SNO paper]
+[rehash intro; maybe add some notes on SNOs]
 
 \FloatBarrier
 \section{Appendix}
 \label{append}
 
-We can use the basis size needed to get a reconstruction residual
-below some fixed threshold as a measure the correlation of a set of
-radiances.  Let $R$ be an $m$ by $n$ array of radiances with one row
-per channel and one column per observation.  Let $R=U S\,V^T$ be a
-singular value decomposition with the singular values in descending
-order, and $U_k$ the first $k$ columns of $U$.  We can simply take
-the singular values as one measure of correlation; these drop off
-more quickly for more correlated data.
+We want to measure the correlation of a set of observations.  A
+standard measure is the dimension of a spanning set.  An analog when
+approximations are acceptable is to use the basis size needed to get
+a reconstruction residual below a fixed threshold.  Let $r_0$ be an
+$m \times n$ array of radiances, one row per channel and one column
+per observation.  Let $r_1 = U S\,V^T$ be a singular value
+decomposition with singular values in descending order, and $U_k$
+the first $k$ columns of $U$.  Let $r_k = U_k U_k^T r_0$; then $r_k
+\approx r_0$.  The approximation improves as $k$ increases and
+becomes exact for some $k <= m$.  This is the analog of principal
+component filtering using left-singular rather than eigenvectors.
+This is useful as a form of compression when $k$ is small relative
+to $n$.  For that case we save $U_k$ and $U_k^T r_0$ separately.
+Applications include IASI radiance data and the kcarta absorption
+database.
 
-For our applications a more useful measure is the number of basis
-vectors needed for a particular reconstruction residual.  We can
-approximate $R$ with a linear combination of the orthonormal vectors
-$U_k$, as $R\approx U_k U_k^T R$.  The approximation improves as
-$k$ increases and becomes exact for some $k <= m$.  This is useful
-as a form of compression when $k$ is small relative to $n$.  For
-that case we save $U_k$ and $U_k^T R$ separately.  Examples of this
-include IASI radiance data and the kcarta absorption database.
-
-We can think of $k$ as a reconstruction score and for example find
-the smallest $k$ such that $\rms(B^{-1}(R) - B^{-1}(U_k U_k^T R)) <
-0.02$ degrees K, where $B^{-1}$ is the inverse Planck function.  In
-this case $k$ is the number of linearly independent vectors needed
-to represent the radiance data to some particular accuracy, and so a
-measure of the correlation of the data.  For the 49 profile fitting
-set and a residual limit of 0.02~K, we found $k=48$, which we would
-interpret as largely uncorrelated while for the 7377 profile cloudy
-set we found $k=260$, which we would interpret as moderately
+Let $B^{-1}$ be the inverse Planck function and define $d(r_1, r_2)
+= \rms(B^{-1}(r_1, v) - B^{-1}(r_2, v))$, the {\rms} difference over
+all channels and observations of the brightness temperatures of
+radiance data.  Finally let $j$ be the smallest value such that
+$d(r_0, r_j) \le T_d$, for some threshold $T_d$.  We have chosen as
+$T_d = 0.02$~K.  Then $j$ is the effective dimension of our set
+$r_0$.  For the 49 profile fitting set this gives $j=48$, which we
+would interpret as largely uncorrelated, while for the 7377 profile
+cloudy set we found $j=260$, which we would interpret as highly
 correlated.
 
 \FloatBarrier
