@@ -581,19 +581,19 @@ deconvolution.
 
 The {\airs} L1c to L1d translation can be done with a single linear
 transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-transforms taking the intermediate grid to L1c and L1d channels.
+transforms taking the intermediate grid to L1c and L1d channels.  
 The {\airs} to {\cris} translation can also be done with a single
 transform if we use a resampling matrix rather than double Fourier
 interpolation.  We can get such a one-step tranform in other ways.
 If $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs} and
 {\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
-r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and
-we solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is in
-contrast with the corrections of section \ref{airs2cris} and
-\ref{airsL1d}.  There regression was used to find linear or
-quadratic correction coefficients independently for each channel.
-In contrast for direct regression each output channel can be a
-linear combination of any number of input channels.
+r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and we
+solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is in contrast
+with the corrections of section \ref{airs2cris} and \ref{airsL1d}.
+There regression was used to find linear or quadratic correction
+coefficients independently for each channel.  For direct regression
+each output channel can be a linear combination of any number of
+input channels.
 
 Direct regression minimizes residuals but is prone to over-fitting.
 As with the translation corrections we use the 7377 profile set as
@@ -605,32 +605,31 @@ is larger at the low end of the band for direct regression and the
 high end for the deconvolved translation.  Deconvolution does better
 in the MW, and direct regression in the SW.
 
-Unfortunately the regression matrices have significant unwanted
-correlations.  Figures \ref{dreg3}, \ref{dreg4}, and \ref{dreg5} show
-the LW, MW, and SW direct regression matrices.  The LW is marginal,
-the MW looks bad, and the SW looks like garbage.  As noted in section
-\ref{airs2cris} the 7377 profile dependent set is highly correlated;
-the effective dimension is only 260, so our regression is actually
-underdetermined.  The independent set residuals are small because the
-7377 profile set spans the 49 profile test set, in the sense that
-2400 of 7377 left-singular vectors reduces the reconstruction
-residual for the 49 profile set to our 0.02~K threshold.
+Unfortunately the regression matrices show significant unwanted
+correlations.  Figure \ref{dreg3} shows the LW direct regression
+matrices.  There is significant unwanted correlation.  This is much
+worse for the MW and SW bands.  As noted in section \ref{airs2cris}
+the 7377 profile dependent set is highly correlated.  The effective
+dimension is only 260, so our regression is actually underdetermined.
+The independent set residuals are small because the 7377 profile set
+spans the 49 profile test set, at least in the sense that 2400 of
+7377 left-singular vectors reduces the reconstruction residual for
+the 49 profile set to our 0.02~K threshold.
 
-This is a common problem with regression.  One fix is to add noise.
-Recall that we generate true {\airs} and true {\cris} by convolving
-a common set of high-resolution radiances.  For true {\airs} we can
-simply add noise at the {\airs} NEdN spec.  But if we want true
-{\cris} radiances with noise for testing or regression it does not
-work well to simply add noise at the {\cris} NEdN spec.  This does
-reduce correlations but increases residuals for the independent set
-significantly.  To model NEdN for the AIRS to CrIS translation we
-synthesize noise at the {\airs} NEdN spec, add it to the signal, run
-it through the translation, and measure it.  Similarly, for testing
-or regression it might be better to generate true {\airs}, generate
-noise at the {\airs} NEdN spec, add this to true {\airs}, translate
-the individual noise spectra to {\cris}, and add these to true
-{\cris}.  The problem appears to be getting a reference translation
-for the noise, and we do not pursue that further here.
+One fix is to add noise.  Recall that we generate true {\airs} and
+true {\cris} by convolving a common set of high-resolution radiances.
+For true {\airs} we can simply add noise at the {\airs} NEdN spec.
+But if we want true {\cris} radiances with noise for testing or
+regression it does not work well to simply add noise at the {\cris}
+NEdN spec.  This does reduce correlations but increases residuals for
+the independent set significantly.  To model NEdN for the AIRS to
+CrIS translation we synthesize noise at the {\airs} NEdN spec, add it
+to the signal, run it through the translation, and measure it.
+Similarly, for testing or regression it might be better to generate
+true {\airs}, generate noise at the {\airs} NEdN spec, add this to
+true {\airs}, translate the individual noise spectra to {\cris}, and
+add these to true {\cris}.  The problem is getting a reference
+translation for the noise, and we do not pursue that further here.
 
 As an alternative to adding noise, we use a form of principal
 component regression.  As above, $r_a$ and $r_c$ are $m \times k$
@@ -641,7 +640,7 @@ Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
 decomposition with singular values in descending order and $U_c^j$
 the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
 $\hat r_c = (U_c^j)^T r_c$.  This gives $r_a$ and $r_c$ represented
-with respect to the bases $U_a^i$ and $U_c^j$; Since these are
+with respect to the bases $U_a^i$ and $U_c^j$; since these are
 orthonormal, the transpose is the inverse.  Then as before find $X$
 to minimize $\|X \hat r_a - \hat r_c\|_2$ by solving $\hat r_a^T X^T
 = \hat r_c^T$ for $X$ by regression.  Translating $X$ to act as a
@@ -649,19 +648,19 @@ transform on the original bases for $r_a$ and $r_c$ gives us $R =
 U_c^j X (U_a^i)^T$, our {\airs} to {\cris} transform.  This is
 parameterized by $i$ and $j$, the {\airs} and {\cris} basis sizes.
 
-Figures \ref{dreg6} shows residuals and \ref{dreg7}, \ref{dreg8} and
-\ref{dreg9} the final linear transform $R$ for the {\cris} LW, MW,
-and SW bands.  We have chosen $i = j = 500$ for the LW, $i = 500$
-and $j = 320$ for the MW, and $i = j = 100$ for the SW, to roughly
-balance unwanted correlation with residual size.
+Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
+\ref{dreg8}, and \ref{dreg9} the final linear transform $R$ for the
+{\cris} LW, MW, and SW bands.  We have chosen $i = j = 500$ for the
+LW, $i = 500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW,
+to roughly balance unwanted correlation with residual size.
 
-Note that this sort of principal component regression is not the
+Note that this sort of principal component regression is not the 
 same as regression after principal component (or singular vector)
 filtering; for that we would take $\bar r_a = U_a^i (U_a^i)^T r_a$,
 $\bar r_c = U_c^j (U_c^j)^T r_c$, find $X$ to minimize $\|X \bar r_a
-- \bar r_c\|_2$, and have no need for a change of bases to apply
-$X$.  In practice this does not work as well as doing regression
-after the change of bases.
+- \bar r_c\|_2$, and have no need for a change of bases to apply $X$.
+In practice this did not work as well as doing regression after the
+change of bases.
 
 \begin{figure} % source slackfigs a2cris_regr4.m
   \centering
@@ -686,19 +685,19 @@ after the change of bases.
   \label{dreg3}
 \end{figure}
 
-\begin{figure} % source slackfigs a2cris_regr4.m
-  \centering
-  \includegraphics[height=7.5cm]{slackfigs/full_7377_MW_regr_mat.png}
-  \caption{regression coefficients for the MW direct regression}
-  \label{dreg4}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr4.m
-  \centering
-  \includegraphics[height=7.5cm]{slackfigs/full_7377_SW_regr_mat.png}
-  \caption{regression coefficients for the SW direct regression}
-  \label{dreg5}
-\end{figure}
+% \begin{figure} % source slackfigs a2cris_regr4.m
+%   \centering
+%   \includegraphics[height=7.5cm]{slackfigs/full_7377_MW_regr_mat.png}
+%   \caption{regression coefficients for the MW direct regression}
+%   \label{dreg4}
+% \end{figure}
+% 
+% \begin{figure} % source slackfigs a2cris_regr4.m
+%   \centering
+%   \includegraphics[height=7.5cm]{slackfigs/full_7377_SW_regr_mat.png}
+%   \caption{regression coefficients for the SW direct regression}
+%   \label{dreg5}
+% \end{figure}
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
