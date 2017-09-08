@@ -579,42 +579,38 @@ deconvolution.
 \section{Direct and principal component regression}
 \label{dregr}
 
-The {\airs} L1c to L1d translation can be done with a single linear
-transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
+The {\airs} L1c to L1d translation can be done with a single 
+linear transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
 transforms taking the intermediate grid to L1c and L1d channels.  
-The {\airs} to {\cris} translation can also be done with a single
-transform if we use a resampling matrix rather than double Fourier
-interpolation.  We can get such a one-step tranform in other ways.
-If $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs} and
-{\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
-r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and we
-solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is in contrast
-with the corrections of section \ref{airs2cris} and \ref{airsL1d}.
-There regression was used to find linear or quadratic correction
-coefficients independently for each channel.  For direct regression
-each output channel can be a linear combination of any number of
-input channels.
+A similar one-step transform is possible for the {\airs} to {\cris}
+translation if we use a resampling matrix rather than double Fourier
+interpolation.  We can get such a tranform in other ways.  For
+example if $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs}
+and {\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
+r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and
+we solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is
+different from the corrections of section \ref{airs2cris} and
+\ref{airsL1d}; there regression was used to find linear or quadratic
+correction coefficients independently for each channel.
 
-Direct regression minimizes residuals but is prone to over-fitting.
-As with the translation corrections we use the 7377 profile set as
-the dependent and the 49 profile as the independent sets.  Figures
-\ref{dreg1} and \ref{dreg2} show residuals for direct regression and
-the deconvolution translation with statistical correction, both for
-apodized radiances.  These are roughly comparable; the LW residual
-is larger at the low end of the band for direct regression and the
-high end for the deconvolved translation.  Deconvolution does better
-in the MW, and direct regression in the SW.
+Figures \ref{dreg1} and \ref{dreg2} show residuals for direct
+regression and the deconvolution translation with statistical
+correction, both for apodized radiances.  As with the translation
+corrections we use the 7377 profile set as the dependent and the 49
+profile as the independent sets.  The residuals are roughly
+comparable; the LW residual is larger at the low end of the band for
+direct regression and the high end for the deconvolved translation.
+Deconvolution does better in the MW, and direct regression in the
+SW.  
 
-Unfortunately the regression matrices show significant unwanted
-correlations.  Figure \ref{dreg3} shows the LW direct regression
-matrices.  There is significant unwanted correlation.  This is much
-worse for the MW and SW bands.  As noted in section \ref{airs2cris}
-the 7377 profile dependent set is highly correlated.  The effective
-dimension is only 260, so our regression is actually underdetermined.
-The independent set residuals are small because the 7377 profile set
-spans the 49 profile test set, at least in the sense that 2400 of
-7377 left-singular vectors reduces the reconstruction residual for
-the 49 profile set to our 0.02~K threshold.
+The regression matrices show significant unwanted correlations.
+Figure \ref{dreg3} shows this for the LW; the MW and SW bands are
+much worse.  As noted in section \ref{airs2cris} the 7377 profile
+dependent set is highly correlated.  The effective dimension is only
+260, our regression is actually under-determined, and the dependent
+set residuals are very small.  The independent set residuals are
+larger but acceptable because the 7377 profile set approximately
+spans the 49 profile test set.
 
 One fix is to add noise.  Recall that we generate true {\airs} and
 true {\cris} by convolving a common set of high-resolution radiances.
@@ -631,7 +627,7 @@ true {\airs}, translate the individual noise spectra to {\cris}, and
 add these to true {\cris}.  The problem is getting a reference
 translation for the noise, and we do not pursue that further here.
 
-As an alternative to adding noise, we use a form of principal
+As an alternative to adding noise, we can use a form of principal
 component regression.  As above, $r_a$ and $r_c$ are $m \times k$
 and $n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
 S_a\,V_a^T$ be a singular value decomposition with singular values
@@ -640,13 +636,13 @@ Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
 decomposition with singular values in descending order and $U_c^j$
 the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
 $\hat r_c = (U_c^j)^T r_c$.  This gives $r_a$ and $r_c$ represented
-with respect to the bases $U_a^i$ and $U_c^j$; since these are
+with respect to the bases $U_a^i$ and $U_c^j$.  Since these are
 orthonormal, the transpose is the inverse.  Then as before find $X$
 to minimize $\|X \hat r_a - \hat r_c\|_2$ by solving $\hat r_a^T X^T
-= \hat r_c^T$ for $X$ by regression.  Translating $X$ to act as a
-transform on the original bases for $r_a$ and $r_c$ gives us $R =
-U_c^j X (U_a^i)^T$, our {\airs} to {\cris} transform.  This is
-parameterized by $i$ and $j$, the {\airs} and {\cris} basis sizes.
+= \hat r_c^T$ for $X$ by regression.  Translating $X$ a transform on
+the bases for $r_a$ and $r_c$ gives us $R = U_c^j X (U_a^i)^T$, our
+{\airs} to {\cris} transform.  This is parameterized by $i$ and $j$,
+the {\airs} and {\cris} basis sizes.
 
 Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
 \ref{dreg8}, and \ref{dreg9} the final linear transform $R$ for the
@@ -736,7 +732,7 @@ change of bases.
 \section{Conclusions}
 \label{appcon}
 
-[rehash intro; maybe add some notes on SNOs]
+[rehash intro; maybe add some notes on applications and SNOs]
 
 \FloatBarrier
 \section{Appendix}
