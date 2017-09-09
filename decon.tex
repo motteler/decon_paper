@@ -576,15 +576,16 @@ deconvolution.
 
 %---------------------------------------------------------------------
 \FloatBarrier
-\section{Direct and principal component regression}
+\section{Principal component regression}
 \label{dregr}
 
-The {\airs} L1c to L1d translation can be done with a single 
-linear transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
-transforms taking the intermediate grid to L1c and L1d channels.  
-A similar one-step transform is possible for the {\airs} to {\cris}
-translation if we use a resampling matrix rather than double Fourier
-interpolation.  We can get such a tranform in other ways.  For
+The {\airs} L1c to L1d translation can be done with a single linear
+transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
+transforms taking the intermediate grid to L1c and L1d channels.
+The {\airs} to {\cris} translation can also be done with a composite
+transform if we use a resampling matrix rather than the double
+Fourier interpolation to go from the intermediate to the {\cris}
+user grid.  We can get such a one-step tranform in other ways.  For
 example if $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs}
 and {\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
 r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and
@@ -594,69 +595,78 @@ different from the corrections of section \ref{airs2cris} and
 correction coefficients independently for each channel.
 
 Figures \ref{dreg1} and \ref{dreg2} show residuals for direct
-regression and the deconvolution translation with statistical
-correction, both for apodized radiances.  As with the translation
-corrections we use the 7377 profile set as the dependent and the 49
-profile as the independent sets.  The residuals are roughly
-comparable; the LW residual is larger at the low end of the band for
-direct regression and the high end for the deconvolved translation.
-Deconvolution does better in the MW, and direct regression in the
-SW.  
+regression and deconvolution translation with statistical
+correction, both for apodized radiances.  As before we use the 7377
+profile set as the dependent and the 49 profile as the independent
+sets.  The residuals are roughly comparable; the LW residual is
+larger at the low end of the band for direct regression and the high
+end for the deconvolved translation.  Deconvolution does better in
+the MW, and direct regression in the SW.
 
-The regression matrices show significant unwanted correlations.
-Figure \ref{dreg3} shows this for the LW; the MW and SW bands are
-much worse.  As noted in section \ref{airs2cris} the 7377 profile
-dependent set is highly correlated.  The effective dimension is only
-260, our regression is actually under-determined, and the dependent
-set residuals are very small.  The independent set residuals are
-larger but acceptable because the 7377 profile set approximately
-spans the 49 profile test set.
+Unfortunately the regression matrices show significant off-diagonal
+correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
+SW bands are worse.  As noted in section \ref{airs2cris} the 7377
+profile dependent set is highly correlated.  The effective dimension
+is only 260, our regression is actually under-determined.  The
+dependent set residuals are close to zero, much less than the
+residuals for the independed set shown above.
 
-One fix is to add noise.  Recall that we generate true {\airs} and
-true {\cris} by convolving a common set of high-resolution radiances.
-For true {\airs} we can simply add noise at the {\airs} NEdN spec.
-But if we want true {\cris} radiances with noise for testing or
-regression it does not work well to simply add noise at the {\cris}
-NEdN spec.  This does reduce correlations but increases residuals for
-the independent set significantly.  To model NEdN for the AIRS to
-CrIS translation we synthesize noise at the {\airs} NEdN spec, add it
-to the signal, run it through the translation, and measure it.
-Similarly, for testing or regression it might be better to generate
-true {\airs}, generate noise at the {\airs} NEdN spec, add this to
-true {\airs}, translate the individual noise spectra to {\cris}, and
-add these to true {\cris}.  The problem is getting a reference
-translation for the noise, and we do not pursue that further here.
+One fix is to add noise.  Recall that we generate true {\airs} 
+and true {\cris} by convolving a common set of high-resolution
+radiances.  For true {\airs} we can simply add noise at the {\airs}
+NEdN spec.  But for regression or testing of an {\airs} to {\cris}
+translation we want {\cris} radiances with actual translated {\airs}
+noise, not simply true {\cris} with noise added as per the {\cris}
+NEdN spec.  The latter does reduce correlations but increases
+residuals for the independent set significantly.
+
+To model NEdN for the AIRS to CrIS translation we synthesize noise
+at the {\airs} NEdN spec, add it to the signal, run it through the
+translation, and measure it.  That works fine for measuring noise.
+But to get an {\airs} to {\cris} translation by regression with
+added noise we need the reference translation of each noisy {\airs}
+spectra.  One way to do that might be to add noise to the high res
+spectra before convolution to the {\airs} user grid in such a way
+that we match the {\airs} NEdN spec and convolve this noisy signal
+to the {\cris} user grid to get noisy {\cris}, but we do not pursue
+that further here.
 
 As an alternative to adding noise, we can use a form of principal
-component regression.  As above, $r_a$ and $r_c$ are $m \times k$
+component regression.  As above, let $r_a$ and $r_c$ be $m \times k$
 and $n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
-S_a\,V_a^T$ be a singular value decomposition with singular values
+S_a\,V_a^T$ be the singular value decomposition with singular values
 in descending order and $U_a^i$ the first $i$ columns of $U_a$.
 Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
 decomposition with singular values in descending order and $U_c^j$
 the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
-$\hat r_c = (U_c^j)^T r_c$.  This gives $r_a$ and $r_c$ represented
-with respect to the bases $U_a^i$ and $U_c^j$.  Since these are
+$\hat r_c = (U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with
+respect to the bases $U_a^i$ and $U_c^j$.  Since these are
 orthonormal, the transpose is the inverse.  Then as before find $X$
 to minimize $\|X \hat r_a - \hat r_c\|_2$ by solving $\hat r_a^T X^T
-= \hat r_c^T$ for $X$ by regression.  Translating $X$ a transform on
-the bases for $r_a$ and $r_c$ gives us $R = U_c^j X (U_a^i)^T$, our
-{\airs} to {\cris} transform.  This is parameterized by $i$ and $j$,
-the {\airs} and {\cris} basis sizes.
+= \hat r_c^T$ for $X$ by regression.  This gives us $R = U_c^j X
+(U_a^i)^T$, an {\airs} to {\cris} transform parameterized by the
+{\airs} and {\cris} basis sizes $i$ and $j$,
 
-Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
-\ref{dreg8}, and \ref{dreg9} the final linear transform $R$ for the
-{\cris} LW, MW, and SW bands.  We have chosen $i = j = 500$ for the
-LW, $i = 500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW,
-to roughly balance unwanted correlation with residual size.
-
-Note that this sort of principal component regression is not the 
+Note that this sort of principal component regression is not the
 same as regression after principal component (or singular vector)
 filtering; for that we would take $\bar r_a = U_a^i (U_a^i)^T r_a$,
 $\bar r_c = U_c^j (U_c^j)^T r_c$, find $X$ to minimize $\|X \bar r_a
-- \bar r_c\|_2$, and have no need for a change of bases to apply $X$.
-In practice this did not work as well as doing regression after the
-change of bases.
+- \bar r_c\|_2$, and have no need for a change of bases to apply
+$X$.  In practice this did not work as well as doing regression
+after the change of bases.
+
+Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
+\ref{dreg8}, and \ref{dreg9} the transform $R$ for the {\cris} LW,
+MW, and SW bands.  We have chosen $i = j = 500$ for the LW, $i =
+500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW, to
+roughly balance unwanted correlation with residual size.  For all
+three bands the residuals for principal component regression are
+larger than for the deconvolution translation with regression
+correction and there is still significant off-diagonal correlation,
+especially for the MW and SW bands.  We conclude the deconvolution
+translation with regression correction works significantly better
+than regular or principal component regression, although the latter
+does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr4.m
   \centering
@@ -670,7 +680,7 @@ change of bases.
   \centering
   \includegraphics[height=7.5cm]{slackfigs/ap_decon_corr.png}
   \caption{mean residuals for apodized {\airs} to {\cris}
-    reconvolution with the regression correction}
+    deconvolution translation with the regression correction}
   \label{dreg2}
 \end{figure}
 
@@ -732,38 +742,39 @@ change of bases.
 \section{Conclusions}
 \label{appcon}
 
-[rehash intro; maybe add some notes on applications and SNOs]
+[rehash intro, note conclusions from the previous section, maybe add
+  some notes on applications and SNOs]
 
 \FloatBarrier
 \section{Appendix}
 \label{append}
 
-We want to measure the correlation of a set of observations.  A
-standard measure is the dimension of a spanning set.  An analog when
-approximations are acceptable is to use the basis size needed to get
-a reconstruction residual below a fixed threshold.  Let $r_0$ be an
-$m \times n$ array of radiances, one row per channel and one column
-per observation.  Let $r_1 = U S\,V^T$ be a singular value
-decomposition with singular values in descending order, and $U_k$
-the first $k$ columns of $U$.  Let $r_k = U_k U_k^T r_0$; then $r_k
-\approx r_0$.  The approximation improves as $k$ increases and
-becomes exact for some $k <= m$.  This is the analog of principal
-component filtering using left-singular rather than eigenvectors.
-This is useful as a form of compression when $k$ is small relative
-to $n$.  For that case we save $U_k$ and $U_k^T r_0$ separately.
-Applications include IASI radiance data and the kcarta absorption
-database.
+We want to measure the correlation of a set of radiances.  One such
+measure is dimension of a spanning set.  For an approximation we use
+the basis size needed to get reconstruction residuals below some
+fixed threshold.  Let $r_0$ be an $m \times n$ array of radiances,
+one row per channel and one column per observation.  Let $r_1 = U
+S\,V^T$ be a singular value decomposition with singular values in
+descending order and $U_k$ the first $k$ columns of $U$.  Let $r_k =
+U_k U_k^T r_0$; then $r_k \approx r_0$.  The approximation improves
+as $k$ increases and becomes exact for some $k <= m$.  This is the
+analog of principal component filtering using left-singular rather
+than eigenvectors and is useful as a form of compression when $k$ is
+small relative to $n$.  For that case we save $U_k$ and $U_k^T r_0$
+separately.  Applications include compression of IASI radiance data
+and the kcarta absorption coefficient database.
 
-Let $B^{-1}$ be the inverse Planck function and define $d(r_1, r_2)
-= \rms(B^{-1}(r_1, v) - B^{-1}(r_2, v))$, the {\rms} difference over
-all channels and observations of the brightness temperatures of
-radiance data.  Finally let $j$ be the smallest value such that
-$d(r_0, r_j) \le T_d$, for some threshold $T_d$.  We have chosen as
-$T_d = 0.02$~K.  Then $j$ is the effective dimension of our set
-$r_0$.  For the 49 profile fitting set this gives $j=48$, which we
-would interpret as largely uncorrelated, while for the 7377 profile
-cloudy set we found $j=260$, which we would interpret as highly
-correlated.
+We use a threshold for equivalence that is relevant for our
+applications.  Let $B^{-1}$ be the inverse Planck function and
+define $d(r_1, r_2) = \rms(B^{-1}(r_1, v) - B^{-1}(r_2, v))$, the
+{\rms} difference over all channels and observations of the
+brightness temperatures of radiance data.  Finally let $j$ be the
+smallest value such that $d(r_0, r_j) \le T_d$, for some threshold
+$T_d$.  Then $j$ is the effective dimension of our set $r_0$.  Here
+we have chosen $T_d = 0.02$~K.  For the 49 profile fitting set this
+gives $j=48$, which we interpret as largely uncorrelated, while for
+the 7377 profile cloudy set we found $j=260$, which we interpret as
+highly correlated.
 
 \FloatBarrier
 \bibliographystyle{abbrv}
