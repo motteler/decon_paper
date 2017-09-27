@@ -5,8 +5,9 @@
 
 \input{crisdefs.tex}
 
-\title{AIRS Deconvolution and Translation \\
-  from the AIRS to CrIS IR Sounders \\
+\title{AIRS deconvolution and the \\
+       translation of AIRS to CrIS radiances \\ 
+       with applications for the IR climate record \\
   \vspace{3mm}
   {****} DRAFT {****}\\
 }
@@ -26,30 +27,31 @@
 
 Upwelling infrared radiation as measured by the {\airs} \cite{airs1}
 and {\cris} \cite{cris1,cris2} sounders is a significant part of the
-long term climate record.  We would like to treat this as a single
-data set and often want to compare radiances, for example in the
-analysis of simultaneous nadir overpasses (SNOs) for sounder
-calibration or validation.  However the instruments have different
-spectral resolutions, channel response functions, and band spans.
-As a step in addressing this problem we consider the translation of
-channel radiances from {\airs} to standard resolution {\cris}.
+long term climate record.  {\airs} and {\cris} have similar sampling
+patterns \cite{git:acsamp}.  We often want to compare radiances, and
+would like to treat this as a single data set for the analysis of
+long term trends.  However the instruments have different spectral
+resolutions, channel response functions, and band spans.  As a step
+in addressing this problem we consider the translation of channel
+radiances from {\airs} to standard resolution {\cris}.
 
-In addition to {\airs} to {\cris} we make regular use of an {\iasi}
-to {\cris} translation, and have implemented and tested {\iasi} to
-{\airs} and {\cris} to {\airs} translations as well.  The
+In addition to our {\airs} to {\cris} translation we make regular
+use of an {\iasi} to {\cris} translation for evaluating simultaneous
+nadir overpasses (SNOs) \cite{sno1}, and have implemented and tested
+{\iasi} to {\airs} and {\cris} to {\airs} translations as well.  The
 translations from {\iasi} includes deapodization (a form of
-deconvolution) before reconvolution to the translation target and
+deconvolution) before reconvolution to the translation target, and
 work very well.  Ranking these translations by accuracy in
 comparison with calculated reference truth, we have {\iasi} to
 {\cris}, {\iasi} to {\airs}, {\airs} to {\cris}, and finally {\cris}
-to {\airs} \cite{git:decon}.  But aside from the {\airs} to {\cris}
-translation, the methods used are for the most part conventional.
+to {\airs} \cite{git:decon}.  But aside from {\airs} to {\cris} the
+methods used are for the most part conventional.
 
 Our translation from {\airs} to {\cris} has some novel features.
 {\airs} is a grating spectrometer with a distinct response function
 for each channel determined by the focal plane geometery, while
 {\cris} is a Michaelson interferometer with a sinc response
-function, after calibration and corrections.  In section \ref{decon}
+function after calibration and corrections.  In section \ref{decon}
 we show how to take advantage of our detailed knowledge of the
 {\airs} spectral response functions (SRFs) and their overlap to
 deconvolve channel radiances to a resolution-enhanced intermediate
@@ -63,8 +65,7 @@ model.  For both cases deconvolution followed by reconvolution is
 shown to work significantly better than conventional interpolation.
 Both methods can be further improved with a statistical correcion.
 In section \ref{dregr} we consider a purely statistical approach to
-such translations.  Section \ref{appcon} discusses applications and
-related and future work.
+such translations, and compare these with deconvolution.
 
 %---------------------------------------------------------------------
 \FloatBarrier
@@ -743,8 +744,30 @@ does work better than conventional interpolation.
 \section{Conclusions}
 \label{appcon}
 
-[rehash intro, note conclusions from the previous section, maybe add
-  some notes on applications and SNOs]
+We have shown how to take advantage of detailed knowledge of the
+{\airs} spectral response functions to deconvolve channel radiances
+to a resolution-enhanced intermediate representation, typically a
+$0.1$~\wn\ grid.  This deconvolution by itself gives a modest
+resolution enhancement at the cost of added artifacts and noise, but
+the main application is reconvolution to an alternate instrument
+specification.  We consider two cases: reconvolution to the {\cris}
+user grid, and to an idealized grating model.  This translation
+works well by itself but can be improved with a linear correction
+applied independently to each channel, with coefficients determined
+by regression.  Finally, we consider principal component regression
+directly from {\airs} to {\cris} radiances, and find a tradeoff
+between residual size and undesired correlations.  Reducing the
+correlations increases the residuals, which become larger than for
+translation with deconvolution.
+
+These ideas have been implemented and tested extensively, with
+Matlab demo code published on github.  Our demos are i/o bound, but
+the in-core time for the {\airs} to {\cris} translation is divided
+into roughly 25 percent for the deconvolution and 75 percent for
+reconvolution, about 22 seconds to process our 7377 profile cloudy
+test set on one compute node.  Calculating the pseudo-inverse adds
+another 12 seconds, but that only needs to be done when the
+translation parameters change.
 
 \FloatBarrier
 \section{Appendix}
