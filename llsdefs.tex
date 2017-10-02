@@ -1,0 +1,44 @@
+% LLS packages and defs
+
+% Easy way to change geometry of the page
+\usepackage{geometry}
+\geometry{letterpaper,textwidth=6.9in,textheight=9in,includeheadfoot}
+
+% Better kerning, etc.
+\usepackage{microtype}
+
+% Special font
+\usepackage[T1]{fontenc}
+\usepackage[expert,altbullet]{lucidabr}
+% End Special font
+
+% Small captions
+\usepackage[font=small]{caption}
+
+% Force more floats when there is little text
+\columnsep=0.2in
+\setlength{\belowcaptionskip}{-1ex}
+\setcounter{topnumber}{4}
+\def\topfraction{.9}
+\setcounter{bottomnumber}{4}
+\def\bottomfraction{.9}
+\setcounter{totalnumber}{4}
+\def\textfraction{0}
+\def\floatpagefraction{.8}
+\setcounter{dbltopnumber}{4}
+\def\dbltopfraction{.9}
+\def\dblfloatpagefraction{.8}
+
+% I've always hated default section sizes, always use these
+\makeatletter
+\renewcommand{\section}{\@startsection {section}{1}{\z@}%
+                                   {-3.5ex \@plus -1ex \@minus -.2ex}%
+                                   {2.3ex \@plus.2ex}%
+                                   {\reset@font\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\reset@font\normalsize\bfseries}}
+\makeatother
+
+

@@ -1,0 +1,65 @@
+LLS Intro Changes?
+
+Spectra of the earth's thermal emission as measured by the {\airs}
+\cite{airs1}, {\cris} \cite{cris1,cris2}, and the {\iasi} \cite{iasi}
+sounders are becoming a significant part of a long term climate record.
+These measurements started with {\airs} in 2002 and should continue for the
+foreseeable future given their important role in numerical weather
+prediction.  {\cris} is the operational version of {\airs} that was tested
+under NASA NPP program and will soon continue flying on NOAA's JPSS
+meterological satellite series with the first launch slated for
+November 2017.  {\cris} and {\airs} both fly in a 1:30 sun-synchronous
+orbit with similar cross-track spatial resolution and sampling.  The main
+difference between {\cris} and {\airs} is spectral resolution, and although
+they are similar, channel spectral responses are different enough to
+produce radiometric differences up to 10K.  This is related to the fact
+that {\airs} is a grating spectrometer with a nominallyl constant resolving
+power over the 4 to 15 micron wavelength range while CrIS is an
+interferometer with constant spectral resolution (that is different for
+three bands in it's initial flight configuration.)
+
+This paper considers methods to convert the combination of {\airs} and
+{\cris} into a common set of channel radiances with identical spectral
+response functions (SRFs) to facilitate construction of long-term radiance
+climate records.  This approach also allows channel-by-channel adjustments
+of true radiometric calibration differences in each instrument, which is
+not possible using their native spectra with different SRFs.  In addition,
+SRF differences can give each instrument slightly different sensitivities
+to the upwelling atmospheric radiances that could result in slight
+differences in geophysical retrievals from these radiances, causing an
+offset in the retrieval climate record.  Moreover, this approach allows an
+inter-instrument retrieval algorithm to use the same fast forward radiative
+transfer model, minimizing any differential effect of forward model errors
+between the two instrument retrievals.
+
+# We often want to compare radiances, and would like to treat this as a
+# single data set for the analysis of long term trends.  However the
+# instruments have different spectral resolutions, channel response
+# functions, and band spans.  As a step in addressing this problem we
+# consider the translation of channel radiances from {\airs} to standard
+# resolution {\cris}.
+
+
+LLS Comments
+
+- I wonder if "AIRS->CrIS" is better than just "AIRS CrIS"?
+
+- Need to state early that most retrieval and assimilation schemes only use Hamming apodized radiances.  (Bill Smith might use sinc, need to check, but that is an anomaly and he is doing regression.)
+
+- Near .tex line 371 maybe also state that the low std of the simulation shows that the conversion errors are mostly static.  
+
+- Near .tex line 393, maybe mention that Fig. 11 has a vastly smaller scale than the earlier figures?
+
+- Near .tex line 455, I think noise deserves a subsection?  We really want people to pay attention to this part as well as the conversion.
+
+- I'd like to add a bit more on noise.  For apodized only maybe (a) ratio of CrIS to AIRS CrIS noise and (b) nominal nedt noise (for some profile), which is easier for people to understand and follow.  
+
+- Maybe also suggest that these differences can be accounted for by adding noise to the appropriate sensor when attempting to create identical retrieval records.    
+
+- In addition, people will likely bring up CrIS FSR resolution.  We can say that will be addressed in the future.  I don't think we can get AIRS-CrIS in the MW for FSR, you think that is true.  If so, we suggest that a new intermediate resolution be used, ie in the MW we convert AIRS to the highest resolution we can and degrade CrIS MW to that resolution.  For the SW same thing.
+
+- Isn't Figure 22 a repeat of earlier plots?  Fine to show again, but if true, we should note that.
+
+
+
+

@@ -1,8 +1,10 @@
-\documentclass[11pt]{article}
+%\documentclass[11pt]{article}
+\documentclass[10pt,twocolumn]{article}  %10pt is big enough with my lucida font
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{url}
 
+\input{llsdefs.tex}
 \input{crisdefs.tex}
 
 \title{AIRS deconvolution and the \\
@@ -82,7 +84,7 @@ channel frequency.
 
 \begin{figure} % source plot_SRF2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/airs_sample_srfs.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_sample_srfs.pdf}
   \caption{sample {\airs} spectral response functions from the low
     and high ends of the band.   The dashed line is a generalized
     Gaussian function.}
@@ -91,7 +93,7 @@ channel frequency.
 
 \begin{figure} % source plot_SRF2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/airs_L1c_res.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_L1c_res.pdf}
   \caption{{\airs} L1c channel spacing and derived resolving
     power.}
   \label{chan1}
@@ -181,7 +183,7 @@ $0.2$~\wn, all of which gave larger residuals.
 
 \begin{figure} % source decon_test1.m 
   \centering
-  \includegraphics[height=7.5cm]{figures/airs_decon_zoom.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_decon_zoom.pdf}
   \caption{details from fitting profile 1 for kcarta, direct
     convolution to the $0.1$~\wn\ grid (``gauss''), deconvolved
     {\airs}, and true {\airs}.}
@@ -190,7 +192,7 @@ $0.2$~\wn, all of which gave larger residuals.
 
 \begin{figure} % source decon_test1.m
   \centering
-  \includegraphics[height=7.5cm]{figures/airs_decon_spec.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
   \caption{spectra from fitting profile 1 for direct convolution to
     the $0.1$~\wn\ grid (``gauss'') and deconvolved {\airs}}
   \label{dspec}
@@ -198,7 +200,7 @@ $0.2$~\wn, all of which gave larger residuals.
 
 % \begin{figure} % source decon_test1.m
 %   \centering
-%   \includegraphics[height=7.5cm]{figures/airs_decon_diff.pdf}
+%   \includegraphics[width=\linewidth]{figures/airs_decon_diff.pdf}
 %   \caption{mean and standard deviation over the 49 fitting profiles
 %     for the L1c deconvolution minus direct convolution to the
 %     $0.1$~\wn\ intermediate grid.  The residuals are too large to use
@@ -235,7 +237,7 @@ reconvolution to a lower resolution.
 
 \begin{figure} % source plot_Binv.m
   \centering
-  \includegraphics[height=7.5cm]{figures/airs_decon_basis.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_decon_basis.pdf}
   \caption{sample adjacent rows for the deconvolution and L1c to L1d
     transforms}
   \label{dbasis}
@@ -299,7 +301,7 @@ uncorrelated; reducing the reconstruction residual to 0.02~K
 requires 48 left-singular vectors.  (Details of this correlation
 measure are given in an appendix.)  For statistical correction and
 the direct regression discussed in section \ref{dregr} we also use a
-set of 7377 radiances calculated from mostly cloudy AIRS profiles
+set of 7377 radiances calculated from all-sky (clear and cloudy) AIRS profiles
 spanning several consecutive days as the dependent set.  This set is
 moderately correlated; reducing the reconstruction residual to
 0.02~K requires 260 left-singular vectors.  Splitting the 7377
@@ -325,15 +327,16 @@ to zero for the apodized residuals.
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_spec_LW.pdf}
-  \caption{true {\airs}, deconvolved {\airs}, true {\cris}, and
-    {\airs} {\cris}}
+  \includegraphics[width=\linewidth]{figures/a2cris_spec_LW.pdf}
+  \caption{true {\airs}, deconvolved {\airs}, true {\cris}, and {\airs}
+    {\cris}.  Differences between true {\cris} and {\airs} {\cris} are too
+    small to be visible in this figure.}
   \label{specLW}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_diff_LW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_LW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
     band}
@@ -342,7 +345,7 @@ to zero for the apodized residuals.
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_diff_MW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_MW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
     band}
@@ -351,7 +354,7 @@ to zero for the apodized residuals.
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_diff_SW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_SW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
     apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
     band}
@@ -360,7 +363,7 @@ to zero for the apodized residuals.
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_diff_all.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_all.pdf}
   \caption{Mean of apodized residuals for all three {\cris} bands}
   \label{meanAll}
 \end{figure}
@@ -404,7 +407,7 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_regr_LW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_regr_LW.pdf}
   \caption{Mean and standard deviation of LW corrected apodized
     residuals}
   \label{statLW}
@@ -412,14 +415,14 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_coef_LW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_coef_LW.pdf}
   \caption{LW $a$ and $b$ weights for the linear correction $ax+b$}
   \label{coefLW}
 \end{figure}
 
 \begin{figure} % source a2cris_regr2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_regr_MW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_regr_MW.pdf}
   \caption{Mean and standard deviation of MW corrected apodized
     residuals.}
   \label{statMW}
@@ -427,7 +430,7 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_regr_SW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_regr_SW.pdf}
   \caption{Mean and standard deviation of SW corrected apodized
     residuals.}
   \label{statSW}
@@ -435,7 +438,7 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source a2cris_test2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_regr_all.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_regr_all.pdf}
   \caption{Mean corrected and uncorrected apodized residuals for all
     three bands.}
   \label{statall}
@@ -443,7 +446,7 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source nedn_test1.m
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_nedn.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
   \caption{{\airs} to {\cris} unapodized and apodized NEdN
     estimates}
   \label{nedn}
@@ -487,7 +490,7 @@ significantly less than interpolation for all three bands.
 
 \begin{figure} % source a2cris_test1
   \centering
-  \includegraphics[height=7.5cm]{figures/a2cris_interp_LW.pdf}
+  \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
   \caption{spline interpolation, interpolation with convolution, 
     and deconvolution with convolution for the {\cris} LW band}
   \label{intpLW}
@@ -540,7 +543,7 @@ a linear correction.  Residuals for L1d with a resolving power of
 
 \begin{figure} % source L1d_regr1.m
   \centering
-  \includegraphics[height=7.5cm]{figures/L1d_corr_1200.pdf}
+  \includegraphics[width=\linewidth]{figures/L1d_corr_1200.pdf}
   \caption{mean and standard deviation over the 49 fitting profiles
     for the L1c to L1d translation minus true L1d for a resolving
     power of 1200}
@@ -549,7 +552,7 @@ a linear correction.  Residuals for L1d with a resolving power of
 
 \begin{figure} % source L1d_regr1.m
   \centering
-  \includegraphics[height=7.5cm]{figures/L1d_corr_700.pdf}
+  \includegraphics[width=\linewidth]{figures/L1d_corr_700.pdf}
   \caption{mean and standard deviation over the 49 fitting profiles
     for the L1c to L1d translation minus true L1d for a resolving
     power of 700}
@@ -569,7 +572,7 @@ deconvolution.
 
 \begin{figure} % source L1d_test2.m
   \centering
-  \includegraphics[height=7.5cm]{figures/CtoD_interp_diff.pdf}
+  \includegraphics[width=\linewidth]{figures/CtoD_interp_diff.pdf}
   \caption{spline interpolation, interpolation with convolution, 
     and deconvolution with convolution for the {\airs} L1c to L1d
     translation with $v_0=649.822$~\wn\ and a resolving power of 700}
@@ -586,7 +589,7 @@ transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
 transforms taking the intermediate grid to L1c and L1d channels.
 The {\airs} to {\cris} translation can also be done with a composite
 transform if we use a resampling matrix rather than the double
-Fourier interpolation to go from the intermediate to the {\cris}
+Fourier interpolation to go from the intermediate grid to the {\cris}
 user grid.  We can get such a one-step tranform in other ways.  For
 example if $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs}
 and {\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
@@ -611,7 +614,7 @@ SW bands are worse.  As noted in section \ref{airs2cris} the 7377
 profile dependent set is highly correlated.  The effective dimension
 is only 260, our regression is actually under-determined.  The
 dependent set residuals are close to zero, much less than the
-residuals for the independed set shown above.
+residuals for the independent set shown above.
 
 One fix is to add noise.  Recall that we generate true {\airs} 
 and true {\cris} by convolving a common set of high-resolution
@@ -672,7 +675,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr4.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/ap_direct_regr.png}
+  \includegraphics[width=\linewidth]{slackfigs/ap_direct_regr.png}
   \caption{mean residuals for apodized {\airs} to {\cris} direct
     regression}
   \label{dreg1}
@@ -680,7 +683,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_test2.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/ap_decon_corr.png}
+  \includegraphics[width=\linewidth]{slackfigs/ap_decon_corr.png}
   \caption{mean residuals for apodized {\airs} to {\cris}
     deconvolution translation with the regression correction}
   \label{dreg2}
@@ -688,28 +691,28 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr4.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/full_7377_LW_regr_mat.png}
+  \includegraphics[width=\linewidth]{slackfigs/full_7377_LW_regr_mat.png}
   \caption{regression coefficients for the LW direct regression}
   \label{dreg3}
 \end{figure}
 
 % \begin{figure} % source slackfigs a2cris_regr4.m
 %   \centering
-%   \includegraphics[height=7.5cm]{slackfigs/full_7377_MW_regr_mat.png}
+%   \includegraphics[width=\linewidth]{slackfigs/full_7377_MW_regr_mat.png}
 %   \caption{regression coefficients for the MW direct regression}
 %   \label{dreg4}
 % \end{figure}
 % 
 % \begin{figure} % source slackfigs a2cris_regr4.m
 %   \centering
-%   \includegraphics[height=7.5cm]{slackfigs/full_7377_SW_regr_mat.png}
+%   \includegraphics[width=\linewidth]{slackfigs/full_7377_SW_regr_mat.png}
 %   \caption{regression coefficients for the SW direct regression}
 %   \label{dreg5}
 % \end{figure}
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/ap_pc_direct_regr.png}
+  \includegraphics[width=\linewidth]{slackfigs/ap_pc_direct_regr.png}
   \caption{mean residuals for apodized {\airs} to {\cris} principal
     component regression}
   \label{dreg6}
@@ -717,7 +720,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/LW_pc_regr_mat.png}
+  \includegraphics[width=\linewidth]{slackfigs/LW_pc_regr_mat.png}
   \caption{regression coefficients for the LW principal component
     regression}
   \label{dreg7}
@@ -725,7 +728,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/MW_pc_regr_mat.png}
+  \includegraphics[width=\linewidth]{slackfigs/MW_pc_regr_mat.png}
   \caption{regression coefficients for the MW principal component
     regression}
   \label{dreg8}
@@ -733,7 +736,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
-  \includegraphics[height=7.5cm]{slackfigs/SW_pc_regr_mat.png}
+  \includegraphics[width=\linewidth]{slackfigs/SW_pc_regr_mat.png}
   \caption{regression coefficients for the SW principal component
     regression}
   \label{dreg9}
@@ -806,3 +809,8 @@ highly correlated.
 
 \end{document}
 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
