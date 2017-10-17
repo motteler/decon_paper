@@ -1,10 +1,10 @@
-%\documentclass[11pt]{article}
-\documentclass[10pt,twocolumn]{article}  %10pt is big enough with my lucida font
+% \documentclass[11pt]{article}
+\documentclass[10pt,twocolumn]{article}  %10pt is big enough with lucida
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{url}
 
-\input{llsdefs.tex}
+% \input{llsdefs.tex}
 \input{crisdefs.tex}
 
 \title{AIRS deconvolution and the \\
@@ -84,7 +84,7 @@ channel frequency.
 
 \begin{figure} % source plot_SRF2.m
   \centering
-  \includegraphics[width=\linewidth]{figures/airs_sample_srfs.pdf}
+  \includegraphics[width=\linewidth]{figures/airs_sample_SRF.pdf}
   \caption{sample {\airs} spectral response functions from the low
     and high ends of the band.   The dashed line is a generalized
     Gaussian function.}
@@ -444,36 +444,55 @@ linear correction, paired with the apodized uncorrected residuals.
   \label{statall}
 \end{figure}
 
-\begin{figure} % source nedn_test1.m
+\FloatBarrier
+
+We can give a good estimate of noise equivalent differential
+radiance (NEdN) for the translation by adding noise with a normal
+distribution at the {\airs} NEdN to blackbody radiance at 280K and
+translating this to {\cris}.  This is done repeatedly and the noise
+after translation is measured.  As a check, noise before translation
+is also measured and compared with the original {\airs} value.  The
+result, along with {\airs} and {\cris} NEdN, are shown in figure
+\ref{nedn}.  The first subplot in figure \ref{nedt} shows
+corresponding NEdT for fitting profile 1, for apodized {\cris} and
+{\airs} to {\cris} radiances.
+
+The {\airs} and {\cris} NEdN values are averages over a full day, 
+4 Dec 2016.  NEdT for the L1c synthetic channels is interpolated.
+The {\airs} channel-to-channel NEdN variation is significant; in the
+upper half of the LW and most of the MW it is the same order as the
+{\airs} and {\cris} NEdN difference.  This variation is due the
+{\airs} focal plane structure and sensitivity.  Both {\airs} and
+{\cris} NEdN measures are spiky when averaged over a few minutes,
+but the {\cris} variation is primarily uncertainty in the noise
+measurement, and smooths out as the time span is extended.
+
+The {\airs} to {\cris} translation inherits this variability, which
+becomes a significant part of the difference between {\airs} {\cris}
+and true {\cris}.  For a common record, we might want to add noise
+on a channel-by-channel basis to whichever NEdN value---{\airs}
+{\cris} or true {\cris}---is lower.  NEdN for the combined record
+would then be max of the {\airs} {\cris} and true {\cris} NEdN
+values, as shown in the second subplot of figure \ref{nedt}.
+
+\begin{figure} % source nedn_test2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
-  \caption{{\airs} to {\cris} unapodized and apodized NEdN
-    estimates}
+  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} unapodized and
+      apodized NEdN}
   \label{nedn}
 \end{figure}
 
-We can give a reasonable estimate of noise equivalent differential
-radiance (NEdN) for the translation as follows.  We start with
-{\airs} L1c and {\cris} NEdN estimates.  These noise specs are
-showin in figure \ref{nedn}.  The L1c spec is the average over a day
-(4 Dec 2016) of NEdN values from the L1c granules, with gaps for the
-synthetic channels filled by interpolation.  The {\cris} values are
-from a single {\ccast} \cite{git:ccast} granule for the same day.
-The {\ccast} values are quite stable over time and consistent with
-NOAA {\cris} NEdN estimates \cite{zav2013}.  Noise with a normal
-distribution at the {\airs} spec is added to true {\airs} and then
-measured.  The measured {\airs} noise is the ``test'' line in the
-plot.  This is very close to the spec and so serves as a check for
-our methods.  True {\airs} with added noise is then translated to
-{\cris} and the noise of the translation is measured.  This is the
-{\airs} to {\cris} line in the plots.  The unapodized translation
-tracks the {\airs} noise spec fairly closely in the LW and MW, and
-is a little less in the SW.  Unapodized {\airs} to {\cris} noise is
-a little higher than true {\cris} noise in the LW, a little less in
-the MW, and significantly less in the SW, and this relationship is
-unchanged with apodization.
+\begin{figure} % source nedt_test1.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_nedt.pdf}
+  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
+    and the max of true {\cris} and {\airs}-to-{\cris} NEdN, with
+    true {\cris} shown as a reference}
+  \label{nedt}
+\end{figure}
 
-{\airs} to {\cris} translation via de- and re-convolution works
+The {\airs} to {\cris} translation via deconvolution works
 significantly better than conventional interpolation.  We consider
 two cases.  For the first, start with true {\airs} and interpolate
 radiances directly to the {\cris} user grid with a cubic spline.
@@ -683,7 +702,7 @@ does work better than conventional interpolation.
 
 \begin{figure} % source slackfigs a2cris_test2.m
   \centering
-  \includegraphics[width=\linewidth]{slackfigs/ap_decon_corr.png}
+  \includegraphics[width=\linewidth]{figures/ap_decon_corr.pdf}
   \caption{mean residuals for apodized {\airs} to {\cris}
     deconvolution translation with the regression correction}
   \label{dreg2}
@@ -809,8 +828,3 @@ highly correlated.
 
 \end{document}
 
-
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: t
-%%% End:

@@ -20,6 +20,9 @@
 *.bbl
 *.blg
 
+# fig files can be huge
+*.fig
+
 # archives and packages
 *.gz
 *.tgz

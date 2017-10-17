@@ -44,21 +44,38 @@ LLS Comments
 
 - I wonder if "AIRS->CrIS" is better than just "AIRS CrIS"?
 
-- Need to state early that most retrieval and assimilation schemes only use Hamming apodized radiances.  (Bill Smith might use sinc, need to check, but that is an anomaly and he is doing regression.)
+- Need to state early that most retrieval and assimilation schemes
+  only use Hamming apodized radiances.  (Bill Smith might use sinc,
+  need to check, but that is an anomaly and he is doing regression.)
 
-- Near .tex line 371 maybe also state that the low std of the simulation shows that the conversion errors are mostly static.  
+- Near .tex line 371 maybe also state that the low std of the
+  simulation shows that the conversion errors are mostly static.
 
-- Near .tex line 393, maybe mention that Fig. 11 has a vastly smaller scale than the earlier figures?
+- Near .tex line 393, maybe mention that Fig. 11 has a vastly
+  smaller scale than the earlier figures?
 
-- Near .tex line 455, I think noise deserves a subsection?  We really want people to pay attention to this part as well as the conversion.
+- Near .tex line 455, I think noise deserves a subsection?  We
+  really want people to pay attention to this part as well as the
+  conversion.
 
-- I'd like to add a bit more on noise.  For apodized only maybe (a) ratio of CrIS to AIRS CrIS noise and (b) nominal nedt noise (for some profile), which is easier for people to understand and follow.  
+- I'd like to add a bit more on noise.  For apodized only maybe 
+  (a) ratio of CrIS to AIRS CrIS noise and (b) nominal nedt noise
+  (for some profile), which is easier for people to understand and
+  follow.
 
-- Maybe also suggest that these differences can be accounted for by adding noise to the appropriate sensor when attempting to create identical retrieval records.    
+- Maybe also suggest that these differences can be accounted for by
+  adding noise to the appropriate sensor when attempting to create
+  identical retrieval records.
 
-- In addition, people will likely bring up CrIS FSR resolution.  We can say that will be addressed in the future.  I don't think we can get AIRS-CrIS in the MW for FSR, you think that is true.  If so, we suggest that a new intermediate resolution be used, ie in the MW we convert AIRS to the highest resolution we can and degrade CrIS MW to that resolution.  For the SW same thing.
+- In addition, people will likely bring up CrIS FSR resolution.  We
+  can say that will be addressed in the future.  I don't think we
+  can get AIRS-CrIS in the MW for FSR, you think that is true.  If
+  so, we suggest that a new intermediate resolution be used, ie in
+  the MW we convert AIRS to the highest resolution we can and
+  degrade CrIS MW to that resolution.  For the SW same thing.
 
-- Isn't Figure 22 a repeat of earlier plots?  Fine to show again, but if true, we should note that.
+- Isn't Figure 22 a repeat of earlier plots?  Fine to show again,
+  but if true, we should note that.
 
 
 
