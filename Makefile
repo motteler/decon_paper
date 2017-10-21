@@ -1,18 +1,22 @@
-# basic makefile
+#
+# makefile for decon paper
+#
 
-decon: decon.pdf
+decon_paper: decon_paper.pdf
 
-decon.pdf: decon.tex crisdefs.tex figures/*.pdf decon.bib Makefile
-	pdflatex decon.tex -interaction nonstopmode && \
-	bibtex decon && \
-	pdflatex decon.tex -interaction nonstopmode && \
-	pdflatex decon.tex -interaction nonstopmode || \
-	rm decon.pdf 2> /dev/null || true
+decon_paper.pdf: decon_paper.tex crisdefs.tex figures/*.pdf \
+	decon_paper.bib Makefile
+	pdflatex decon_paper.tex -interaction nonstopmode && \
+	bibtex decon_paper && \
+	pdflatex decon_paper.tex -interaction nonstopmode && \
+	pdflatex decon_paper.tex -interaction nonstopmode || \
+	rm decon_paper.pdf 2> /dev/null || true
 
-show: decon.pdf
-	evince decon.pdf 2> /dev/null &
+show: decon_paper.pdf
+	evince decon_paper.pdf 2> /dev/null &
 
 clean:
-	rm decon.log decon.aux decon.toc decon.vrb decon.bbl \
-	decon.blg decon.snm decon.nav decon.out 2> /dev/null || true
+	rm decon_paper.log decon_paper.aux decon_paper.toc \
+	decon_paper.vrb decon_paper.bbl decon_paper.blg \
+	decon_paper.snm decon_paper.nav decon_paper.out 2> /dev/null || true
 

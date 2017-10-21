@@ -21,7 +21,7 @@
 *.blg
 
 # fig files can be huge
-*.fig
+# *.fig
 
 # archives and packages
 *.gz
