@@ -3,6 +3,7 @@
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{url}
+\widowpenalty10000
 
 \input{llsdefs.tex}
 \input{crisdefs.tex}
@@ -67,7 +68,7 @@ model.  For both cases deconvolution followed by reconvolution is
 shown to work significantly better than conventional interpolation.
 Both methods can be further improved with a statistical correcion.
 In section \ref{dregr} we consider a purely statistical approach to
-such translations, and compare these with deconvolution.
+such translations, and compare this with deconvolution.
 
 %---------------------------------------------------------------------
 \FloatBarrier
@@ -175,11 +176,19 @@ the corresponding {\airs} SRFs.  We used the same functions as
 reference truth for the $0.1~\wn$ intermediate grid with ${\fwhm} =
 v_i / 2000$, where $v_i$ are the grid frequencies.  This represents
 a hypothetical grating spectrometer with a resolving power of 2000,
-oversampled to the 0.1~\wn\ grid.  The residual was roughly
-minimized for a resolving power of 2000, as shown here.  We also
-tried the generalized Gaussian with a fixed {\FWHM} for values
-$0.4$, $0.6$, and $0.8$, and a sinc basis with a spacing of
-$0.2$~\wn, all of which gave larger residuals.
+oversampled to the 0.1~\wn\ grid.  The value of 2000 was chosen to
+give an approximate fit to the deconvolved radiances.  We also tried
+a generalized Gaussian with a fixed {\FWHM} for values $0.4$, $0.6$,
+and $0.8$ and a sinc basis with a spacing of $0.2$~\wn, all of which
+gave larger residuals.
+
+\begin{figure} % source decon_test1.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
+  \caption{spectra from fitting profile 1 for direct convolution to
+    the $0.1$~\wn\ grid (``gauss'') and deconvolved {\airs}}
+  \label{dspec}
+\end{figure}
 
 \begin{figure} % source decon_test1.m 
   \centering
@@ -188,14 +197,6 @@ $0.2$~\wn, all of which gave larger residuals.
     convolution to the $0.1$~\wn\ grid (``gauss''), deconvolved
     {\airs}, and true {\airs}.}
   \label{dzoom}
-\end{figure}
-
-\begin{figure} % source decon_test1.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
-  \caption{spectra from fitting profile 1 for direct convolution to
-    the $0.1$~\wn\ grid (``gauss'') and deconvolved {\airs}}
-  \label{dspec}
 \end{figure}
 
 % \begin{figure} % source decon_test1.m
@@ -209,22 +210,22 @@ $0.2$~\wn, all of which gave larger residuals.
 % \end{figure}
 
 The {\airs} deconvolution gives a modest resolution enhancement, at
-the cost of added artifacts and noise.  Figure \ref{dzoom} shows
-details of kcarta, direct convolution to the $0.1$~\wn\ grid
-(``gauss''), deconvolution, and AIRS spectra for fitting profile~1
+the cost of added artifacts and noise.  Figure \ref{dspec} shows the
+full spectra from fitting profile~1, along with sample details from
+the low and high ends of the band, for the deconvolution and direct
+convolution to the intermediate grid.  In the details we see some
+overshoot and ringing in the deconvolution.  Figure \ref{dzoom}
+shows details of kcarta, direct convolution to the $0.1$~\wn\ grid,
+deconvolution, and AIRS spectra for fitting profile~1
 \cite{sarta1,sarta2}.  In the first subplot we see the deconvolution
 is capturing some of the fine structure in the kcarta data that is
 present in the direct convolution but not in the AIRS data.  In the
 second subplot we see the deconvolution (and direct convolution)
 resolving a pair of close lines that are not resolved at the {\airs}
 L1c resolution.  But we also see some ringing that is not present in
-the direct convolution.  Figure \ref{dspec} shows the full spectra
-from fitting profile~1, along with sample details from the low and
-high ends of the band, for the deconvolution and direct convolution
-to the intermediate grid.  In the details we see some overshoot and
-ringing in the deconvolution.  But as noted we do not propose using
-the deconvolved radiances directly, they are an intermediate step in
-reconvolution to a lower resolution.
+the direct convolution.  These artifacts are acceptable because we
+do not propose using the deconvolved radiances directly; they are an
+intermediate step before reconvolution to a lower resolution.
 
 % Figure \ref{ddiff} shows the mean and standard deviation of the
 % difference of the deconvolved minus the directly convolved radiances
@@ -252,17 +253,15 @@ AIRS channel, subtracting weighted values for channels $\pm 1$ step
 away, adding weighted values for channels $\pm 2$ steps away, and so
 on, with the weights decreasing quickly as we move away from $v_i$,
 with eight to ten L1c channels making a significant contribution to
-each deconvolution grid point.
-
-The second subplot shows four adjacent rows of the matrix 
-$S_d \cdot S_b^{-1}$, which takes L1c to L1d channel radiances.
-(The L1d radiances are discussed in a later section; here they are
-of interest mainly as a typical reconvolution.)  Both matrices are
-banded but the bands are narrower in the second, with three to five
-L1c channels contributing significantly to each L1d channel.  
-The range of influence is significant since for example we may want
-to see which L1d channels are derived in part from the subset of
-synthetic L1c channels.
+each deconvolution grid point.  The second subplot shows four
+adjacent rows of the matrix $S_d \cdot S_b^{-1}$, which takes L1c to
+L1d channel radiances.  (The L1d radiances are discussed in a later
+section; here they are of interest mainly as a typical
+reconvolution.)  Both matrices are banded but the bands are narrower
+in the second, with three to five L1c channels contributing
+significantly to each L1d channel.  The range of influence is
+significant since we may want to know which L1d channels are derived
+in part from the synthetic L1c channels.
 
 %---------------------------------------------------------------------
 \FloatBarrier
@@ -271,14 +270,14 @@ synthetic L1c channels.
 
 Given {\airs} deconvolution to a $0.1~\wn$ intermediate grid,
 reconvolution to the {\cris} user grid is straightforward.  For the
-{\cris} standard resolution mode the channel spacing is $0.625~\wn$
-for the LW, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW bands.
+{\cris} standard resolution the channel spacing is $0.625~\wn$ for
+the LW band, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW.  
 For each {\cris} band, we (1) find the {\airs} and {\cris} band
 intersection, (2) apply a bandpass filter to the deconvolved {\airs}
 radiances restricting them to the intersection, with a rolloff
 outside the intersection, and (3) reconvolve the filtered spectra to
 the {\cris} user grid with a zero-filled double Fourier transform
-\cite{git:finterp}. 
+\cite{git:finterp}.
 
 Translations are tested by comparison with calculated reference
 truth.  We start with a set of atmospheric profiles and calculate
@@ -286,7 +285,7 @@ upwelling radiance at a $0.0025~\wn$ grid with kcarta \cite{kcarta1}
 over a band spanning the domains of the {\airs} and {\cris} response
 functions.  ``True {\airs}'' is calculated by convolving the kcarta
 radiances with {\airs} SRFs and ``true {\cris}'' by convolving
-kcarta radiances to a sinc basis at the {\cris} user-grid.  True
+kcarta radiances to a sinc basis at the {\cris} user grid.  True
 {\airs} is then translated to {\cris} to get ``{\airs} {\cris}'',
 and this is compared with true {\cris}.  Figure~\ref{specLW} shows
 sample spectra for true {\airs}, deconvolved {\airs}, true {\cris}
@@ -301,17 +300,17 @@ uncorrelated; reducing the reconstruction residual to 0.02~K
 requires 48 left-singular vectors.  (Details of this correlation
 measure are given in an appendix.)  For statistical correction and
 the direct regression discussed in section \ref{dregr} we also use a
-set of 7377 radiances calculated from all-sky (clear and cloudy) AIRS profiles
-spanning several consecutive days as the dependent set.  This set is
-moderately correlated; reducing the reconstruction residual to
-0.02~K requires 260 left-singular vectors.  Splitting the 7377
-profile set into dependent and independent subsets and comparing
-residuals from the independent subset with residuals from the
-49-profile set, we found residuals from the latter are consistently
-larger, suggesting it makes for a stricter test.  So for the results
-shown here the test or independent set is always the 49-profile set,
-while for tests requiring fitting the 7377 profile is used as the
-dependent set.
+set of 7377 radiances calculated from all-sky (clear and cloudy)
+AIRS profiles spanning several consecutive days as the dependent
+set.  This set is moderately correlated; reducing the reconstruction
+residual to 0.02~K requires 260 left-singular vectors.  Splitting
+the 7377 profile set into dependent and independent subsets and
+comparing residuals from the independent subset with residuals from
+the 49-profile set, we found residuals from the latter are
+consistently larger, suggesting it makes for a stricter test.  So
+for the results shown here the test or independent set is always the
+49-profile set, while for tests requiring fitting the 7377 profile
+is used as the dependent set.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
@@ -381,7 +380,7 @@ profile set the independent or test set.
 We compare three such corrections.  These are done with a separate
 regression for each {\cris} channel, and so introduce no
 cross-correlations.  Let $\Ttc_i$ be true {\cris} and $\Tac_i$
-{\airs} to {\cris} brightness temperatures for {\cris} channel $i$,
+{\airs} {\cris} brightness temperatures for {\cris} channel $i$,
 from the dependent set.  For the bias test we subtract the mean
 residual from the dependent set.  For the linear test we find $a_i$
 and $b_i$ to minimize $||a_i\,\Tac_i + b_i - \Ttc_i||_2$, and for
@@ -398,8 +397,10 @@ from figure \ref{statLW}.  The $a$ weights are very close to 1 and
 the $b$ weight to the bias.  Figures \ref{statMW} and \ref{statSW}
 show the linear correction giving a similar improvement in the MW
 and a small improvement in the SW, where the quadratic correction is
-noticably worse.  Figure \ref{statall} summarizes results for the
-linear correction, paired with the apodized uncorrected residuals.
+noticably worse.  Figure \ref{statAll1} shows the residuals for the
+apodized linear correction for all three bands.  The residuals are
+significantly reduced in comparison with the apodized uncorrected
+radiances shown in figure \ref{meanAll}.
 
 % Note that convolution, deconvolution, and apodization are done
 % with radiances while spectra are presented and statistics done
@@ -438,46 +439,53 @@ linear correction, paired with the apodized uncorrected residuals.
 
 \begin{figure} % source a2cris_test2.m
   \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_regr_all.pdf}
-  \caption{Mean corrected and uncorrected apodized residuals for all
-    three bands.}
-  \label{statall}
+  \includegraphics[width=\linewidth]{figures/ap_decon_corr.pdf}
+  \caption{Mean corrected apodized residuals for all three bands.}
+  \label{statAll1}
 \end{figure}
+
+% \begin{figure} % source a2cris_test2.m
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/a2cris_regr_all.pdf}
+%   \caption{Mean corrected and uncorrected apodized residuals for all
+%     three bands.}
+%   \label{statAll2}
+% \end{figure}
 
 We can give a good estimate of noise equivalent differential
 radiance (NEdN) for the translation by adding noise with a normal
-distribution at the {\airs} NEdN to blackbody radiance at 280K and
-translating this to {\cris}.  This is done repeatedly and the noise
-after translation is measured.  As a check, noise before translation
-is also measured and compared with the original {\airs} value.  The
-result, along with {\airs} and {\cris} NEdN, are shown in figure
-\ref{nedn}.  The first subplot in figure \ref{nedt} shows
-corresponding NEdT for fitting profile 1, for apodized {\cris} and
-{\airs} to {\cris} radiances.
+distribution at the {\airs} NEdN spec to blackbody radiance at 280K
+and translating this to {\cris}.  This is done repeatedly and the
+noise after translation is measured.  As a check, noise before
+translation is also measured and compared with the {\airs} value.
+Figure \ref{nedn} shows this measured {\airs}-to-{\cris} together
+with {\airs} and {\cris} NEdN for both apodized and unapodized
+radiances.  The {\airs} and {\cris} values are averages over a full
+day, 4 Dec 2016.  NEdN for the L1c synthetic channels is
+interpolated.  The first subplot of figure \ref{nedt} is NEdT for
+apodized radiances, for fitting profile 1.
 
-The {\airs} and {\cris} NEdN values are averages over a full day, 
-4 Dec 2016.  NEdT for the L1c synthetic channels is interpolated.
 The {\airs} channel-to-channel NEdN variation is significant; in the
-upper half of the LW and most of the MW it is the same order as the
-{\airs} and {\cris} NEdN difference.  This variation is due the
-{\airs} focal plane structure and sensitivity.  Both {\airs} and
-{\cris} NEdN measures are spiky when averaged over a few minutes,
-but the {\cris} variation is primarily uncertainty in the noise
-measurement, and smooths out as the time span is extended.
-
-The {\airs} to {\cris} translation inherits this variability, which
-becomes a significant part of the difference between {\airs} {\cris}
-and true {\cris}.  For a common record, we might want to add noise
-on a channel-by-channel basis to whichever NEdN value---{\airs}
-{\cris} or true {\cris}---is lower.  NEdN for the combined record
-would then be max of the {\airs} {\cris} and true {\cris} NEdN
-values, as shown in the second subplot of figure \ref{nedt}.
+upper half of the LW and most of the MW it is of the same order as
+the {\airs} and {\cris} NEdN difference.  This variation is due the
+{\airs} focal plane structure and sensitivity.  The {\airs} and
+{\cris} NEdN measures are both spiky when averaged over a few
+minutes but the {\cris} variation is primarily uncertainty in the
+noise measurement and smooths out as the time span is extended
+while the {\airs} variation is stable.  The {\airs}-to-{\cris}
+translation inherits this variability; it is a significant part of
+the difference between {\airs} {\cris} and true {\cris}.  For a
+common record we might want to add noise on a channel-by-channel
+basis to whichever NEdN value---{\airs} {\cris} or true {\cris}---is
+lower.  NEdN for the combined record would then be max of the
+{\airs} {\cris} and true {\cris} NEdN values, as shown in the second
+subplot of figure \ref{nedt}.
 
 \begin{figure} % source nedn_test2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
-  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} unapodized and
-      apodized NEdN}
+  \caption{mean {\airs}, {\airs}-to-{\cris}, and mean {\cris}
+    apodized and unapodized NEdN.}
   \label{nedn}
 \end{figure}
 
@@ -485,8 +493,8 @@ values, as shown in the second subplot of figure \ref{nedt}.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_nedt.pdf}
   \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
-    and the max of true {\cris} and {\airs}-to-{\cris} NEdN, with
-    true {\cris} shown as a reference}
+    and the max of {\cris} and {\airs}-to-{\cris} with {\cris}
+    NEdN shown as a reference.}
   \label{nedt}
 \end{figure}
 
@@ -509,7 +517,7 @@ significantly less than interpolation for all three bands.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
   \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the {\cris} LW band}
+    and deconvolution with convolution for the {\cris} LW band.}
   \label{intpLW}
 \end{figure}
 
@@ -524,7 +532,7 @@ significantly less than interpolation for all three bands.
 The {\airs} deconvolution can be used for other translations.  
 In this section we briefly consider reconvolution to an idealized
 grating model for resolving powers of 700 and 1200.  Define an
-{\airs} L1d basis with resolving power $R$ from the generalized
+{\airs} L1d basis with resolving power $R$ using the generalized
 Gaussian response function of section \ref{decon} as follows.
 Let $v_0$ be the frequency of the first channel and for $i\ge0$
 $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} = v_i +
@@ -552,7 +560,7 @@ resolving power of 1200 (figure \ref{L1d1200}) are roughly
 comparable to unapodized {\cris} (figures \ref{diffLW},
 \ref{diffMW}, and \ref{diffSW}) and residuals for a resolving power
 of 700 (figure \ref{L1d700s}) are roughly comparable to apodized
-{\cris} (figure \ref{statall}).  As with the {\airs} to {\cris}
+{\cris} (figure \ref{statAll1}).  As with the {\airs} to {\cris}
 translation, the L1c to L1d residuals are significantly reduced with
 a linear correction.  Residuals for L1d with a resolving power of
 700 after correction are comparable to residuals for apodized
@@ -616,22 +624,21 @@ different from the corrections of section \ref{airs2cris} and
 \ref{airsL1d}; there regression was used to find linear or quadratic
 correction coefficients independently for each channel.
 
-Figures \ref{dreg1} and \ref{dreg2} show residuals for direct
-regression and deconvolution translation with statistical
-correction, both for apodized radiances.  As before we use the 7377
-profile set as the dependent and the 49 profile as the independent
-sets.  The residuals are roughly comparable; the LW residual is
+Figures \ref{dreg1} shows residuals for direct regression, for
+apodized radiances.  As before we use the 7377 profile set as the
+dependent and the 49 profile as the independent sets.  The residuals
+are roughly comparable to the residuals from the deconvolution
+translation summarized in figure \ref{statAll1}.  The LW residual is
 larger at the low end of the band for direct regression and the high
 end for the deconvolved translation.  Deconvolution does better in
-the MW, and direct regression in the SW.
-
-Unfortunately the regression matrices show significant off-diagonal
-correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
-SW bands are worse.  As noted in section \ref{airs2cris} the 7377
-profile dependent set is highly correlated.  The effective dimension
-is only 260, our regression is actually under-determined.  The
-dependent set residuals are close to zero, much less than the
-residuals for the independent set shown above.
+the MW, and direct regression in the SW.   Unfortunately the
+regression matrices show significant off-diagonal correlations.
+Figure \ref{dreg3} shows this for the LW; the MW and SW bands are
+worse.  As noted in section \ref{airs2cris} the 7377 profile
+dependent set is highly correlated.  The effective dimension is only
+260, our regression is actually under-determined.  The dependent set
+residuals are close to zero, much less than the residuals for the
+independent set shown above.
 
 One fix is to add noise.  Recall that we generate true {\airs} 
 and true {\cris} by convolving a common set of high-resolution
@@ -696,14 +703,6 @@ does work better than conventional interpolation.
   \caption{mean residuals for apodized {\airs} to {\cris} direct
     regression}
   \label{dreg1}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_test2.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/ap_decon_corr.pdf}
-  \caption{mean residuals for apodized {\airs} to {\cris}
-    deconvolution translation with the regression correction}
-  \label{dreg2}
 \end{figure}
 
 \begin{figure} % source slackfigs a2cris_regr4.m

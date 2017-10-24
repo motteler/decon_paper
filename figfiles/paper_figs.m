@@ -1,9 +1,6 @@
 %
-% translate fig to pdf figures
+% translate fig to pdf files
 %
-
-% example:
-% set(findall(gcf,'type','text'),'FontSize',12,fontWeight','bold')
 
 addpath /home/motteler/matlab/export_fig
 

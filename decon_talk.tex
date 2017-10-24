@@ -1,0 +1,446 @@
+\documentclass[10pt]{beamer}
+% \usetheme{Boadilla}
+  \usetheme{default}
+
+\input{crisdefs.tex}
+
+\title{AIRS deconvolution and the \\
+       translation of AIRS to CrIS radiances \\ 
+}
+\author{H.~E.~Motteler, L.~L.~Strow}
+\institute{
+  UMBC Atmospheric Spectroscopy Lab \\
+  Joint Center for Earth Systems Technology \\
+}
+\date{\today}
+\begin{document}
+
+%----------- slide --------------------------------------------------%
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS spectral response functions}
+\begin{itemize}
+
+  \item Each {\airs} channel $i$ has an associated spectral response
+    function or {\srf} $\sigma_i(v)$, where $v$ is frequency.
+
+  \item Channel radiance $c_i = \int \sigma_i(v)r(v)\,dv$, where $r$
+    is radiance at frequency $v$.
+
+  \item The center or peak of $\sigma_i$ is the nominal channel
+    frequency.
+
+  \item We can approximate the {\airs} {\srf}s with a generalized
+    Gaussian of the form \[w(v, v_0, \fwhm) =
+    \exp\left(-\left(\frac{(v - v_0)^2}{2c^2}\right)^{1.5}\right) \]
+    where $c=\fwhm / (2\sqrt{2\ln 2})$ and $v_0$ is the desired
+    channel center.
+
+  \item The exponent $1.5$ was chosen to give an approximate match
+    to {\airs} {\srf}s with the same {\FWHM} and channel centers,
+    though without the fine structure and variation.
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{sample SRFs and resolving power}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/airs_sample_SRF.pdf} \\
+  \end{centering}\vspace{2mm}
+  Sample {\airs} spectral response functions from the low and high
+  ends of the band.  The dashed line is the generalized Gaussian
+  function.
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/airs_L1c_res.pdf}
+  \end{centering}\vspace{3mm}
+  {\airs} L1c channel spacing and resolving power, $R =
+  v_i/\fwhm_i$.  The relatively regular L1c channel spacing aids the
+  deconvolution. 
+
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{the AIRS deconvolution}
+\begin{itemize}
+
+  \item Let $\vec v_b = v_1,v_2,\ldots,v_m$ be a $0.1~\wn$ grid
+    spanning the domains of the functions $\sigma_i$.
+
+  \item This is the approximate resolution of the {\srf}
+    measurements and convenient for reconvolution to the {\cris}
+    user grid.
+
+  \item Let $S_b$ be an $n\times m$ array where row $i$ is
+    $\sigma_i(v)$ tabulated at the $\vec v_b$ grid, with rows
+    normalized to~1.
+
+  \item Note that the $\sigma_i(v)$ are the measured {\srf}s, not
+    our Gaussian approximation.
+
+  \item If $r$ is radiance at the $\vec v_b$ grid, then $c = S_b r$
+    is a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
+
+  \item We want to start with $c$ and find $r$, that is to
+    deconvolve $c$ by solving $S_b r = c$ for $r$.  
+
+  \item Since $m < k$ the system is underdetermined.  
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{the AIRS deconvolution}
+\begin{itemize}
+
+  \item We take the Moore-Penrose pseudoinverse of $S_b$ to get $r_0
+    = S_b^{-1} c$.
+
+  \item This gives a minimal solution, in the sense that $||r_0||_2
+     \le ||r_j||_2$ for all $r_j$ satisfying $S_b r_j = c$.  
+
+  \item The condition number for $S_b$ as built from the L1c
+    channels is $||S_b||_2||S_b^{-1}||_2 = 115$, which is tolerable.
+
+  \item Although our main goal is to reconvolve the $0.1~\wn$
+    intermediate representation to the {\cris} or other user grids,
+    we first compare the deconvolved radiances with reference truth
+    from a direct convolution to the intermediate grid.
+
+  \item We use the generalized Gaussian as reference truth for the
+    $0.1~\wn$ intermediate grid with ${\fwhm} = v_i / 2000$, where
+    $v_i$ are the grid frequencies.  
+
+  \item This represents a hypothetical grating spectrometer with a
+    resolving power of 2000, oversampled to the 0.1~\wn\ grid.
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{examples of deconvolution}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/airs_decon_spec.pdf}
+  \end{centering}\vspace{3mm}
+  Spectra from fitting profile 1 for direct convolution to the
+  $0.1$~\wn\ grid and for deconvolved {\airs}.  We see some
+  overshoot and ringing in the deconvolution.
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/airs_decon_zoom.pdf}
+  \end{centering}\vspace{2mm}
+  Details from fitting profile 1 for kcarta, direct convolution to
+  the $0.1$~\wn\ grid, deconvolved {\airs}, and true {\airs}.  The
+  deconvolution restores some detail.
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{deconvolution notes}
+\begin{itemize}
+
+  \item The {\airs} deconvolution gives a modest resolution
+    enhancement, at the cost of added artifacts and noise.
+
+  \item The deconvolution captures some fine structure that is
+    present in the direct convolution but not the AIRS data and 
+    can resolves lines that are merged in the {\airs} L1c spectra
+
+  \item But we also see some ringing and overshoot that is not
+    present in the direct convolution.
+
+  \item These artifacts are acceptable because we do not propose
+    using the deconvolved radiances directly; they are an
+    intermediate step before reconvolution to a lower resolution.
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS to CrIS translation}
+\begin{itemize}
+
+  \item Given {\airs} deconvolution to a $0.1~\wn$ intermediate
+    grid, reconvolution to the {\cris} user grid is straightforward.
+
+  \item For the {\cris} standard resolution the channel spacing is
+    $0.625~\wn$ for the LW band, $1.25~\wn$ for the MW, and
+    $2.5~\wn$ for the SW.
+
+  \item For each {\cris} band, we 
+    \begin{enumerate}
+       \item find the {\airs} and {\cris} band intersection, 
+       \item apply a bandpass filter to the deconvolved {\airs}
+         radiances restricting them to the intersection, with a
+         rolloff outside the intersection, and
+       \item reconvolve the filtered spectra to the {\cris} user
+         grid with a zero-filled double Fourier transform
+    \end{enumerate}
+
+  \item The basic translation is from {\airs} to unapodized {\cris},
+    but we will typically show both apodized and unapodizied residuals.
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{testing and validation}
+\begin{itemize}
+
+  \item Translations are tested by comparison with calculated
+    reference truth.
+
+  \item We start with a set of atmospheric profiles and calculate
+    upwelling radiance at a $0.0025~\wn$ grid with kcarta over a
+    band spanning the domains of the {\airs} and {\cris} response
+    functions.
+
+  \item ``True {\airs}'' is calculated by convolving the kcarta
+    radiances with {\airs} SRFs and ``true {\cris}'' by convolving
+    kcarta radiances to a sinc basis at the {\cris} user grid.
+
+  \item True {\airs} is then translated to {\cris} to get ``{\airs}
+    {\cris}'', and this is compared with true {\cris}.
+
+  \item For most tests we use a set of 49 fitting profiles spanning
+    a wide range of clear atmospheric conditions, initially chosen
+    for testing radiative transfer codes
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS to CrIS residuals}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_diff_LW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of unapodized and Hamming apodized
+  {\airs} {\cris} minus true {\cris}, for the {\cris} LW band
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_diff_MW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of unapodized and Hamming apodized
+  {\airs} {\cris} minus true {\cris}, for the {\cris} MW band
+
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS to CrIS residuals}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_diff_SW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of unapodized and Hamming apodized
+  {\airs} {\cris} minus true {\cris}, for the {\cris} SW band.
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_diff_all.pdf}
+  \end{centering}\vspace{5mm}
+  Mean of apodized residuals for all three {\cris} bands, showing
+  the apodized residuals in greater detail.
+
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS to CrIS statistical correction}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_regr_LW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of LW corrected apodized residuals.
+
+\end{column}
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_regr_MW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of MW corrected apodized residuals.
+ 
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{AIRS to CrIS statistical correction}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_regr_SW.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation of SW corrected apodized residuals.
+
+\end{column}
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/ap_decon_corr.pdf}
+  \end{centering}\vspace{3mm}
+  Mean corrected apodized residuals for all three bands, showing
+  the corrected apodized residuals in greater detail.
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{NEdN of the translation}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_nedn.pdf}
+  \end{centering}\vspace{3mm}
+  mean {\airs}, {\airs}-to-{\cris}, and mean {\cris} apodized and
+  unapodized NEdN.
+
+\end{column}
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/a2cris_nedt.pdf}
+  \end{centering}\vspace{3mm}
+  {\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
+    and the max of {\cris} and {\airs}-to-{\cris} with {\cris}
+    NEdN shown as a reference.
+ 
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{L1c to L1d translation}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/L1d_cor1_1200.pdf}
+  \end{centering}\vspace{3mm}
+  mean and standard deviation over the 49 fitting profiles for the
+  L1c to L1d translation minus true L1d for a resolving power of
+  1200
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{figures/L1d_cor1_700.pdf}
+  \end{centering}\vspace{3mm}
+  Mean and standard deviation over the 49 fitting profiles for the
+  L1c to L1d translation minus true L1d for a resolving power of 700.
+ 
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{principal component regression}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/ap_direct_regr.png}
+  \end{centering}\vspace{3mm}
+  Mean residuals for apodized {\airs} to {\cris} direct regression.
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/full_7377_LW_regr_mat.png}
+  \end{centering}\vspace{3mm}
+  Regression coefficients for the LW direct regression.
+
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{channel spacing and resolving power}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/ap_pc_direct_regr.png}
+  \end{centering}\vspace{3mm}
+  Mean residuals for apodized {\airs} to {\cris} principal component
+  regression.
+
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/LW_pc_regr_mat.png}
+  \end{centering}\vspace{3mm}
+  Regression coefficients for the LW principal component regression.
+ 
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
+\frametitle{channel spacing and resolving power}
+\begin{columns}[t]
+\begin{column}{0.5\textwidth}
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/MW_pc_regr_mat.png}
+  \end{centering}\vspace{3mm}
+  Regression coefficients for the MW principal component
+  regression. 
+ 
+\end{column}
+\begin{column}{0.5\textwidth}  
+  \begin{centering}
+  \includegraphics[width=\textwidth]{slackfigs/SW_pc_regr_mat.png}
+  \end{centering}\vspace{3mm}
+  Regression coefficients for the SW principal component regression.
+
+\end{column}
+\end{columns}
+\end{frame}
+%----------- slide --------------------------------------------------%
+% \begin{frame}
+% \frametitle{conclusions}
+% 
+% \begin{itemize}
+% 
+%   \item with the switch to extended res, we have seen a significant
+%     convergence in calibration algorithm performance 
+% 
+%   \item the {\noaa} ``SA-1 first'' algorithm does slightly better
+%     when compared with reference truth convolved with responsivity,
+%     while the {\ccast} ``ratio first'' algorithm does slightly
+%     better when compared with reference truth convolved with a flat
+%     passband
+% 
+%   \item this may be because responsivity cancels out more completely
+%     in the ratio-first method
+% 
+%   \item because reference truth convolved with a flat passband is a
+%     more conventional and non instrument-specific standard, the
+%     ccast algorithm, or some similar ratio-first method, may be
+%     preferable
+% 
+% \end{itemize}
+% \end{frame}
+% %----------- slide --------------------------------------------------%
+
+\end{document}
+
