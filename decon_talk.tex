@@ -21,6 +21,37 @@
 \end{frame}
 %----------- slide --------------------------------------------------%
 \begin{frame}
+\frametitle{introduction}
+\begin{itemize}
+
+  \item Upwelling infrared radiation as measured by {\airs},
+    {\cris}, and {\iasi} is a significant part of the long term
+    climate record.
+
+  \item These instruments have broadly similar spatial sampling and
+    spectral resolution, channel response functions, and band spans.
+
+  \item We make regular use of {\airs} to {\cris} and {\iasi} to
+    {\cris}, and have implemented and tested {\iasi} to {\airs} and
+    {\cris} to {\airs} translations as well.  But aside from {\airs}
+    to {\cris} the methods used are for the most part conventional.
+
+  \item {\airs} is a grating spectrometer with a distinct response
+    function for each channel, while {\cris} is a Michaelson
+    interferometer with a sinc response function after calibration
+    and corrections.
+
+  \item We use our detailed knowledge of the {\airs} spectral
+    response functions to deconvolve {\airs} channel radiances to a
+    resolution enhanced intermediate representation.
+
+  \item This intermediate representation is then reconvolved to
+    {\cris} or other instrument specifications.
+
+\end{itemize}
+\end{frame}
+%----------- slide --------------------------------------------------%
+\begin{frame}
 \frametitle{AIRS spectral response functions}
 \begin{itemize}
 
@@ -78,15 +109,15 @@
     spanning the domains of the functions $\sigma_i$.
 
   \item This is the approximate resolution of the {\srf}
-    measurements and convenient for reconvolution to the {\cris}
+    measurements and is convenient for reconvolution to the {\cris}
     user grid.
 
   \item Let $S_b$ be an $n\times m$ array where row $i$ is
     $\sigma_i(v)$ tabulated at the $\vec v_b$ grid, with rows
     normalized to~1.
 
-  \item Note that the $\sigma_i(v)$ are the measured {\srf}s, not
-    our Gaussian approximation.
+  \item Note that the $\sigma_i(v)$ here are the measured {\srf}s,
+    not our Gaussian approximation.
 
   \item If $r$ is radiance at the $\vec v_b$ grid, then $c = S_b r$
     is a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
@@ -303,7 +334,7 @@
   \includegraphics[width=\textwidth]{figures/ap_decon_corr.pdf}
   \end{centering}\vspace{3mm}
   Mean corrected apodized residuals for all three bands, showing
-  the corrected apodized residuals in greater detail.
+  the linear correction apodized residuals in greater detail.
 \end{column}
 \end{columns}
 \end{frame}
