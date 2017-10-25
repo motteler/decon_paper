@@ -6,8 +6,8 @@ addpath /home/motteler/matlab/export_fig
 
 clear all
 close all
-  textfont = 10;
-  axisfont = 9;;
+  textfont = 11;
+  axisfont = 11;;
 flist =  dir('*.fig');
 
 for i = 1 : length(flist)
