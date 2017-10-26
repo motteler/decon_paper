@@ -149,7 +149,7 @@ to~1.  If $r$ is radiance at the $\vec v_b$ grid, then $c = S_b r$
 is still a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
 
 For our application we want to start with $c$ and find $r$, that is
-to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $m < k$ the
+to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$ the
 system is underdetermined.  We take the Moore-Penrose pseudoinverse
 \cite{wiki:pinv} of $S_b$ to get $r_0 = S_b^{-1} c$.  This gives a
 minimal solution, in the sense that $||r_0||_2 \le ||r_j||_2$ for

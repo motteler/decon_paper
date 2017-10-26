@@ -126,7 +126,7 @@
   \item We want to start with $c$ and find $r$, that is to
     deconvolve $c$ by solving $S_b r = c$ for $r$.  
 
-  \item Since $m < k$ the system is underdetermined.  
+  \item Since $n < m$ the system is underdetermined.  
 
 \end{itemize}
 \end{frame}
@@ -190,8 +190,8 @@
     enhancement, at the cost of added artifacts and noise.
 
   \item The deconvolution captures some fine structure that is
-    present in the direct convolution but not the AIRS data, and 
-    can resolves lines that are merged in the {\airs} L1c spectra
+    present in the direct convolution but not the AIRS L1c spectra,
+    and can resolves lines that are merged in the {\airs} data.
 
   \item But we also see some ringing and overshoot that is not
     present in the direct convolution.
@@ -462,8 +462,8 @@
   \item We can get such a one-step tranform in other ways.
 
   \item For example if $r_a$ and $r_c$ are $m \times k$ and $n
-    \times k$ {\airs} and {\cris} radiance sets, we can find $X$ to
-    minimize $\|X r_a - r_c\|_2$.  
+    \times k$ {\airs} and {\cris} radiance sets, we can find an $n
+    \times m$ array $X$ to minimize $\|X r_a - r_c\|_2$.
 
   \item Typically $k > m$, giving an overdetermined system, and we
     solve $r_a^t X^t = r_c^t$ for $X$ by regression.
@@ -488,14 +488,16 @@
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/ap_direct_regr.png}
   \end{centering}\vspace{3mm}
-  Mean residuals for apodized {\airs} to {\cris} direct regression.
+  Mean residuals over the 49 profile independent set for {\airs} to
+  apodized {\cris} direct regression.
 
 \end{column}
 \begin{column}{0.5\textwidth}  
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/full_7377_LW_regr_mat.png}
   \end{centering}\vspace{3mm}
-  Regression coefficients for the LW direct regression.
+  Regression coefficients from the 7377 profile dependent set for
+  the LW direct regression.
 
 \end{column}
 \end{columns}
@@ -540,15 +542,16 @@
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/ap_pc_direct_regr.png}
   \end{centering}\vspace{3mm}
-  Mean residuals for apodized {\airs} to {\cris} principal component
-  regression.
+  Mean residuals over the 49 profile independent set for {\airs} to
+  apodized {\cris} principal component regression.
 
 \end{column}
 \begin{column}{0.5\textwidth}  
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/LW_pc_regr_mat.png}
   \end{centering}\vspace{3mm}
-  Regression coefficients for the LW principal component regression.
+  Regression coefficients from the 7377 profile dependent set for
+  LW principal component regression with $i = j = 500$.
  
 \end{column}
 \end{columns}
@@ -561,15 +564,16 @@
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/MW_pc_regr_mat.png}
   \end{centering}\vspace{3mm}
-  Regression coefficients for the MW principal component
-  regression. 
+  Regression coefficients from the 7377 profile dependent set for
+  MW principal component regression with $i = 500$ and $j = 320$.
  
 \end{column}
 \begin{column}{0.5\textwidth}  
   \begin{centering}
   \includegraphics[width=\textwidth]{slackfigs/SW_pc_regr_mat.png}
   \end{centering}\vspace{3mm}
-  Regression coefficients for the SW principal component regression.
+  Regression coefficients from the 7377 profile dependent set for
+  SW principal component regression with $i = j = 100$.
 
 \end{column}
 \end{columns}
