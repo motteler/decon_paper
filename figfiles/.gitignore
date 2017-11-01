@@ -1,0 +1,11 @@
+#
+# skip the most bloated fig files
+#
+
+airs_decon_zoom.fig
+airs_sample_SRF.fig
+LW_dir_regr_mat.fig
+LW_pc_regr_mat.fig
+MW_pc_regr_mat.fig
+SW_pc_regr_mat.fig
+

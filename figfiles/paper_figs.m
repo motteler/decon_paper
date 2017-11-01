@@ -6,10 +6,19 @@ addpath /home/motteler/matlab/export_fig
 
 clear all
 close all
-  textfont = 11;
-  axisfont = 11;;
-flist =  dir('*.fig');
+textfont = 11;
+axisfont = 11;;
 
+% option to select individual figures
+flist =  dir('*.fig');
+for i = 1 : length(flist)
+  [~,fname] = fileparts(flist(i).name);
+  fprintf(1, '%2d %s\n', i, fname)
+end  
+ix = input('fig num, <ret> for all > ');
+if ~isempty(ix), flist = flist(ix);, end
+
+% call export_fig for each selected figure
 for i = 1 : length(flist)
   [~,fname] = fileparts(flist(i).name);
   open([fname,'.fig'])

@@ -26,6 +26,18 @@
 \begin{document}
 \maketitle
 
+\begin{abstract}
+Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
+accusantium doloremque laudantium, totam rem aperiam eaque ipsa,
+quae ab illo inventore veritatis et quasi architecto beatae vitae
+dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas
+sit, aspernatur aut odit aut fugit, sed quia consequuntur magni
+dolores eos, qui ratione voluptatem sequi nesciunt, neque porro
+quisquam est, qui dolorem ipsum, quia dolor sit amet consectetur
+adipisci velit, sed quia non numquam eius modi tempora incidunt, ut
+labore et dolore magnam aliquam quaerat voluptatem.
+\end{abstract}
+
 \section{Introduction}
 
 Upwelling infrared radiation as measured by the {\airs} \cite{airs1}
@@ -71,7 +83,7 @@ In section \ref{dregr} we consider a purely statistical approach to
 such translations, and compare this with deconvolution.
 
 %---------------------------------------------------------------------
-\FloatBarrier
+% \FloatBarrier
 \section{AIRS Deconvolution}
 \label{decon}
 
@@ -95,8 +107,9 @@ channel frequency.
 \begin{figure} % source plot_SRF2.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_L1c_res.pdf}
-  \caption{{\airs} L1c channel spacing and derived resolving
-    power.}
+  \caption{{\airs} L1c channel spacing and resolving power, $R =
+    v_i/\fwhm_i$.  The relatively regular L1c channel spacing aids
+    the deconvolution.}
   \label{chan1}
 \end{figure}
 
@@ -185,29 +198,28 @@ gave larger residuals.
 \begin{figure} % source decon_test1.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
-  \caption{spectra from fitting profile 1 for direct convolution to
-    the $0.1$~\wn\ grid (``gauss'') and deconvolved {\airs}}
+  \caption{Spectra from fitting profile 1 for direct convolution to
+    the $0.1$~\wn\ grid and for deconvolved {\airs}.  We see some
+    overshoot and ringing in the deconvolution.}
   \label{dspec}
 \end{figure}
 
 \begin{figure} % source decon_test1.m 
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_zoom.pdf}
-  \caption{details from fitting profile 1 for kcarta, direct
-    convolution to the $0.1$~\wn\ grid (``gauss''), deconvolved
-    {\airs}, and true {\airs}.}
+  \caption{Details from fitting profile 1 for kcarta, direct
+    convolution to the $0.1$~\wn\ grid, deconvolved {\airs}, and
+    true {\airs}.  The deconvolution restores some detail.}
   \label{dzoom}
 \end{figure}
 
-% \begin{figure} % source decon_test1.m
-%   \centering
-%   \includegraphics[width=\linewidth]{figures/airs_decon_diff.pdf}
-%   \caption{mean and standard deviation over the 49 fitting profiles
-%     for the L1c deconvolution minus direct convolution to the
-%     $0.1$~\wn\ intermediate grid.  The residuals are too large to use
-%     the deconvolved radiances directly.}
-%   \label{ddiff}
-% \end{figure}
+\begin{figure} % source plot_Binv.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/airs_decon_basis.pdf}
+  \caption{sample adjacent rows for the deconvolution and L1c to L1d
+    transforms}
+  \label{dbasis}
+\end{figure}
 
 The {\airs} deconvolution gives a modest resolution enhancement, at
 the cost of added artifacts and noise.  Figure \ref{dspec} shows the
@@ -227,22 +239,23 @@ the direct convolution.  These artifacts are acceptable because we
 do not propose using the deconvolved radiances directly; they are an
 intermediate step before reconvolution to a lower resolution.
 
+% \begin{figure} % source decon_test1.m
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/airs_decon_diff.pdf}
+%   \caption{mean and standard deviation over the 49 fitting profiles
+%     for the L1c deconvolution minus direct convolution to the
+%     $0.1$~\wn\ intermediate grid.  The residuals are too large to use
+%     the deconvolved radiances directly.}
+%   \label{ddiff}
+% \end{figure}
+
 % Figure \ref{ddiff} shows the mean and standard deviation of the
 % difference of the deconvolved minus the directly convolved radiances
 % for all 49 fitting profiles.  The residuals are large but mainly
 % significant for understanding limitations of the deconvolution.
-
 % The residuals can be reduced dramatically by reconvolving the
 % $0.1$~\wn\ intermediate grid to a lower resolution.  We consider
 % this for convolution to the {\cris} user grid in the next section.
-
-\begin{figure} % source plot_Binv.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/airs_decon_basis.pdf}
-  \caption{sample adjacent rows for the deconvolution and L1c to L1d
-    transforms}
-  \label{dbasis}
-\end{figure}
 
 Figure \ref{dbasis} shows a pair of typical adjacent rows of the
 deconvolution matrix $S_b^{-1}$\, in the first subplot.  Row $i$ of
@@ -264,7 +277,7 @@ significant since we may want to know which L1d channels are derived
 in part from the synthetic L1c channels.
 
 %---------------------------------------------------------------------
-\FloatBarrier
+% \FloatBarrier
 \section{AIRS to CrIS translation}
 \label{airs2cris}
 
@@ -292,6 +305,50 @@ sample spectra for true {\airs}, deconvolved {\airs}, true {\cris}
 and {\airs} {\cris}.  The difference between true {\cris} and
 {\airs} {\cris} is hard to see at this level of detail, and for the
 remainder of this paper we will mainly show explicit differences.
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_spec_LW.pdf}
+  \caption{true {\airs}, deconvolved {\airs}, true {\cris}, and {\airs}
+    {\cris}.  Differences between true {\cris} and {\airs} {\cris} are too
+    small to be visible in this figure.}
+  \label{specLW}
+\end{figure}
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_LW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
+    band}
+  \label{diffLW}
+\end{figure}
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_MW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
+    band.}
+  \label{diffMW}
+\end{figure}
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_SW.pdf}
+  \caption{Mean and standard deviation of unapodized and Hamming
+    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
+    band.}
+  \label{diffSW}
+\end{figure}
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_diff_all.pdf}
+  \caption{Mean of apodized residuals for all three {\cris} bands,
+    showing the residuals in greater detail.}
+  \label{meanAll}
+\end{figure}
 
 For most tests we use a set of 49 fitting profiles spanning a wide
 range of clear atmospheric conditions, initially chosen for testing
@@ -323,49 +380,6 @@ to zero for the apodized residuals.
 
 % $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for the
 % SW.
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_spec_LW.pdf}
-  \caption{true {\airs}, deconvolved {\airs}, true {\cris}, and {\airs}
-    {\cris}.  Differences between true {\cris} and {\airs} {\cris} are too
-    small to be visible in this figure.}
-  \label{specLW}
-\end{figure}
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_diff_LW.pdf}
-  \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
-    band}
-  \label{diffLW}
-\end{figure}
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_diff_MW.pdf}
-  \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
-    band}
-  \label{diffMW}
-\end{figure}
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_diff_SW.pdf}
-  \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
-    band}
-  \label{diffSW}
-\end{figure}
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_diff_all.pdf}
-  \caption{Mean of apodized residuals for all three {\cris} bands}
-  \label{meanAll}
-\end{figure}
 
 Some regularity remains in the apodized residual, including the
 oscillation with a period of two channel steps.  Up to this point
@@ -440,7 +454,9 @@ radiances shown in figure \ref{meanAll}.
 \begin{figure} % source a2cris_test2.m
   \centering
   \includegraphics[width=\linewidth]{figures/ap_decon_corr.pdf}
-  \caption{Mean corrected apodized residuals for all three bands.}
+  \caption{Mean corrected apodized residuals for all three bands,
+    showing the linear corrected apodized residuals in greater
+    detail.}
   \label{statAll1}
 \end{figure}
 
@@ -451,6 +467,24 @@ radiances shown in figure \ref{meanAll}.
 %     three bands.}
 %   \label{statAll2}
 % \end{figure}
+
+\begin{figure} % source nedn_test2.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
+  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} NEdN.
+    Apodization reduces the {\cris} and {\airs}-to-{\cris} NEdN by a
+    factor of $0.63$.}
+  \label{nedn}
+\end{figure}
+
+\begin{figure} % source nedt_test1.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_nedt.pdf}
+  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
+    and the max of {\cris} and {\airs}-to-{\cris} NEdN (shown as
+    NEdT) with {\cris} NEdT shown as a reference.}
+  \label{nedt}
+\end{figure}
 
 We can give a good estimate of noise equivalent differential
 radiance (NEdN) for the translation by adding noise with a normal
@@ -481,48 +515,8 @@ lower.  NEdN for the combined record would then be max of the
 {\airs} {\cris} and true {\cris} NEdN values, as shown in the second
 subplot of figure \ref{nedt}.
 
-\begin{figure} % source nedn_test2.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
-  \caption{mean {\airs}, {\airs}-to-{\cris}, and mean {\cris}
-    apodized and unapodized NEdN.}
-  \label{nedn}
-\end{figure}
-
-\begin{figure} % source nedt_test1.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_nedt.pdf}
-  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
-    and the max of {\cris} and {\airs}-to-{\cris} with {\cris}
-    NEdN shown as a reference.}
-  \label{nedt}
-\end{figure}
-
-The {\airs} to {\cris} translation via deconvolution works
-significantly better than conventional interpolation.  We consider
-two cases.  For the first, start with true {\airs} and interpolate
-radiances directly to the {\cris} user grid with a cubic spline.
-For the second, interpolate true {\airs} to the 0.1 {\wn}
-intermediate grid with a cubic spline and then convolve this to the
-use {\cris} user grid.  Figure~\ref{intpLW} shows interpolated
-{\cris} minus true {\cris} for the LW band, without apodization.
-The two-step interpolation works a little better than the simple
-spline, but both residuals are significantly larger than for the
-translation with deconvolution.  Results for the MW are similar,
-while the unapodized comparison is less clear for the SW.  With
-Hamming apodization, the residuals with deconvolution are
-significantly less than interpolation for all three bands.
-
-\begin{figure} % source a2cris_test1
-  \centering
-  \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
-  \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the {\cris} LW band.}
-  \label{intpLW}
-\end{figure}
-
 %---------------------------------------------------------------------
-\FloatBarrier
+% \FloatBarrier
 \section{Translation to an idealized grating model}
 \label{airsL1d}
 
@@ -569,44 +563,24 @@ a linear correction.  Residuals for L1d with a resolving power of
 \begin{figure} % source L1d_regr1.m
   \centering
   \includegraphics[width=\linewidth]{figures/L1d_cor1_1200.pdf}
-  \caption{mean and standard deviation over the 49 fitting profiles
+  \caption{Mean and standard deviation over the 49 fitting profiles
     for the L1c to L1d translation minus true L1d for a resolving
-    power of 1200}
+    power of 1200.}
   \label{L1d1200}
 \end{figure}
 
 \begin{figure} % source L1d_regr1.m
   \centering
   \includegraphics[width=\linewidth]{figures/L1d_cor1_700.pdf}
-  \caption{mean and standard deviation over the 49 fitting profiles
+  \caption{Mean and standard deviation over the 49 fitting profiles
     for the L1c to L1d translation minus true L1d for a resolving
-    power of 700}
+    power of 700.}
   \label{L1d700s}
 \end{figure}
 
-As with the {\airs} to {\cris} translation, deconvolution works
-significantly better than interpolation.  We consider similar cases.
-For the first, start with true L1c and interpolate radiances
-directly to the L1d grid with a cubic spline.  For the second,
-interpolate true L1c to the 0.1 {\wn} intermediate grid with a cubic
-spline and convolve this to the L1d channel set.
-Figure~\ref{interpL1d} shows interpolated L1d minus true L1d.  The
-two-step interpolation works a little better than the simple spline,
-but is still much larger than the residual for translation with
-deconvolution.
-
-\begin{figure} % source L1d_test2.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/CtoD_interp_diff.pdf}
-  \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the {\airs} L1c to L1d
-    translation with $v_0=649.822$~\wn\ and a resolving power of 700}
-  \label{interpL1d}
-\end{figure}
-
 %---------------------------------------------------------------------
-\FloatBarrier
-\section{Principal component regression}
+% \FloatBarrier
+\section{Direct and principal component regression}
 \label{dregr}
 
 The {\airs} L1c to L1d translation can be done with a single linear
@@ -640,6 +614,22 @@ dependent set is highly correlated.  The effective dimension is only
 residuals are close to zero, much less than the residuals for the
 independent set shown above.
 
+\begin{figure} % source a2cris_regr4.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/ap_dir_regr.pdf}
+  \caption{Mean residuals over the 49 profile independent set for
+    {\airs} to apodized {\cris} direct regression.}
+  \label{dreg1}
+\end{figure}
+
+\begin{figure} % source  a2cris_regr4.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/LW_dir_regr_mat.png}
+  \caption{Regression coefficients from the 7377 profile dependent set for
+  the LW direct regression.}
+  \label{dreg3}
+\end{figure}
+
 One fix is to add noise.  Recall that we generate true {\airs} 
 and true {\cris} by convolving a common set of high-resolution
 radiances.  For true {\airs} we can simply add noise at the {\airs}
@@ -659,6 +649,39 @@ spectra before convolution to the {\airs} user grid in such a way
 that we match the {\airs} NEdN spec and convolve this noisy signal
 to the {\cris} user grid to get noisy {\cris}, but we do not pursue
 that further here.
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/ap_pc_regr.pdf}
+  \caption{Mean residuals over the 49 profile independent set for
+    {\airs} to apodized {\cris} principal component regression.}
+  \label{dreg6}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/LW_pc_regr_mat.png}
+  \caption{Regression coefficients from the 7377 profile dependent
+    set for LW principal component regression with $i = j = 500$.}
+  \label{dreg7}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/MW_pc_regr_mat.png}
+  \caption{Regression coefficients from the 7377 profile dependent
+    set for MW principal component regression with $i = 500$ and $j
+    = 320$.}
+  \label{dreg8}
+\end{figure}
+
+\begin{figure} % source slackfigs a2cris_regr5.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/SW_pc_regr_mat.png}
+  \caption{Regression coefficients from the 7377 profile dependent
+    set for SW principal component regression with $i = j = 100$.}
+  \label{dreg9}
+\end{figure}
 
 As an alternative to adding noise, we can use a form of principal
 component regression.  As above, let $r_a$ and $r_c$ be $m \times k$
@@ -688,78 +711,14 @@ Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
 \ref{dreg8}, and \ref{dreg9} the transform $R$ for the {\cris} LW,
 MW, and SW bands.  We have chosen $i = j = 500$ for the LW, $i =
 500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW, to
-roughly balance unwanted correlation with residual size.  For all
-three bands the residuals for principal component regression are
-larger than for the deconvolution translation with regression
-correction and there is still significant off-diagonal correlation,
-especially for the MW and SW bands.  We conclude the deconvolution
-translation with regression correction works significantly better
-than regular or principal component regression, although the latter
-does work better than conventional interpolation.
-
-\begin{figure} % source slackfigs a2cris_regr4.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/ap_direct_regr.png}
-  \caption{mean residuals for apodized {\airs} to {\cris} direct
-    regression}
-  \label{dreg1}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr4.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/full_7377_LW_regr_mat.png}
-  \caption{regression coefficients for the LW direct regression}
-  \label{dreg3}
-\end{figure}
-
-% \begin{figure} % source slackfigs a2cris_regr4.m
-%   \centering
-%   \includegraphics[width=\linewidth]{slackfigs/full_7377_MW_regr_mat.png}
-%   \caption{regression coefficients for the MW direct regression}
-%   \label{dreg4}
-% \end{figure}
-% 
-% \begin{figure} % source slackfigs a2cris_regr4.m
-%   \centering
-%   \includegraphics[width=\linewidth]{slackfigs/full_7377_SW_regr_mat.png}
-%   \caption{regression coefficients for the SW direct regression}
-%   \label{dreg5}
-% \end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/ap_pc_direct_regr.png}
-  \caption{mean residuals for apodized {\airs} to {\cris} principal
-    component regression}
-  \label{dreg6}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/LW_pc_regr_mat.png}
-  \caption{regression coefficients for the LW principal component
-    regression}
-  \label{dreg7}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/MW_pc_regr_mat.png}
-  \caption{regression coefficients for the MW principal component
-    regression}
-  \label{dreg8}
-\end{figure}
-
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{slackfigs/SW_pc_regr_mat.png}
-  \caption{regression coefficients for the SW principal component
-    regression}
-  \label{dreg9}
-\end{figure}
+roughly balance unwanted correlation with residual size.  The
+residuals for principal component regression are larger than for the
+deconvolution translation with regression correction and there is
+still significant off-diagonal correlation, especially for the MW
+and SW bands.
 
 %---------------------------------------------------------------------
-\FloatBarrier
+% \FloatBarrier
 \section{Conclusions}
 \label{appcon}
 
@@ -788,9 +747,11 @@ test set on one compute node.  Calculating the pseudo-inverse adds
 another 12 seconds, but that only needs to be done when the
 translation parameters change.
 
-\FloatBarrier
+% \FloatBarrier
 \section{Appendix}
 \label{append}
+
+\subsection{Measures of correlation}
 
 We want to measure the correlation of a set of radiances.  One such
 measure is dimension of a spanning set.  For an approximation we use
@@ -819,7 +780,52 @@ gives $j=48$, which we interpret as largely uncorrelated, while for
 the 7377 profile cloudy set we found $j=260$, which we interpret as
 highly correlated.
 
-\FloatBarrier
+\subsection{Conventional interpolation}
+
+The {\airs} to {\cris} translation via deconvolution works
+significantly better than conventional interpolation.  We consider
+two cases.  For the first, start with true {\airs} and interpolate
+radiances directly to the {\cris} user grid with a cubic spline.
+For the second, interpolate true {\airs} to the 0.1 {\wn}
+intermediate grid with a cubic spline and then convolve this to the
+use {\cris} user grid.  Figure~\ref{intpLW} shows interpolated
+{\cris} minus true {\cris} for the LW band, without apodization.
+The two-step interpolation works a little better than the simple
+spline, but both residuals are significantly larger than for the
+translation with deconvolution.  Results for the MW are similar,
+while the unapodized comparison is less clear for the SW.  With
+Hamming apodization, the residuals with deconvolution are
+significantly less than interpolation for all three bands.
+
+\begin{figure} % source a2cris_test1
+  \centering
+  \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
+  \caption{spline interpolation, interpolation with convolution, 
+    and deconvolution with convolution for the {\cris} LW band.}
+  \label{intpLW}
+\end{figure}
+
+\begin{figure} % source L1d_test2.m
+  \centering
+  \includegraphics[width=\linewidth]{figures/CtoD_interp_diff.pdf}
+  \caption{spline interpolation, interpolation with convolution, 
+    and deconvolution with convolution for the {\airs} L1c to L1d
+    translation with $v_0=649.822$~\wn\ and a resolving power of 700}
+  \label{interpL1d}
+\end{figure}
+
+For the {\airs} L1c to L1d translation, deconvolution again works
+significantly better than interpolation.  As before, we consider two
+cases.  For the first, start with true {\airs} and interpolate
+radiances directly to the L1d grid with a cubic spline.  For the
+second, interpolate true L1c to the 0.1 {\wn} intermediate grid with
+a cubic spline and convolve this to the L1d channel set.
+Figure~\ref{interpL1d} shows interpolated L1d minus true L1d, for a
+resolving power of 700.  The two-step interpolation works a little
+better than the simple spline, but is still much larger than the
+residual for translation with deconvolution.
+
+% \FloatBarrier
 \bibliographystyle{abbrv}
 \bibliography{decon_paper}
 
