@@ -1,8 +1,9 @@
 % \documentclass[11pt]{article}
-\documentclass[10pt,twocolumn]{article}  %10pt is big enough with lucida
+\documentclass[10pt,twocolumn]{article}
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{url}
+
 \widowpenalty10000
 
 \input{llsdefs.tex}
@@ -78,7 +79,7 @@ details and validation tests for the {\airs} to {\cris} translation
 and section \ref{airsL1d} for translation to an idealized grating
 model.  For both cases deconvolution followed by reconvolution is
 shown to work significantly better than conventional interpolation.
-Both methods can be further improved with a statistical correcion.
+Both methods can be further improved with a statistical correction.
 In section \ref{dregr} we consider a purely statistical approach to
 such translations, and compare this with deconvolution.
 
@@ -128,12 +129,13 @@ simple function of frequency---the L1c channel set is more regular
 than the L1b channel set from which it is derived, and we mainly
 consider the L1c set here.
 
-Suppose we have $n$ channels and a frequency grid $\vec v$ of 
-$k$ points spanning the union of the domains of the functions
+Suppose we have $n$ channels and a frequency grid $\vec v$ of $k$
+points spanning the union of the domains of the functions
 $\sigma_i$.  The grid step size for our applications is often 0.0025
 {\wn}, the default resolution for upwelling radiances calculated
-with kcarta \cite{kcarta1}.  Let $S_k$ be an $n\times k$ array such 
-that $s_{i,j} = \sigma_i(v_j)/w_i$, where $w_i = \sum_j \sigma_i(v_j)$,
+with the kCompressed Atmospheric Radiative Transfer Model (\kcarta)
+\cite{kcarta1}.  Let $S_k$ be an $n\times k$ array such that
+$s_{i,j} = \sigma_i(v_j)/w_i$, where $w_i = \sum_j \sigma_i(v_j)$,
 that is where row $i$ is $\sigma_i(v)$ tabulated at the grid $\vec
 v$ and normalized so the row sum is 1.  If the channel centers are
 in increasing order $S_k$ is banded, and if they are not too close
@@ -141,10 +143,11 @@ in increasing order $S_k$ is banded, and if they are not too close
 independent.  $S_k$ is a linear transform whose domain is radiance
 at the grid $\vec v$ and whose range is channel radiances.  If $r$
 is radiance at the grid $\vec v$, then $c = S_k r$ gives a good
-approximation of the channel radiances $c_i = \int\sigma_i(v)r(v)\,dv$.
-In practice this is how we convolve kcarta or other high resolution
-calculated radiances to get {\airs} channel radiances, for example
-for reference truth or ``true {\airs}'' for the tests shown here.
+approximation of the channel radiances $c_i =
+\int\sigma_i(v)r(v)\,dv$.  In practice this is how we convolve
+{\kcarta} or other high resolution calculated radiances to get
+{\airs} channel radiances, for example for reference truth or ``true
+{\airs}'' for the tests shown here.
 
 % We construct $S_k$ either explicitly or implicitly from the
 % {\airs} {\srf} tabulations.  The matrix $S_k$ in the former case
@@ -162,7 +165,7 @@ to~1.  If $r$ is radiance at the $\vec v_b$ grid, then $c = S_b r$
 is still a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
 
 For our application we want to start with $c$ and find $r$, that is
-to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$ the
+to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$, the
 system is underdetermined.  We take the Moore-Penrose pseudoinverse
 \cite{wiki:pinv} of $S_b$ to get $r_0 = S_b^{-1} c$.  This gives a
 minimal solution, in the sense that $||r_0||_2 \le ||r_j||_2$ for
@@ -172,12 +175,12 @@ which is tolerable.
 
 Although our main goal is to reconvolve the $0.1~\wn$ intermediate
 representation to the {\cris} or other user grids, we first compare
-the deconvolved radiances with reference truth from a direct
-convolution to the intermediate grid.  The choice of response
-functions for the direct convolution is not obvious, since the
-deconvolution is undoing---at least to some extent---the effects of
-the {\airs} SRF convolutions.  We chose a generalized Gaussian 
-\cite{wiki:gauss} of the form
+the deconvolved radiance with reference truth from a direct
+convolution of {\kcarta} radiance to the intermediate grid.  The
+choice of response functions for the direct convolution is not
+obvious, since the deconvolution is undoing---at least to some
+extent---the effects of the {\airs} SRF convolutions.  We chose a
+generalized Gaussian \cite{wiki:gauss} of the form
 \[w(v, v_0, \fwhm) = 
 \exp\left(-\left(\frac{(v - v_0)^2}{2c^2}\right)^{1.5}\right) \]
 where $c=\fwhm / (2\sqrt{2\ln 2})$ and $v_0$ is the desired channel
@@ -207,7 +210,7 @@ gave larger residuals.
 \begin{figure} % source decon_test1.m 
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_zoom.pdf}
-  \caption{Details from fitting profile 1 for kcarta, direct
+  \caption{Details from fitting profile 1 for {\kcarta}, direct
     convolution to the $0.1$~\wn\ grid, deconvolved {\airs}, and
     true {\airs}.  The deconvolution restores some detail.}
   \label{dzoom}
@@ -227,16 +230,19 @@ full spectra from fitting profile~1, along with sample details from
 the low and high ends of the band, for the deconvolution and direct
 convolution to the intermediate grid.  In the details we see some
 overshoot and ringing in the deconvolution.  Figure \ref{dzoom}
-shows details of kcarta, direct convolution to the $0.1$~\wn\ grid,
-deconvolution, and AIRS spectra for fitting profile~1
-\cite{sarta1,sarta2}.  In the first subplot we see the deconvolution
-is capturing some of the fine structure in the kcarta data that is
-present in the direct convolution but not in the AIRS data.  In the
-second subplot we see the deconvolution (and direct convolution)
-resolving a pair of close lines that are not resolved at the {\airs}
-L1c resolution.  But we also see some ringing that is not present in
-the direct convolution.  These artifacts are acceptable because we
-do not propose using the deconvolved radiances directly; they are an
+shows details of {\kcarta}, direct convolution to the
+$0.1$~\wn\ grid, deconvolution, and AIRS spectra for fitting
+profile~1 \cite{sarta1,sarta2}.  In the first subplot we see the
+deconvolution is capturing some of the fine structure in the
+{\kcarta} data that is present in the direct convolution but not in
+the AIRS data.  In the second subplot we see the deconvolution (and
+direct convolution) resolving a pair of close lines that are not
+resolved at the {\airs} L1c resolution.  But we also see some
+ringing that is not present in the direct convolution.  This is to
+be expected; significant detail is lost in the convolution to
+{\airs} channel radiances and this can only partially be recovered
+by the deconvolution.  The artifacts are acceptable because we do
+not propose using the deconvolved radiances directly; they are an
 intermediate step before reconvolution to a lower resolution.
 
 % \begin{figure} % source decon_test1.m
@@ -282,29 +288,31 @@ in part from the synthetic L1c channels.
 \label{airs2cris}
 
 Given {\airs} deconvolution to a $0.1~\wn$ intermediate grid,
-reconvolution to the {\cris} user grid is straightforward.  For the
-{\cris} standard resolution the channel spacing is $0.625~\wn$ for
-the LW band, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW.  
+reconvolution to the {\cris} user grid is straightforward.  For
+{\cris} standard resolution the channel spacing is $0.625~\wn$ 
+for the LW band, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW.
 For each {\cris} band, we (1) find the {\airs} and {\cris} band
 intersection, (2) apply a bandpass filter to the deconvolved {\airs}
 radiances restricting them to the intersection, with a rolloff
-outside the intersection, and (3) reconvolve the filtered spectra to
+outside the passband, and (3) reconvolve the filtered spectra to 
 the {\cris} user grid with a zero-filled double Fourier transform
-\cite{git:finterp}.
+\cite{git:finterp}.  The out-of-band rolloff smooths what would
+otherwise be an impulse at the band edges, reducing ringing in the
+translation.  
 
 Translations are tested by comparison with calculated reference
 truth.  We start with a set of atmospheric profiles and calculate
-upwelling radiance at a $0.0025~\wn$ grid with kcarta \cite{kcarta1}
-over a band spanning the domains of the {\airs} and {\cris} response
-functions.  ``True {\airs}'' is calculated by convolving the kcarta
-radiances with {\airs} SRFs and ``true {\cris}'' by convolving
-kcarta radiances to a sinc basis at the {\cris} user grid.  True
-{\airs} is then translated to {\cris} to get ``{\airs} {\cris}'',
-and this is compared with true {\cris}.  Figure~\ref{specLW} shows
-sample spectra for true {\airs}, deconvolved {\airs}, true {\cris}
-and {\airs} {\cris}.  The difference between true {\cris} and
-{\airs} {\cris} is hard to see at this level of detail, and for the
-remainder of this paper we will mainly show explicit differences.
+upwelling radiance at a $0.0025~\wn$ grid with {\kcarta}
+\cite{kcarta1} over a band spanning the domains of the {\airs} and
+{\cris} response functions.  ``True {\airs}'' is calculated by
+convolving the {\kcarta} radiances with {\airs} SRFs and ``true
+{\cris}'' by convolving {\kcarta} radiances to a sinc basis at the
+{\cris} user grid.  True {\airs} is then translated to {\cris} to
+get ``{\airs} {\cris}'', and this is compared with true {\cris}.
+Figure~\ref{specLW} shows sample spectra for true {\airs},
+deconvolved {\airs}, true {\cris} and {\airs} {\cris}.  Any
+difference between true {\cris} and {\airs} {\cris} is hard to see
+here, and in subsequent plots we mainly show explicit differences.
 
 \begin{figure} % source a2cris_test1
   \centering
@@ -355,41 +363,55 @@ range of clear atmospheric conditions, initially chosen for testing
 radiative transfer codes \cite{sarta1,sarta2}.  The set is largely
 uncorrelated; reducing the reconstruction residual to 0.02~K
 requires 48 left-singular vectors.  (Details of this correlation
-measure are given in an appendix.)  For statistical correction and
-the direct regression discussed in section \ref{dregr} we also use a
-set of 7377 radiances calculated from all-sky (clear and cloudy)
-AIRS profiles spanning several consecutive days as the dependent
-set.  This set is moderately correlated; reducing the reconstruction
-residual to 0.02~K requires 260 left-singular vectors.  Splitting
-the 7377 profile set into dependent and independent subsets and
-comparing residuals from the independent subset with residuals from
-the 49-profile set, we found residuals from the latter are
-consistently larger, suggesting it makes for a stricter test.  So
-for the results shown here the test or independent set is always the
-49-profile set, while for tests requiring fitting the 7377 profile
-is used as the dependent set.
+measure are given in an appendix.)  For the statistical correction
+described later in this section and the direct regression of section
+\ref{dregr} we also use a set of 7377 radiances calculated from
+all-sky (clear and cloudy) AIRS profiles spanning several
+consecutive days.  This set is more correlated; reducing the
+reconstruction residual to 0.02~K requires 260 left-singular
+vectors.  Splitting the 7377 profile set into dependent and
+independent subsets and comparing residuals from the independent
+subset with residuals from the 49-profile set, residuals from the
+latter are consistently larger, suggesting it makes for a stricter
+test.  So for the results shown here the test or independent set is
+always the 49-profile set, while for tests requiring fitting the
+7377 profile is used as the dependent set.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
-49 fitting profiles, with and without Hamming apodization, for each
-of the {\cris} bands.  Figure \ref{meanAll} summarizes these results
-for Hamming apodized radiances.  The residual has a high frequency
-component with a period of 2 channel steps that is significantly
-reduced by the apodization.  The constant or DC bias is very close
-to zero for the apodized residuals.
+49 fitting profiles, for each of the {\cris} bands.  Comparisons are
+shown both with and without apodization.  Hamming apodization
+\cite{wiki:wind} sacrifices some resolution but gives a significant
+reduction in the residuals and is convenient for many applications.
+Figure \ref{meanAll} summarizes all three bands for apodized
+radiances.  
 
-% $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for the
-% SW.
+% The residual has a high frequency component with a period of 2
+% channel steps that is significantly reduced by the apodization.
+% The constant or DC bias is very close to zero for the apodized
+% residuals.
 
-Some regularity remains in the apodized residual, including the
-oscillation with a period of two channel steps.  Up to this point
-there as been no statistical component to our translation, beyond
-the choice of test set for validation.  We feel it is important to
-be clear about any steps that require statistical fitting.  That
-said, a simple linear correction can give a significantly further
-reduction of the residuals.  For such tests as noted we use the set
-of 7377 mostly cloudy AIRS profiles as the dependent set and the 49
-profile set the independent or test set.
+% Note that convolution, deconvolution, and apodization are done
+% with radiances while spectra are presented and statistics done
+% after translation to brightness temperatures.
+
+% At the low end of the {\cris} LW band there are only the two
+% {\airs} ``guard channels'' below 650 {\wn}, so the rolloff is
+% abrupt and we have significant ringing in the translation.
+
+% $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for 
+% the SW.
+
+The relatively small standard deviation of our residuals suggests
+some regularity, and we can see an oscillation with a period of two
+channel steps in many places.  Up to this point there as been no
+statistical component to our translation, beyond the choice of test
+set for validation.  We feel it is important to be clear about any
+steps that require statistical fitting.  That said, a simple linear
+correction can give a significantly further reduction of the
+residuals.  For such tests as noted we use the set of 7377 mostly
+cloudy AIRS profiles as the dependent set and the 49 profile set the
+independent or test set.
 
 We compare three such corrections.  These are done with a separate
 regression for each {\cris} channel, and so introduce no
@@ -415,10 +437,6 @@ noticably worse.  Figure \ref{statAll1} shows the residuals for the
 apodized linear correction for all three bands.  The residuals are
 significantly reduced in comparison with the apodized uncorrected
 radiances shown in figure \ref{meanAll}.
-
-% Note that convolution, deconvolution, and apodization are done
-% with radiances while spectra are presented and statistics done
-% after translation to brightness temperatures.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
@@ -531,7 +549,7 @@ Gaussian response function of section \ref{decon} as follows.
 Let $v_0$ be the frequency of the first channel and for $i\ge0$
 $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} = v_i +
 dv_i$.  As with tests of the {\airs} to {\cris} translation, true
-L1c is calculated by convolving kcarta radiances with {\airs} L1c
+L1c is calculated by convolving {\kcarta} radiances with {\airs} L1c
 SRFs and true L1d by convolving with an L1d basis at the desired
 resolving power.  L1c is translated to L1d by deconvolution followed
 by reconvolution to the desired L1d basis, and this is compared with
@@ -766,7 +784,7 @@ analog of principal component filtering using left-singular rather
 than eigenvectors and is useful as a form of compression when $k$ is
 small relative to $n$.  For that case we save $U_k$ and $U_k^T r_0$
 separately.  Applications include compression of IASI radiance data
-and the kcarta absorption coefficient database.
+and the {\kcarta} absorption coefficient database.
 
 We use a threshold for equivalence that is relevant for our
 applications.  Let $B^{-1}$ be the inverse Planck function and
