@@ -291,7 +291,7 @@ Given {\airs} deconvolution to a $0.1~\wn$ intermediate grid,
 reconvolution to the {\cris} user grid is straightforward.  For
 {\cris} standard resolution the channel spacing is $0.625~\wn$ 
 for the LW band, $1.25~\wn$ for the MW, and $2.5~\wn$ for the SW.
-For each {\cris} band, we (1) find the {\airs} and {\cris} band
+For each {\cris} band, we (1)~find the {\airs} and {\cris} band
 intersection, (2) apply a bandpass filter to the deconvolved {\airs}
 radiances restricting them to the intersection, with a rolloff
 outside the passband, and (3) reconvolve the filtered spectra to 
@@ -313,6 +313,13 @@ Figure~\ref{specLW} shows sample spectra for true {\airs},
 deconvolved {\airs}, true {\cris} and {\airs} {\cris}.  Any
 difference between true {\cris} and {\airs} {\cris} is hard to see
 here, and in subsequent plots we mainly show explicit differences.
+
+Comparisons are done both with and without apodization.  Hamming
+apodization \cite{wiki:wind} sacrifices some resolution but gives a
+significant reduction in the residuals and is convenient for many
+applications.  Convolution, deconvolution, and apodization are done
+with radiances, while spectra are presented and statistics are done
+after translation to brightness temperatures.
 
 \begin{figure} % source a2cris_test1
   \centering
@@ -379,32 +386,24 @@ always the 49-profile set, while for tests requiring fitting the
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
-49 fitting profiles, for each of the {\cris} bands.  Comparisons are
-shown both with and without apodization.  Hamming apodization
-\cite{wiki:wind} sacrifices some resolution but gives a significant
-reduction in the residuals and is convenient for many applications.
-Figure \ref{meanAll} summarizes all three bands for apodized
-radiances.  
+49 fitting profiles, for each {\cris} band.  The Hamming apodization
+gives a significant reduction in the residuals.  Figure \ref{meanAll}
+summarizes results all three bands, for apodized radiances.  The
+constant or DC bias is very close to zero for the apodized residuals.
+The unapodized residuals are significant but both the apodized and
+unapodized residuals are much less than the corresponding residuals
+from conventional interpolation, as shown in the appendix.
 
-% The residual has a high frequency component with a period of 2
-% channel steps that is significantly reduced by the apodization.
-% The constant or DC bias is very close to zero for the apodized
-% residuals.
-
-% Note that convolution, deconvolution, and apodization are done
-% with radiances while spectra are presented and statistics done
-% after translation to brightness temperatures.
+% $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for 
+% the SW.
 
 % At the low end of the {\cris} LW band there are only the two
 % {\airs} ``guard channels'' below 650 {\wn}, so the rolloff is
 % abrupt and we have significant ringing in the translation.
 
-% $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for 
-% the SW.
-
-The relatively small standard deviation of our residuals suggests
+The relatively small standard deviation of the residuals suggests
 some regularity, and we can see an oscillation with a period of two
-channel steps in many places.  Up to this point there as been no
+channel steps in several places.  Up to this point there as been no
 statistical component to our translation, beyond the choice of test
 set for validation.  We feel it is important to be clear about any
 steps that require statistical fitting.  That said, a simple linear
@@ -506,16 +505,16 @@ radiances shown in figure \ref{meanAll}.
 
 We can give a good estimate of noise equivalent differential
 radiance (NEdN) for the translation by adding noise with a normal
-distribution at the {\airs} NEdN spec to blackbody radiance at 280K
-and translating this to {\cris}.  This is done repeatedly and the
-noise after translation is measured.  As a check, noise before
-translation is also measured and compared with the {\airs} value.
-Figure \ref{nedn} shows this measured {\airs}-to-{\cris} together
-with {\airs} and {\cris} NEdN for both apodized and unapodized
-radiances.  The {\airs} and {\cris} values are averages over a full
-day, 4 Dec 2016.  NEdN for the L1c synthetic channels is
-interpolated.  The first subplot of figure \ref{nedt} is NEdT for
-apodized radiances, for fitting profile 1.
+distribution at the {\airs} NEdN to blackbody radiance at 280K and
+translating this to {\cris}.  This is done repeatedly and the noise
+after translation is measured.  As a check, noise before translation
+is also measured and compared with the {\airs} value.  Figure
+\ref{nedn} shows this measured {\airs}-to-{\cris} NEdN together with
+{\airs} and {\cris} NEdN for both apodized and unapodized radiances.
+The {\airs} and {\cris} values are averages over a full day, 4 Dec
+2016.  NEdN for the L1c synthetic channels is interpolated.  The
+first subplot of figure \ref{nedt} is NEdT for apodized radiances,
+for fitting profile 1.
 
 The {\airs} channel-to-channel NEdN variation is significant; in the
 upper half of the LW and most of the MW it is of the same order as
@@ -543,17 +542,25 @@ subplot of figure \ref{nedt}.
 
 The {\airs} deconvolution can be used for other translations.  
 In this section we briefly consider reconvolution to an idealized
-grating model for resolving powers of 700 and 1200.  Define an
-{\airs} L1d basis with resolving power $R$ using the generalized
-Gaussian response function of section \ref{decon} as follows.
-Let $v_0$ be the frequency of the first channel and for $i\ge0$
-$\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} = v_i +
-dv_i$.  As with tests of the {\airs} to {\cris} translation, true
-L1c is calculated by convolving {\kcarta} radiances with {\airs} L1c
-SRFs and true L1d by convolving with an L1d basis at the desired
-resolving power.  L1c is translated to L1d by deconvolution followed
-by reconvolution to the desired L1d basis, and this is compared with
-true L1d.
+grating model for resolving powers of 700 and 1200.  There are
+several reasons to consider such a translation.  The constant
+resolving power of the L1d basis (defined below) is a more natural
+translation target for {\airs} than the constant channel spacing of
+{\cris}.  It is the next step in regularization of the {\airs}
+product, following the partial regularization from L1b to L1c.  
+If there were other operational grating spectrometers it would be
+a logical target for a common record.
+
+Define an {\airs} L1d basis with resolving power $R$ using the
+generalized Gaussian response function of section \ref{decon} as
+follows.  Let $v_0$ be the frequency of the first channel and for
+$i\ge0$ $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} =
+v_i + dv_i$.  As with tests of the {\airs} to {\cris} translation,
+true L1c is calculated by convolving {\kcarta} radiances with
+{\airs} L1c SRFs and true L1d by convolving with an L1d basis at the
+desired resolving power.  L1c is translated to L1d by deconvolution
+followed by reconvolution to the desired L1d basis, and this is
+compared with true L1d.
 
 Figure \ref{L1d1200} shows residuals for reconvolution to an L1d
 basis with resolving power of 1200, the nominal {\airs} resolution,
@@ -601,36 +608,38 @@ a linear correction.  Residuals for L1d with a resolving power of
 \section{Direct and principal component regression}
 \label{dregr}
 
-The {\airs} L1c to L1d translation can be done with a single linear
-transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
+The {\airs} L1c to L1d translation can be done with a single 
+linear transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
 transforms taking the intermediate grid to L1c and L1d channels.
 The {\airs} to {\cris} translation can also be done with a composite
 transform if we use a resampling matrix rather than the double
-Fourier interpolation to go from the intermediate grid to the {\cris}
-user grid.  We can get such a one-step tranform in other ways.  For
-example if $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs}
-and {\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
-r_c\|_2$.  Typically $k > m$, giving an overdetermined system, and
-we solve $r_a^t X^t = r_c^t$ for $X$ by regression.  This is
-different from the corrections of section \ref{airs2cris} and
-\ref{airsL1d}; there regression was used to find linear or quadratic
-correction coefficients independently for each channel.
+Fourier interpolation and a matrix form of the bandpass filters.  
+We can get such a one-step tranform in other ways.  For example if
+$r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs} and
+{\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
+r_c\|_2$.  Typically $k > m$, giving an apparently overdetermined
+system, and we solve $r_a^t X^t = r_c^t$ for $X$ by regression.
+This is different from the corrections of section \ref{airs2cris}
+and \ref{airsL1d}; there regression was used to find linear or
+quadratic correction coefficients independently for each channel.
 
-Figures \ref{dreg1} shows residuals for direct regression, for
-apodized radiances.  As before we use the 7377 profile set as the
-dependent and the 49 profile as the independent sets.  The residuals
-are roughly comparable to the residuals from the deconvolution
-translation summarized in figure \ref{statAll1}.  The LW residual is
-larger at the low end of the band for direct regression and the high
-end for the deconvolved translation.  Deconvolution does better in
-the MW, and direct regression in the SW.   Unfortunately the
-regression matrices show significant off-diagonal correlations.
-Figure \ref{dreg3} shows this for the LW; the MW and SW bands are
-worse.  As noted in section \ref{airs2cris} the 7377 profile
-dependent set is highly correlated.  The effective dimension is only
-260, our regression is actually under-determined.  The dependent set
-residuals are close to zero, much less than the residuals for the
-independent set shown above.
+Figures \ref{dreg1} shows residuals for direct regression from
+{\airs} to apodized {\cris} radiances.  As before we use the 7377
+profile set as the dependent and the 49 profile as the independent
+sets.  The residuals are roughly comparable to the residuals from
+the deconvolution translation summarized in figure \ref{statAll1}.
+The LW residual is larger at the low end of the band for direct
+regression and the high end for the deconvolved translation.
+Deconvolution does better in the MW, and direct regression in the
+SW.  However the regression matrices show significant off-diagonal
+correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
+SW bands are worse.  The dependent set residuals are very small,
+much less than the residuals for the independent set shown above.
+This and the off-diagonal correlations are signs of overfitting.  
+As noted in section \ref{airs2cris} the 7377 profile dependent set
+is highly correlated.  The effective dimension (as defined in the
+appendix) is only 260, and the regression is actually
+underdetermined.
 
 \begin{figure} % source a2cris_regr4.m
   \centering
@@ -647,6 +656,8 @@ independent set shown above.
   the LW direct regression.}
   \label{dreg3}
 \end{figure}
+
+% This is probably going to be true for any large set of radiances,
 
 One fix is to add noise.  Recall that we generate true {\airs} 
 and true {\cris} by convolving a common set of high-resolution
@@ -842,6 +853,17 @@ Figure~\ref{interpL1d} shows interpolated L1d minus true L1d, for a
 resolving power of 700.  The two-step interpolation works a little
 better than the simple spline, but is still much larger than the
 residual for translation with deconvolution.
+
+\subsection{Source code}
+
+This paper, a companion talk, and all the translation and test code
+discussed here are available online at github.\vspace{-2mm}
+
+\begin{itemize}
+   \item \url{https://github.com/motteler/decon_paper}\vspace{-3mm}
+   \item \url{https://github.com/strow/airs_deconv}\vspace{-3mm}
+   \item \url{https://github.com/strow/iasi_decon}
+\end{itemize}
 
 % \FloatBarrier
 \bibliographystyle{abbrv}
