@@ -611,17 +611,22 @@ a linear correction.  Residuals for L1d with a resolving power of
 The {\airs} L1c to L1d translation can be done with a single 
 linear transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
 transforms taking the intermediate grid to L1c and L1d channels.
-The {\airs} to {\cris} translation can also be done with a composite
-transform if we use a resampling matrix rather than the double
-Fourier interpolation and a matrix form of the bandpass filters.  
-We can get such a one-step tranform in other ways.  For example if
-$r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs} and
-{\cris} radiance sets, we can find $X$ to minimize $\|X r_a -
-r_c\|_2$.  Typically $k > m$, giving an apparently overdetermined
-system, and we solve $r_a^t X^t = r_c^t$ for $X$ by regression.
-This is different from the corrections of section \ref{airs2cris}
-and \ref{airsL1d}; there regression was used to find linear or
-quadratic correction coefficients independently for each channel.
+The {\airs} to {\cris} translation could also be done with a
+composite transform if we use a resampling matrix rather than
+double Fourier interpolation and a matrix form of the bandpass
+filters.  We can get such a one-step tranform in other ways.
+Suppose $r_a$ and $r_c$ are $m \times k$ and $n \times k$ {\airs}
+and {\cris} radiance sets, for example true {\airs} and true {\cris}
+from section \ref{airs2cris}.  We can find an $n \times m$ matrix
+$X$ by regression to minimize $\|X r_a - r_c\|_2$ and use this as
+our {\airs} to {\cris} transform.  We call this standard technique
+``direct regression'' here.  This is different from the corrections
+of section \ref{airs2cris} and \ref{airsL1d}; there regression was
+used to find linear or quadratic correction coefficients
+independently for each channel.
+
+% Typically $k > m$, giving an apparently overdetermined
+% system, and we solve $r_a^t X^t = r_c^t$ for $X$ by regression.
 
 Figures \ref{dreg1} shows residuals for direct regression from
 {\airs} to apodized {\cris} radiances.  As before we use the 7377
@@ -633,13 +638,11 @@ regression and the high end for the deconvolved translation.
 Deconvolution does better in the MW, and direct regression in the
 SW.  However the regression matrices show significant off-diagonal
 correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
-SW bands are worse.  The dependent set residuals are very small,
-much less than the residuals for the independent set shown above.
-This and the off-diagonal correlations are signs of overfitting.  
-As noted in section \ref{airs2cris} the 7377 profile dependent set
-is highly correlated.  The effective dimension (as defined in the
-appendix) is only 260, and the regression is actually
-underdetermined.
+SW bands are worse.  In addition the dependent set residuals are
+very small, much less than the residuals for the independent set.
+These are signs of overfitting.  As noted in section \ref{airs2cris}
+the 7377 profile dependent set is highly correlated; the effective
+dimension (as defined in the appendix) is only 260.
 
 \begin{figure} % source a2cris_regr4.m
   \centering
@@ -657,27 +660,22 @@ underdetermined.
   \label{dreg3}
 \end{figure}
 
-% This is probably going to be true for any large set of radiances,
-
 One fix is to add noise.  Recall that we generate true {\airs} 
 and true {\cris} by convolving a common set of high-resolution
 radiances.  For true {\airs} we can simply add noise at the {\airs}
-NEdN spec.  But for regression or testing of an {\airs} to {\cris}
+NEdN.  But for regression or testing of an {\airs} to {\cris}
 translation we want {\cris} radiances with actual translated {\airs}
 noise, not simply true {\cris} with noise added as per the {\cris}
-NEdN spec.  The latter does reduce correlations but increases
-residuals for the independent set significantly.
-
-To model NEdN for the AIRS to CrIS translation we synthesize noise
-at the {\airs} NEdN spec, add it to the signal, run it through the
-translation, and measure it.  That works fine for measuring noise.
-But to get an {\airs} to {\cris} translation by regression with
-added noise we need the reference translation of each noisy {\airs}
-spectra.  One way to do that might be to add noise to the high res
-spectra before convolution to the {\airs} user grid in such a way
-that we match the {\airs} NEdN spec and convolve this noisy signal
-to the {\cris} user grid to get noisy {\cris}, but we do not pursue
-that further here.
+NEdN specification.  The latter does reduce correlations but
+increases residuals for the independent set significantly.
+To model NEdN for the {\airs} to {\cris} translation of section
+\ref{airs2cris} we synthesize noise at the {\airs} NEdN, add that 
+to the signal, run signal plus noise through the translation, and
+measure the noise.  But to get an {\airs} to {\cris} translation by
+regression with added noise we need a reference translation of each
+noisy {\airs} spectra.  We don't want to use the translation of
+section \ref{airs2cris} for that, at least not if our goal is to
+give each translation method an independent test.
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
@@ -721,12 +719,14 @@ Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
 decomposition with singular values in descending order and $U_c^j$
 the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
 $\hat r_c = (U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with
-respect to the bases $U_a^i$ and $U_c^j$.  Since these are
-orthonormal, the transpose is the inverse.  Then as before find $X$
-to minimize $\|X \hat r_a - \hat r_c\|_2$ by solving $\hat r_a^T X^T
-= \hat r_c^T$ for $X$ by regression.  This gives us $R = U_c^j X
-(U_a^i)^T$, an {\airs} to {\cris} transform parameterized by the
-{\airs} and {\cris} basis sizes $i$ and $j$,
+respect to the bases $U_a^i$ and $U_c^j$.  (Since the bases are
+orthonormal, the transpose is the inverse.)  Then as before find $X$
+by regression to minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives
+us $R = U_c^j X (U_a^i)^T$, an {\airs} to {\cris} transform
+parameterized by the basis sizes $i$ and $j$,
+
+% Then as before find $X$ to minimize $\|X \hat r_a - \hat r_c\|_2$
+% by solving $\hat r_a^T X^T = \hat r_c^T$ for $X$ by regression.
 
 Note that this sort of principal component regression is not the
 same as regression after principal component (or singular vector)
