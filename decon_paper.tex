@@ -28,40 +28,55 @@
 \maketitle
 
 \begin{abstract}
-Sed ut perspiciatis, unde omnis iste natus error sit voluptatem
-accusantium doloremque laudantium, totam rem aperiam eaque ipsa,
-quae ab illo inventore veritatis et quasi architecto beatae vitae
-dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas
-sit, aspernatur aut odit aut fugit, sed quia consequuntur magni
-dolores eos, qui ratione voluptatem sequi nesciunt, neque porro
-quisquam est, qui dolorem ipsum, quia dolor sit amet consectetur
-adipisci velit, sed quia non numquam eius modi tempora incidunt, ut
-labore et dolore magnam aliquam quaerat voluptatem.
+
+Spectra of the earth's thermal emission as measured by the {\airs},
+{\cris}, and {\iasi} hyper-spectral sounders is a significant part
+of the long term climate record.  These instruments have broadly
+similar spatial sampling, spectral resolution, channel response
+functions, and band spans.  We have implemented {\airs} to {\cris}
+and {\iasi} to {\cris} translations for calibaration and validation,
+and propose using them for the construction of a long-term climate
+dataset.  Our translation from {\airs} to {\cris} has some novel
+features.  {\airs} is a grating spectrometer with a distinct
+response function for each channel, while {\cris} is a Michaelson
+interferometer with a sinc response function after calibration and
+corrections.  We use our detailed knowledge of the {\airs} spectral
+response functions to deconvolve {\airs} channel radiances to a
+resolution enhanced intermediate representation.  This is then
+reconvolved to {\cris} or other instrument specifications.  The
+resulting translation is shown to be more accurate than conventional
+regression or interpolation.
+
 \end{abstract}
 
 \section{Introduction}
 
-Upwelling infrared radiation as measured by the {\airs} \cite{airs1}
-and {\cris} \cite{cris1,cris2} sounders is a significant part of the
-long term climate record.  {\airs} and {\cris} have similar sampling
-patterns \cite{git:acsamp}.  We often want to compare radiances, and
-would like to treat this as a single data set for the analysis of
-long term trends.  However the instruments have different spectral
-resolutions, channel response functions, and band spans.  As a step
-in addressing this problem we consider the translation of channel
-radiances from {\airs} to standard resolution {\cris}.
+Spectra of the earth's thermal emission as measured by the {\airs}
+\cite{airs1}, {\cris} \cite{cris1,cris2}, and {\iasi} \cite{iasi1}
+hyperspectral infrared sounders is a significant part of the long
+term climate record.  Such measurements began with {\airs} in 2002
+and should continue for the foreseeable future, given their
+important role in numerical weather prediction.  These sounders are
+in sun-synchronous near-polar orbits, with broadly similar spatial
+sampling, spectral resolution, and spectral band spans.  However the
+channel spectral response functions vary in detail, and this can
+lead to significant differences in observed spectra.
 
-In addition to our {\airs} to {\cris} translation we make regular
-use of an {\iasi} to {\cris} translation for evaluating simultaneous
-nadir overpasses (SNOs) \cite{sno1}, and have implemented and tested
-{\iasi} to {\airs} and {\cris} to {\airs} translations as well.  The
-translations from {\iasi} includes deapodization (a form of
-deconvolution) before reconvolution to the translation target, and
-work very well.  Ranking these translations by accuracy in
+For applications such as calibaration and validation, retrievals,
+and the construction of a long term climate record we would like to
+work with single set of spectral response functions.  This is
+typically done by translating channel radiances from one sounder to
+another, including simulation of the response functions of the
+translation target.  We make regular use such translations from
+{\airs} to {\cris} and {\iasi} to {\cris}, and have implemented and
+tested {\iasi} to {\airs} and {\cris} to {\airs} translations as
+well.  The translations from {\iasi} includes deapodization (a form
+of deconvolution) before reconvolution to the translation target,
+and work very well.  Ranking these translations by accuracy in
 comparison with calculated reference truth, we have {\iasi} to
 {\cris}, {\iasi} to {\airs}, {\airs} to {\cris}, and finally {\cris}
-to {\airs} \cite{git:decon}.  But aside from {\airs} to {\cris} the
-methods used are for the most part conventional.
+to {\airs} \cite{git:decon}.  But aside from the {\airs} to {\cris}
+translation the methods used are for the most part conventional.
 
 Our translation from {\airs} to {\cris} has some novel features.
 {\airs} is a grating spectrometer with a distinct response function
@@ -532,6 +547,16 @@ lower.  NEdN for the combined record would then be max of the
 {\airs} {\cris} and true {\cris} NEdN values, as shown in the second
 subplot of figure \ref{nedt}.
 
+In addition to the standard resolution described at the beginning 
+of this section, {\cris} has a high resolution mode with a channel
+spacing of $0.625~\wn$ for all three bands.  We can do a translation
+from {\airs} to high-resolution {\cris} but the residuals are quite
+large; {\airs} does not have sufficient resolution as a starting
+point.  The high resolution mode does allow for a {\cris} to {\airs}
+translation as described in \cite{git:decon}.  The residuals are
+larger in the LW than for our translation from {\airs} to standard
+resolution {\cris}, but may be acceptable for some applications.
+
 %---------------------------------------------------------------------
 % \FloatBarrier
 \section{Translation to an idealized grating model}
@@ -631,18 +656,20 @@ independently for each channel.
 Figures \ref{dreg1} shows residuals for direct regression from
 {\airs} to apodized {\cris} radiances.  As before we use the 7377
 profile set as the dependent and the 49 profile as the independent
-sets.  The residuals are roughly comparable to the residuals from
+set.  The residuals are roughly comparable to the residuals from
 the deconvolution translation summarized in figure \ref{statAll1}.
-The LW residual is larger at the low end of the band for direct
-regression and the high end for the deconvolved translation.
-Deconvolution does better in the MW, and direct regression in the
-SW.  However the regression matrices show significant off-diagonal
+However the regression matrices show significant off-diagonal
 correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
 SW bands are worse.  In addition the dependent set residuals are
 very small, much less than the residuals for the independent set.
 These are signs of overfitting.  As noted in section \ref{airs2cris}
 the 7377 profile dependent set is highly correlated; the effective
 dimension (as defined in the appendix) is only 260.
+
+% The LW residual is larger at the low end of the band for direct
+% regression and the high end for the deconvolved translation.
+% Deconvolution does better in the MW, and direct regression in 
+% the SW.
 
 \begin{figure} % source a2cris_regr4.m
   \centering
@@ -723,7 +750,7 @@ respect to the bases $U_a^i$ and $U_c^j$.  (Since the bases are
 orthonormal, the transpose is the inverse.)  Then as before find $X$
 by regression to minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives
 us $R = U_c^j X (U_a^i)^T$, an {\airs} to {\cris} transform
-parameterized by the basis sizes $i$ and $j$,
+parameterized by the basis sizes $i$ and $j$.
 
 % Then as before find $X$ to minimize $\|X \hat r_a - \hat r_c\|_2$
 % by solving $\hat r_a^T X^T = \hat r_c^T$ for $X$ by regression.
@@ -739,12 +766,12 @@ after the change of bases.
 Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
 \ref{dreg8}, and \ref{dreg9} the transform $R$ for the {\cris} LW,
 MW, and SW bands.  We have chosen $i = j = 500$ for the LW, $i =
-500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW, to
-roughly balance unwanted correlation with residual size.  The
-residuals for principal component regression are larger than for the
-deconvolution translation with regression correction and there is
-still significant off-diagonal correlation, especially for the MW
-and SW bands.
+500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW for the
+basis sizes, to roughly balance unwanted correlation with residual
+size.  The residuals for principal component regression are larger
+than for the deconvolution translation with regression correction
+and there is still significant off-diagonal correlation, especially
+for the MW and SW bands.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
@@ -856,8 +883,9 @@ residual for translation with deconvolution.
 
 \subsection{Source code}
 
-This paper, a companion talk, and all the translation and test code
-discussed here are available online at github.\vspace{-2mm}
+This paper, a companion talk, and all translation and test code
+discussed here are available online at github licensed under the
+Gnu GPL version 3.\vspace{-2mm}
 
 \begin{itemize}
    \item \url{https://github.com/motteler/decon_paper}\vspace{-3mm}

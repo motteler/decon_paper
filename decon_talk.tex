@@ -455,25 +455,23 @@
 \frametitle{direct regression}
 \begin{itemize}
 
-  \item The {\airs} to {\cris} and {\airs} to L1d translations can
-    be represented as a single linear transform, the composition of
-    the deconvolution and reconvolution matrices.  
+  \item The {\airs} to {\cris} and {\airs} to L1d translations 
+    can be done with a single linear transform, the composition 
+    of deconvolution, bandpass, and reconvolution matrices.
 
   \item We can get such a one-step tranform in other ways.
 
-  \item For example if $r_a$ and $r_c$ are $m \times k$ and $n
-    \times k$ {\airs} and {\cris} radiance sets, we can find an $n
-    \times m$ array $X$ to minimize $\|X r_a - r_c\|_2$.
-
-  \item Typically $k > m$, giving an overdetermined system, and we
-    solve $r_a^t X^t = r_c^t$ for $X$ by regression.
+  \item Suppose $r_a$ and $r_c$ are $m \times k$ and $n \times k$
+    {\airs} and {\cris} radiance sets.  We can find an $n \times m$
+    matrix $X$ by regression to minimize $\|X r_a - r_c\|_2$ and use
+    this as our {\airs} to {\cris} transform.
 
   \item This differs from the regression corrections used earlier;
     there regression was used to find linear or quadratic correction
     coefficients independently for each channel.
 
   \item As before we use the 7377 profile set as the dependent and
-    the 49 profile as the independent sets.
+    the 49 profile as the independent set.
 
   \item This approach is prone to over-fitting, and the regression
     matrices show significant off-diagonal correlations.
@@ -525,12 +523,11 @@
     r_c$ be $r_a$ and $r_c$ represented with respect to the bases
     $U_a^i$ and $U_c^j$.
 
-  \item Then find $X$ to minimize $\|X \hat r_a - \hat r_c\|_2$ by
-    solving $\hat r_a^T X^T = \hat r_c^T$ for $X$ by regression.
+  \item Then find $X$ by regression to minimize $\|X \hat r_a - \hat
+    r_c\|_2$.
 
   \item This gives us $R = U_c^j X (U_a^i)^T$, an {\airs} to {\cris}
-    transform parameterized by the {\airs} and {\cris} basis sizes
-    $i$ and $j$.
+    transform parameterized by the basis sizes $i$ and $j$.
 
 \end{itemize}
 \end{frame}
@@ -586,18 +583,18 @@
   \item The {\airs} deconvolution gives a modest resolution
     enhancement, at the cost of added artifacts and noise.
 
-  \item The deconvolution can be used for other translations, such
-    as an idealized grating model.
-
   \item {\airs} to {\cris} translation via deconvolution,
     reconvolution, and a statistical correction works better than
     translation via regular or principal component regression.
+
+  \item The deconvolution can be used for other translations, such
+    as to an idealized grating model.
 
   \item Translation via deconvolution works significantly better
     than conventional interpolation, including interpolation to the
     intermediate grid followed by convolution to the final target.
 
-  \item This talk, a more in-depth companion paper, and all the
+  \item This talk, a more in-depth companion paper, and the
     translation and test code discussed here are available online at
     github:
     \begin{itemize}
