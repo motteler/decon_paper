@@ -32,20 +32,23 @@
 Spectra of the earth's thermal emission as measured by the {\airs},
 {\cris}, and {\iasi} hyper-spectral sounders is a significant part
 of the long term climate record.  These instruments have broadly
-similar spatial sampling, spectral resolution, channel response
-functions, and band spans.  We have implemented {\airs} to {\cris}
-and {\iasi} to {\cris} translations for calibaration and validation,
-and propose using them for the construction of a long-term climate
-dataset.  Our translation from {\airs} to {\cris} has some novel
-features.  {\airs} is a grating spectrometer with a distinct
-response function for each channel, while {\cris} is a Michaelson
-interferometer with a sinc response function after calibration and
-corrections.  We use our detailed knowledge of the {\airs} spectral
-response functions to deconvolve {\airs} channel radiances to a
-resolution enhanced intermediate representation.  This is then
-reconvolved to {\cris} or other instrument specifications.  The
-resulting translation is shown to be more accurate than conventional
-regression or interpolation.
+similar spatial sampling, spectral resolution, and band spans.
+However the channel spectral response functions differ in detail,
+leading to significant differences in observed spectra.  To address
+this we translate channel radiances from one sounder to another,
+including simulation of the response functions of the translation
+target.  We make regular use such of translations from {\airs} to
+{\cris} and {\iasi} to {\cris}, and have implemented and tested
+{\iasi} to {\airs} and {\cris} to {\airs} translations as well.  
+Our translation from {\airs} to {\cris} has some novel features.
+{\airs} is a grating spectrometer with a distinct response function
+for each channel, while {\cris} is a Michaelson interferometer with
+a sinc response function after calibration and corrections.  We use
+our detailed knowledge of the {\airs} spectral response functions to
+deconvolve {\airs} channel radiances to a resolution enhanced
+intermediate representation.  This is reconvolved to {\cris} or
+other instrument specifications.  The resulting translation is shown
+to be more accurate than interpolation or conventional regression.
 
 \end{abstract}
 
@@ -63,11 +66,11 @@ channel spectral response functions vary in detail, and this can
 lead to significant differences in observed spectra.
 
 For applications such as calibaration and validation, retrievals,
-and the construction of a long term climate record we would like to
-work with single set of spectral response functions.  This is
-typically done by translating channel radiances from one sounder to
+and the construction of a long term climate record we would like 
+to work with single set of spectral response functions.  This is
+can be done by translating channel radiances from one sounder to
 another, including simulation of the response functions of the
-translation target.  We make regular use such translations from
+translation target.  We make regular use of translations from
 {\airs} to {\cris} and {\iasi} to {\cris}, and have implemented and
 tested {\iasi} to {\airs} and {\cris} to {\airs} translations as
 well.  The translations from {\iasi} includes deapodization (a form
@@ -81,22 +84,22 @@ translation the methods used are for the most part conventional.
 Our translation from {\airs} to {\cris} has some novel features.
 {\airs} is a grating spectrometer with a distinct response function
 for each channel determined by the focal plane geometery, while
-{\cris} is a Michaelson interferometer with a sinc response
-function after calibration and corrections.  In section \ref{decon}
-we show how to take advantage of our detailed knowledge of the
-{\airs} spectral response functions (SRFs) and their overlap to
-deconvolve channel radiances to a resolution-enhanced intermediate
+{\cris} is a Michaelson interferometer with a sinc response function
+after calibration and corrections.  In section \ref{decon} we show
+how to take advantage of our detailed knowledge of the {\airs}
+spectral response functions (SRFs) and their overlap to deconvolve
+channel radiances to a resolution-enhanced intermediate
 representation, typically a $0.1$~\wn\ grid, the approximate
-resolution of the tabulated {\airs} SRFs.  
-This intermediate representation can then be reconvolved to an
-alternate instrument specification.  Section \ref{airs2cris} gives
-details and validation tests for the {\airs} to {\cris} translation
-and section \ref{airsL1d} for translation to an idealized grating
-model.  For both cases deconvolution followed by reconvolution is
-shown to work significantly better than conventional interpolation.
-Both methods can be further improved with a statistical correction.
-In section \ref{dregr} we consider a purely statistical approach to
-such translations, and compare this with deconvolution.
+resolution of the tabulated {\airs} SRFs.  This intermediate
+representation can then be reconvolved to an alternate instrument
+specification.  Section \ref{airs2cris} gives details and validation
+tests for an {\airs} to {\cris} translation, and section
+\ref{airsL1d} for translation from {\airs} to an idealized grating
+model.  Both translations can be further improved with a statistical
+correction.  In section \ref{dregr} we consider conventional and
+principal component regression for an {\airs} to {\cris}
+translation, and compare this with our deconvolution-based
+translation.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
