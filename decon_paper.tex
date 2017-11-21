@@ -62,8 +62,8 @@ and should continue for the foreseeable future, given their
 important role in numerical weather prediction.  These sounders are
 in sun-synchronous near-polar orbits, with broadly similar spatial
 sampling, spectral resolution, and spectral band spans.  However the
-channel spectral response functions vary in detail, and this can
-lead to significant differences in observed spectra.
+spectral response functions vary in detail, and this can lead to
+significant differences in observed spectra.
 
 For applications such as calibaration and validation, retrievals,
 and the construction of a long term climate record we would like 
@@ -151,7 +151,7 @@ Suppose we have $n$ channels and a frequency grid $\vec v$ of $k$
 points spanning the union of the domains of the functions
 $\sigma_i$.  The grid step size for our applications is often 0.0025
 {\wn}, the default resolution for upwelling radiances calculated
-with the kCompressed Atmospheric Radiative Transfer Model (\kcarta)
+using the kCompressed Atmospheric Radiative Transfer Model (\kcarta)
 \cite{kcarta1}.  Let $S_k$ be an $n\times k$ array such that
 $s_{i,j} = \sigma_i(v_j)/w_i$, where $w_i = \sum_j \sigma_i(v_j)$,
 that is where row $i$ is $\sigma_i(v)$ tabulated at the grid $\vec
@@ -162,10 +162,9 @@ independent.  $S_k$ is a linear transform whose domain is radiance
 at the grid $\vec v$ and whose range is channel radiances.  If $r$
 is radiance at the grid $\vec v$, then $c = S_k r$ gives a good
 approximation of the channel radiances $c_i =
-\int\sigma_i(v)r(v)\,dv$.  In practice this is how we convolve
-{\kcarta} or other high resolution calculated radiances to get
-{\airs} channel radiances, for example for reference truth or ``true
-{\airs}'' for the tests shown here.
+\int\sigma_i(v)r(v)\,dv$.  In practice this is how we calculate
+{\airs} channel radiances for the validation tests described in
+subsequent sections.
 
 % We construct $S_k$ either explicitly or implicitly from the
 % {\airs} {\srf} tabulations.  The matrix $S_k$ in the former case
@@ -185,7 +184,7 @@ is still a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
 For our application we want to start with $c$ and find $r$, that is
 to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$, the
 system is underdetermined.  We take the Moore-Penrose pseudoinverse
-\cite{wiki:pinv} of $S_b$ to get $r_0 = S_b^{-1} c$.  This gives a
+\cite{strang:linalg} of $S_b$ to get $r_0 = S_b^{-1} c$.  This gives a
 minimal solution, in the sense that $||r_0||_2 \le ||r_j||_2$ for
 all $r_j$ satisfying $S_b r_j = c$.  The condition number for $S_b$
 as built from the L1c channels is $||S_b||_2||S_b^{-1}||_2 = 115$,
@@ -206,7 +205,7 @@ center.  The exponent $1.5$ was chosen to give an approximate match
 to {\airs} SRFs with the same {\FWHM} and channel centers, though
 without the fine structure and variation of the measured \srf s.
 Figure \ref{srfs1} shows two such generalized Gaussians paired with
-the corresponding {\airs} SRFs.  We used the same functions as
+the corresponding {\airs} SRFs.  We used the generalized Gaussian as
 reference truth for the $0.1~\wn$ intermediate grid with ${\fwhm} =
 v_i / 2000$, where $v_i$ are the grid frequencies.  This represents
 a hypothetical grating spectrometer with a resolving power of 2000,
@@ -426,9 +425,9 @@ statistical component to our translation, beyond the choice of test
 set for validation.  We feel it is important to be clear about any
 steps that require statistical fitting.  That said, a simple linear
 correction can give a significantly further reduction of the
-residuals.  For such tests as noted we use the set of 7377 mostly
-cloudy AIRS profiles as the dependent set and the 49 profile set the
-independent or test set.
+residuals.  We use the set of 7377 mostly cloudy AIRS profiles as
+the dependent set and the 49 profile set as the independent or test
+set.
 
 We compare three such corrections.  These are done with a separate
 regression for each {\cris} channel, and so introduce no
@@ -444,7 +443,7 @@ profiles, for comparison with true {\cris}.
 
 Figure \ref{statLW} is a comparison of bias, linear, and quadratic
 corrections for the LW band.  The linear and quadratic corrections
-are nearly identical, and the quadratic coefficient is very close to
+are nearly identical, with the quadratic coefficient very close to
 zero.  Figure \ref{coefLW} shows the weights for the linear fits
 from figure \ref{statLW}.  The $a$ weights are very close to 1 and
 the $b$ weight to the bias.  Figures \ref{statMW} and \ref{statSW}
@@ -527,7 +526,7 @@ distribution at the {\airs} NEdN to blackbody radiance at 280K and
 translating this to {\cris}.  This is done repeatedly and the noise
 after translation is measured.  As a check, noise before translation
 is also measured and compared with the {\airs} value.  Figure
-\ref{nedn} shows this measured {\airs}-to-{\cris} NEdN together with
+\ref{nedn} shows the measured {\airs}-to-{\cris} NEdN together with
 {\airs} and {\cris} NEdN for both apodized and unapodized radiances.
 The {\airs} and {\cris} values are averages over a full day, 4 Dec
 2016.  NEdN for the L1c synthetic channels is interpolated.  The
@@ -540,7 +539,7 @@ the {\airs} and {\cris} NEdN difference.  This variation is due the
 {\airs} focal plane structure and sensitivity.  The {\airs} and
 {\cris} NEdN measures are both spiky when averaged over a few
 minutes but the {\cris} variation is primarily uncertainty in the
-noise measurement and smooths out as the time span is extended
+noise measurement and smooths out as the time span is extended,
 while the {\airs} variation is stable.  The {\airs}-to-{\cris}
 translation inherits this variability; it is a significant part of
 the difference between {\airs} {\cris} and true {\cris}.  For a
@@ -569,15 +568,17 @@ resolution {\cris}, but may be acceptable for some applications.
 % the real resolving power is higher.
 
 The {\airs} deconvolution can be used for other translations.  
-In this section we briefly consider reconvolution to an idealized
+
+In this section we briefly examine reconvolution to an idealized
 grating model for resolving powers of 700 and 1200.  There are
 several reasons to consider such a translation.  The constant
-resolving power of the L1d basis (defined below) is a more natural
-translation target for {\airs} than the constant channel spacing of
-{\cris}.  It is the next step in regularization of the {\airs}
-product, following the partial regularization from L1b to L1c.  
-If there were other operational grating spectrometers it would be
-a logical target for a common record.
+resolving power of the L1d basis (defined below) makes it a more
+natural translation target for {\airs} than the constant channel
+spacing of {\cris}.  It could be considered as the next step in
+regularization of the {\airs} product, following the partial
+regularization from L1b to L1c.  If there were other operational
+hyperspectral grating spectrometers it would be a logical target 
+for a common record.
 
 Define an {\airs} L1d basis with resolving power $R$ using the
 generalized Gaussian response function of section \ref{decon} as
@@ -665,7 +666,7 @@ However the regression matrices show significant off-diagonal
 correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
 SW bands are worse.  In addition the dependent set residuals are
 very small, much less than the residuals for the independent set.
-These are signs of overfitting.  As noted in section \ref{airs2cris}
+These are signs of over-fitting.  As noted in section \ref{airs2cris}
 the 7377 profile dependent set is highly correlated; the effective
 dimension (as defined in the appendix) is only 260.
 
@@ -778,33 +779,36 @@ for the MW and SW bands.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
-\section{Conclusions}
+\section{Applications}  
 \label{appcon}
 
-We have shown how to take advantage of detailed knowledge of the
-{\airs} spectral response functions to deconvolve channel radiances
-to a resolution-enhanced intermediate representation, typically a
-$0.1$~\wn\ grid.  This deconvolution by itself gives a modest
-resolution enhancement at the cost of added artifacts and noise, but
-the main application is reconvolution to an alternate instrument
-specification.  We consider two cases: reconvolution to the {\cris}
-user grid, and to an idealized grating model.  This translation
-works well by itself but can be improved with a linear correction
-applied independently to each channel, with coefficients determined
-by regression.  Finally, we consider principal component regression
-directly from {\airs} to {\cris} radiances, and find a tradeoff
-between residual size and undesired correlations.  Reducing the
-correlations increases the residuals, which become larger than for
-translation with deconvolution.
+We have been using the {\airs} to {\cris} and {\iasi} to {\cris}
+translations to analyze simultaneous nadir overpasses (SNOs)
+\cite{sno1}.  We hope to create a long-term climate record spanning
+observations of the individual sounders.  The initial steps are
+validation with SNOs, validation of uniform geographic sampling and
+subsetting, and showing consistency of global statistics.  Radiance
+translation to a common subset might include added noise, as
+discussed in section \ref{airs2cris}.  The radiance translations
+could be explicit or implicit---that is, run once and saved as a
+dataset, or run as needed on existing data.  Translations are fast
+relative to read times.
 
-These ideas have been implemented and tested extensively, with
-Matlab demo code published on github.  Our demos are i/o bound, but
-the in-core time for the {\airs} to {\cris} translation is divided
-into roughly 25 percent for the deconvolution and 75 percent for
-reconvolution, about 22 seconds to process our 7377 profile cloudy
-test set on one compute node.  Calculating the pseudo-inverse adds
-another 12 seconds, but that only needs to be done when the
-translation parameters change.
+The translations allows a retrieval algorithm to use the same fast
+forward radiative transfer model, minimizing any differential effect
+of forward model errors between the two instrument retrievals.
+An interesting potential application is to revisit the {\airs} SRF
+measurements, to see if adjustmentments (within the original
+measurement uncertainty) can reduce the translation residuals.
+
+The translations presented here have been implemented and tested
+extensively, with the associated Matlab code published on Github.
+The {\airs} to {\cris} translation is I/O bound, with the in-core
+time divided into roughly 25 percent for the deconvolution and 75
+percent for reconvolution, taking about 22 seconds to process our
+7377 profile cloudy test set on one compute node.  Calculating the
+pseudo-inverse adds another 12 seconds, but that only needs to be
+done when the translation parameters change.
 
 % \FloatBarrier
 \section{Appendix}
@@ -886,12 +890,13 @@ residual for translation with deconvolution.
 
 \subsection{Source code}
 
-This paper, a companion talk, and all translation and test code
-discussed here are available online at github licensed under the
-Gnu GPL version 3.\vspace{-2mm}
+% This paper, a companion talk, and 
+
+All translation and test code discussed here is available online at
+Github:
 
 \begin{itemize}
-   \item \url{https://github.com/motteler/decon_paper}\vspace{-3mm}
+%  \item \url{https://github.com/motteler/decon_paper}\vspace{-3mm}
    \item \url{https://github.com/strow/airs_deconv}\vspace{-3mm}
    \item \url{https://github.com/strow/iasi_decon}
 \end{itemize}
