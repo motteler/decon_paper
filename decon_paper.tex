@@ -30,14 +30,14 @@
 \begin{abstract}
 
 Spectra of the earth's thermal emission as measured by the {\airs},
-{\cris}, and {\iasi} hyper-spectral sounders is a significant part
-of the long term climate record.  These instruments have broadly
-similar spatial sampling, spectral resolution, and band spans.
-However the channel spectral response functions differ in detail,
+{\cris}, and {\iasi} hyper-spectral sounders are becoming a
+significant part of the long term climate record.  These instruments
+have broadly similar spatial sampling, spectral resolution, and band
+spans.  However the spectral response functions differ in detail,
 leading to significant differences in observed spectra.  To address
 this we translate channel radiances from one sounder to another,
 including simulation of the response functions of the translation
-target.  We make regular use such of translations from {\airs} to
+target.  We make regular use of such translations from {\airs} to
 {\cris} and {\iasi} to {\cris}, and have implemented and tested
 {\iasi} to {\airs} and {\cris} to {\airs} translations as well.  
 Our translation from {\airs} to {\cris} has some novel features.
@@ -56,9 +56,9 @@ to be more accurate than interpolation or conventional regression.
 
 Spectra of the earth's thermal emission as measured by the {\airs}
 \cite{airs1}, {\cris} \cite{cris1,cris2}, and {\iasi} \cite{iasi1}
-hyperspectral infrared sounders is a significant part of the long
-term climate record.  Such measurements began with {\airs} in 2002
-and should continue for the foreseeable future, given their
+hyperspectral infrared sounders are becoming a significant part of
+the long term climate record.  Such measurements began with {\airs}
+in 2002 and should continue for the foreseeable future, given their
 important role in numerical weather prediction.  These sounders are
 in sun-synchronous near-polar orbits, with broadly similar spatial
 sampling, spectral resolution, and spectral band spans.  However the
@@ -336,7 +336,7 @@ apodization \cite{wiki:wind} sacrifices some resolution but gives a
 significant reduction in the residuals and is convenient for many
 applications.  Convolution, deconvolution, and apodization are done
 with radiances, while spectra are presented and statistics are done
-after translation to brightness temperatures.
+after conversion to brightness temperatures.
 
 \begin{figure} % source a2cris_test1
   \centering
@@ -423,8 +423,8 @@ some regularity, and we can see an oscillation with a period of two
 channel steps in several places.  Up to this point there as been no
 statistical component to our translation, beyond the choice of test
 set for validation.  We feel it is important to be clear about any
-steps that require statistical fitting.  That said, a simple linear
-correction can give a significantly further reduction of the
+steps that require statistical fitting.  That said, we can use a
+simple linear correction for a significant further reduction of the
 residuals.  We use the set of 7377 mostly cloudy AIRS profiles as
 the dependent set and the 49 profile set as the independent or test
 set.
@@ -452,7 +452,8 @@ and a small improvement in the SW, where the quadratic correction is
 noticably worse.  Figure \ref{statAll1} shows the residuals for the
 apodized linear correction for all three bands.  The residuals are
 significantly reduced in comparison with the apodized uncorrected
-radiances shown in figure \ref{meanAll}.
+radiances shown in figure \ref{meanAll} and are generally less than
+NEdT (for the first fitting profile), as we show next.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
@@ -568,7 +569,6 @@ resolution {\cris}, but may be acceptable for some applications.
 % the real resolving power is higher.
 
 The {\airs} deconvolution can be used for other translations.  
-
 In this section we briefly examine reconvolution to an idealized
 grating model for resolving powers of 700 and 1200.  There are
 several reasons to consider such a translation.  The constant
@@ -742,7 +742,7 @@ give each translation method an independent test.
 \end{figure}
 
 As an alternative to adding noise, we can use a form of principal
-component regression.  As above, let $r_a$ and $r_c$ be $m \times k$
+component regression.  As above let $r_a$ and $r_c$ be $m \times k$
 and $n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
 S_a\,V_a^T$ be the singular value decomposition with singular values
 in descending order and $U_a^i$ the first $i$ columns of $U_a$.
@@ -796,10 +796,10 @@ relative to read times.
 
 The translations allows a retrieval algorithm to use the same fast
 forward radiative transfer model, minimizing any differential effect
-of forward model errors between the two instrument retrievals.
+of forward model errors between the two instrument retrievals.  
 An interesting potential application is to revisit the {\airs} SRF
-measurements, to see if adjustmentments (within the original
-measurement uncertainty) can reduce the translation residuals.
+measurements, to see if adjustments (within the original measurement
+uncertainty) can reduce the translation residuals.
 
 The translations presented here have been implemented and tested
 extensively, with the associated Matlab code published on Github.
