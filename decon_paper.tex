@@ -1,30 +1,33 @@
 % \documentclass[11pt]{article}
-\documentclass[10pt,twocolumn]{article}
+% \documentclass[10pt,twocolumn]{article}
+\documentclass[journal]{IEEEtran}
 \usepackage{graphicx}
 \usepackage{placeins}
 \usepackage{url}
+\usepackage{cite}
 
-\widowpenalty10000
-
-\input{llsdefs.tex}
+% \widowpenalty10000
+% \input{llsdefs.tex}
 \input{crisdefs.tex}
 
-\title{AIRS deconvolution and the \\
-       translation of AIRS to CrIS radiances \\ 
-       with applications for the IR climate record \\
-  \vspace{3mm}
-  {****} DRAFT {****}\\
-}
-
-\author{Howard E.~Motteler \\
-  L.~Larrabee Strow \\
-  \\
-  UMBC Atmospheric Spectroscopy Lab \\
-  Joint Center for Earth Systems Technology \\
-}
-
-\date{\today}
 \begin{document}
+
+\title{AIRS Deconvolution and the \\
+       Translation of AIRS to CrIS Radiances \\ 
+       with Applications for the IR Climate Record}
+
+\author{Howard~E.~Motteler,~\IEEEmembership{Member,~IEEE,}
+  L.~Larrabee~Strow
+\thanks{Submitted 22 March 2018.  This work was funded in part by
+  the NASA Earth Sciences Intercalibration Program Grant
+  NNX16AQ68G.}%%
+\thanks{L.~Larrabee~Strow is Research Professor with the Department
+  of Physics, University of Maryland Baltimore County, Baltimore MD
+  21250, email strow@umbc.edu.}%%
+\thanks{Howard~E.~Motteler is Research Asociate Professor with the
+  Joint Center for Earth Systems Technology, 5523 Research Park
+  Drive Suite 140, Baltimore MD 21228, email motteler@gmail.com.}}
+
 \maketitle
 
 \begin{abstract}
@@ -42,15 +45,20 @@ target.  We make regular use of such translations from {\airs} to
 {\iasi} to {\airs} and {\cris} to {\airs} translations as well.  
 Our translation from {\airs} to {\cris} has some novel features.
 {\airs} is a grating spectrometer with a distinct response function
-for each channel, while {\cris} is a Michaelson interferometer with
+for each channel, whereas {\cris} is a Michaelson interferometer with
 a sinc response function after calibration and corrections.  We use
 our detailed knowledge of the {\airs} spectral response functions to
 deconvolve {\airs} channel radiances to a resolution enhanced
 intermediate representation.  This is reconvolved to {\cris} or
 other instrument specifications.  The resulting translation is shown
-to be more accurate than interpolation or conventional regression.
+to be more accurate than interpolation or regression.
 
 \end{abstract}
+
+\begin{IEEEkeywords}
+AIRS, CrIS, deconvolution, hyperspectral, IR sounder,
+spectral response function.
+\end{IEEEkeywords}
 
 \section{Introduction}
 
@@ -83,7 +91,7 @@ translation the methods used are for the most part conventional.
 
 Our translation from {\airs} to {\cris} has some novel features.
 {\airs} is a grating spectrometer with a distinct response function
-for each channel determined by the focal plane geometery, while
+for each channel determined by the focal plane geometery, whereas
 {\cris} is a Michaelson interferometer with a sinc response function
 after calibration and corrections.  In section \ref{decon} we show
 how to take advantage of our detailed knowledge of the {\airs}
@@ -137,7 +145,9 @@ ends of the band.  Note the significant overlap in the wings.  This
 can allow for a deconvolution to recover resolution beyond that of
 the response functions considered individually.  The SRFs are not
 necessarily symmetrical, especially at the high end of the band.
-The dashed line on top of the third SRF in each group is a fit for a
+The SRFs are not necessarily symmetrical due to fringing in the AIRS
+entrance filters, especially at the high end of the band.  The
+dashed line on top of the third SRF in each group is a fit for a
 generalized Gaussian, which we consider in more detail later in this
 section.  Figure \ref{chan1} shows channel spacing and resolving
 power for the {\airs} L1c channel set \cite{a1c:atbd}.  The variable
@@ -404,12 +414,12 @@ always the 49-profile set, while for tests requiring fitting the
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
 49 fitting profiles, for each {\cris} band.  The Hamming apodization
-gives a significant reduction in the residuals.  Figure \ref{meanAll}
-summarizes results all three bands, for apodized radiances.  The
-constant or DC bias is very close to zero for the apodized residuals.
-The unapodized residuals are significant but both the apodized and
-unapodized residuals are much less than the corresponding residuals
-from conventional interpolation, as shown in the appendix.
+gives a significant reduction in the residuals.  Figure
+\ref{meanAll} summarizes results all three bands, for apodized
+radiances.  The constant or DC bias is very close to zero for the
+apodized residuals.  Both the apodized and unapodized residuals are
+significantly less than the corresponding residuals from
+conventional interpolation, as shown in the appendix.
 
 % $0.002$~K for the LW, $-0.005$~K for the MW, and $0.001$~K for 
 % the SW.
@@ -784,12 +794,12 @@ for the MW and SW bands.
 
 We have been using the {\airs} to {\cris} and {\iasi} to {\cris}
 translations to analyze simultaneous nadir overpasses (SNOs)
-\cite{sno1}.  We hope to create a long-term climate record spanning
-observations of the individual sounders.  The initial steps are
-validation with SNOs, validation of uniform geographic sampling and
-subsetting, and showing consistency of global statistics.  Radiance
-translation to a common subset might include added noise, as
-discussed in section \ref{airs2cris}.  The radiance translations
+\cite{wang2015, sno1}.  We hope to create a long-term climate record
+spanning observations of the individual sounders.  The initial steps
+are validation with SNOs, validation of uniform geographic sampling
+and subsetting, and showing consistency of global statistics.
+Radiance translation to a common subset might include added noise,
+as discussed in section \ref{airs2cris}.  The radiance translations
 could be explicit or implicit---that is, run once and saved as a
 dataset, or run as needed on existing data.  Translations are fast
 relative to read times.
@@ -890,20 +900,60 @@ residual for translation with deconvolution.
 
 \subsection{Source code}
 
-% This paper, a companion talk, and 
-
-All translation and test code discussed here is available online at
-Github:
+The translation and test code used here is available at Github:
 
 \begin{itemize}
-%  \item \url{https://github.com/motteler/decon_paper}\vspace{-3mm}
-   \item \url{https://github.com/strow/airs_deconv}\vspace{-3mm}
+%  \item \url{https://github.com/motteler/decon_paper}
+   \item \url{https://github.com/strow/airs_deconv}
    \item \url{https://github.com/strow/iasi_decon}
 \end{itemize}
 
 % \FloatBarrier
-\bibliographystyle{abbrv}
-\bibliography{decon_paper}
+% \bibliographystyle{abbrv}
+% \bibliography{decon_paper}
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,decon_paper}
+
+% received the B.S. degree in mathematics from the University of Puget
+% Sound, Tacoma, Washington, in 1980, an M.S. in computer science from
+% Purdue University, West Lafayette, Indiana, in 1983, and
+
+% hack for bio spacing
+\vspace{10cm}\vfill
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{motte.jpg}}]{Howard~E.~Motteler}
+  (M~'87) received the Ph.D. degree in computer science from the
+  University of Maryland at College Park in 1987.  From 1987 to 1994
+  he was an Assistant Professor and from 1994 to 1998 an Associate
+  Professor of computer science at the University of Maryland
+  Baltimore County, and from 1992 to 1993 an NRC Research Associate
+  at NASA/GSFC.  Since 1998 (with a break from 2008 to 2011) he has
+  been a Research Associate Professor at the Joint Center for Earth
+  Systems Technology, Baltimore MD.  His research interests include
+  infrared sounder modeling and calibration and analysis of AIRS and
+  CrIS data for validation and trending.
+
+\end{IEEEbiography}
+
+% hack for bio spacing
+\vspace{-14cm}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{strow.jpg}}]{L.~Larrabee~Strow}
+  received the Ph.D. degree in physics from the University of
+  Maryland, College Park, in 1981. He is currently a Research
+  Professor with the Department of Physics, University of Maryland
+  Baltimore County, Baltimore, MD. His work focuses on remote
+  sensing of the Earth in the infrared using high spectral
+  resolution satellite instruments. His primary goal is to measure
+  climate trends using infrared sensors flown by NASA, NOAA, and
+  EUMETSAT. To that end, he is a Science Team Member of NASA’s Aqua
+  Atmospheric InfraRed Sounder (AIRS) instrument, the
+  NPOESS/JPSS(NOAA-20) Cross-track Infrared Sounder (CrIS) and
+  EUMETSAT's Infrared Atmospheric Sounding Interferometer (IASI).
+  He also provides NASA and NOAA with the radiative transfer
+  algorithms for the retrieval of geophysical variable using AIRS,
+  IASI, and CrIS.
+\end{IEEEbiography}
 
 \end{document}
 
