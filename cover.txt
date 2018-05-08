@@ -1,0 +1,13 @@
+
+Dear Dr. Yueh,
+
+Please find attached our paper "AIRS Deconvolution and the
+Translation of AIRS to CrIS Radiances with Applications for the IR
+Climate Record".  This describes some results we are using now for
+analyzing AIRS and CrIS SNOs and which we hope to use as the basis
+for a long-term combined AIRS and CrIS climate record.
+
+best regards,
+
+Howard Motteler
+
