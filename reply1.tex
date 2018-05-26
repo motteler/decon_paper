@@ -1,0 +1,336 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{geometry}
+\geometry{top=2cm}
+
+\input{crisdefs.tex}
+
+\newcommand {\reply} {\mbox{\small REPLY}}
+
+\begin{document}
+
+\title{Author's Response to Reviewer \#1 }
+
+\author{AIRS Deconvolution and the \\
+       Translation of AIRS to CrIS Radiances \\ 
+       with Applications for the IR Climate Record \\
+       \\
+       Howard~E.~Motteler, L.~Larrabee~Strow}
+
+\maketitle
+
+\section{General Remarks}
+
+We thank the reviewers for their thoughtful comments, and have tried
+to incorporate all suggestions and respond to all questions.  The list
+below includes reviewer's comments followed by our responses.
+
+The discussion of reference truth for the deconvolution (starting on
+page 3 line 30 RHS of the original submission) was not clear.  We
+have updated the labels in figures 3 and 4 from ``gauss'' to ``decon
+ref'' to better indicate we are showing the deconvolution reference
+truth.  We updated the associated discussion to emphasize that the
+deconvolution reference truth is simply a check of the deconvolution
+step---we don't need it to do the deconvolution or for subsequent
+reconvolution to CrIS or other targets.
+
+We corrected the relationship of standard deviation and full-width
+half-max (FWHM), $s=\fwhm / (2\sqrt{2\ln 2})$ in the original
+submission, to $s=\fwhm / (2\sqrt{2}\,(\ln 2)^{1/(2p)})$.  The
+latter is correct for the generalized Gaussian.  The difference is
+small for the range of values $p$ we used.  As noted above this does
+not effect the accuracy of the translations, just (to a very small
+degree) the consistency of reference truth for the deconvolution and
+the basis functions for our L1d ``idealized grating model''.
+
+\section{Response to Comments}
+
+\begin{itemize}
+
+\item p.1 Line.14 r.h.s.: It would be useful to introduce here,
+  rather than on p.3 and p.6, that the CrIS instrument has two modes
+  of operation, the nominal and full spectral resolution (NSR and
+  FSR, respectively).  It should also be mentioned that CrIS was in
+  the NSR from launch in 10/28/2011 through Dec. 2014 or Dec. 2015
+  (after bit-trim mask upgrade, depending how much detail you want
+  to cover here.
+
+  \reply: We agree this info should be added, but in section 3 the
+  (AIRS to CrIS translation) rather than the introduction.  There is
+  a limit to what fits in a sensible introduction---for example we
+  do not get into other significant detail, such as AIRS L1b vs L1c,
+  there.  The key idea of the paper is that we can get a modest
+  resolution enhancement from the deconvolution, and we do say that
+  in the introduction.  As it turns out this is good enough for NSR
+  but probably not FSR, but again the CrIS section is the natural
+  place for that discussion
+  
+\item p.1 Line.60 r.h.s.: ``The SRFs are not necessarily
+  symmetrical, especially at the high end of the band.''  The SRFs
+  are not necessarily symmetrical due to fringing in the AIRS
+  entrance filters, especially at the high end of the band” is
+  repetitive and can be combined into one sentence.
+
+  \reply: right, we fixed this.
+
+\item p.1 Section 1: It might be best to simply include a table of
+  significant instrument attributes for AIRS, IASI, and CrIS. Things
+  like type (grating or interferometer), spectral sampling,
+  resolution, launch dates, number of channels, and NEDN at selected
+  frequencies.
+
+  \reply: This would be interesting, but we can't really justify
+  discussing IASI here, and AIRS and CrIS are different enough that
+  the differences are not easily summed up in a table.  A short
+  descriptive paragraph, expanding a bit on what we have now, is
+  probably best.
+  
+\item p.2 Fig.1: It might be worth plotting this on a vertical log
+  scale. The real AIRS SRF’s have a long tail that is not adequately
+  demonstrated in a linear vertical scale. The “significant overlap”
+  mentioned on p.1 was by design as a Nyquist sampled spectrum was
+  desired (as is IASI and CrIS) but there is additional significant
+  overlap caused by the long-tail. These details should be briefly
+  mentioned so the reader is not misled into thinking that AIRS can
+  be represented by a simple Gaussian function in the equation that
+  follows later on this page.
+
+  \reply: It's interesting to look at the SRFs this way, and as you
+  note the Gaussian approximation does not have the long tails of
+  the tabulated SRFs.  We've added a comment to this effect.  But we
+  aren't proposing to use the approximation as an alternative to the
+  tabulated SRFS.  The applications are (1) reference truth for the
+  deconvolved radiances at a different spacing and resolving power,
+  used for validation of the deconvolution, and (2) basis functions
+  for the idealized grating model of section~4.
+
+\item p.2 line 25 r.h.s.: on the first uses of the $||r||_2$ it
+  would be helpful to let the reader know this is a Euclidian norm
+  or even more obvious, a root sum square.
+
+  \reply: We've added a footnote to that effect.  The notation used
+  in the paper is taken from the Wikipedia articles for the
+  Moore-Penrose inverse and mathematical norm, and we've added both
+  as citations.
+
+\item p.2 line 37-39 r.h.s.: The $c$ in this equation is not the
+  same as the $c$ used above (in $S_b r = c$). Suggest that a
+  different symbol be used to avoid confusing the reader.
+
+  \reply: Agreed, we replaced this with $s$.
+
+\item p.3 line 45-50 r.h.s.: The CrIS NSR mode will ultimately
+  become a historical oddity for S-NPP. It is irrelevant for JPSS-1
+  to JPSS-4 (ultimately to be known as NOAA-21, 22, 23, 24 if they
+  survive launch) as the NSR will no longer be processed. Thus, the
+  authors need to justify why they would degrade the entire AIRS
+  2002 to 2016 and S-NPP/NOAA-20+ record from 2016 to 2030’s instead
+  of potentially finding an alternative higher resolution grid. For
+  example, consider the loss of spectral information in the AIRS
+  carbon monoxide spectral domain when going from AIRS SRFs to CrIS
+  NSR – the CO band information is completely lost. Similar loss
+  occurs in the 2390 cm-1 R-branch that affects lower tropospheric
+  temperature information.
+
+  \reply: We agree, medium to long term.  But in the meantime we
+  have the significant overlap of AIRS and CrIS NSR data to work
+  with.  The effective resolution of deconvolved AIRS does not take
+  us quite to CrIS FSR for the MW and SW bands.  You can still do a
+  translation but the residuals are relatively large in comparison
+  with what we are showing in the paper.
+
+  One solution might be to pick an intermediate resolution for CrIS,
+  for example 0.6 \wn\ in the MW, that roughly corresponds to the
+  AIRS effective resolution.  This is easy to do for both regular
+  CrIS processing (at least the way we do it) and for our AIRS to
+  CrIS translation.  In both cases we have an intermediate
+  representation---sensor grid for CrIS and our deconvolution grid
+  for AIRS---that can be resampled to any nominal resolution we
+  like.  (We do CrIS calibration processing at FSR for the sensor
+  grid, when that mode is available, and resample to the user grid
+  NSR and FSR to produce those products.)
+
+  We've expanded a brief discussion of NSR and FSR at the end of
+  translation section.  But we would say that beyond suggesting it,
+  adding a new CrIS resolution mode is beyond the scope of this
+  paper.
+
+\item p.3 Fig.4: I had a tough time understanding exactly what was
+  plotted here and I think the text and caption could be improved.
+  I believe AIRS is the original AIRS radiance. Kcarta is the 0.0025
+  cm-1 LBL representation, the Gauss and decon are a comparison of
+  the 0.1 cm-1 intermediate resolution where Gauss is derived from
+  direct convolution of k-Carta and decon is derived by the
+  pseudo-inverse process – but I am not sure if I have Gauss/Decon
+  flipped. It would be best if the plot labels and text were
+  identified explicitly.
+
+  \reply: Agreed.  We've update the figure labels and associated
+  discussion.  In figures 3 and 4 the old label ``gauss'' is now
+  ``decon ref'' (reference truth for the deconvolution) and the old
+  ``decon'' is now ``AIRS decon'' (deconvolved AIRS radiances).
+
+\item p.4 line 34 l.h.s.: given that Hamming apodization is
+  reversible there cannot be any loss in spectral resolution. Thus,
+  the appearance of the radiances in unapodized (or deapodized since
+  there is self- apodization effects with CrIS) versus Hamming
+  apodized only has to do with non-local ILS effects (i.e.,
+  side-lobes of the SRF) and not resolution. The 15 micron band line
+  spacing is a resonance that is aliased with the CrIS OPD, such
+  that the sinc() function produces a distortion of that band (i.e.,
+  the peaks and troughs are exaggerated).
+
+  \reply: We agree there is no loss in interferometric resolution
+  with an invertible apodization.  Hamming apodization does reduce
+  resolving power $R = v_i/ \fwhm_i$, since it increases $\fwhm$
+  while decreasing the side-lobes.  We changed ``resolution'' to
+  ``resolving power'' and set Barnet et al. 2000 as noted below as
+  our first citation for apodization, for the sentence in question.
+
+% For the deconvolution-based translation apodization is a separate,
+% distinct step after deconvolution and reconvolution or resampling
+% to the final user grid, 
+
+% and our ``true Cris'' minus ``AIRS CrIS'' residuals are
+% significantly smaller with apodization.  This is true for almost
+% every sort of test we do, for example comparing calibrated
+% measured and calculated radiances.
+  
+\item p.4 line.34 l.h.s.: The AIRS SRF is a modified Gaussian that
+  is mostly a local function. It seems odd that the authors would
+  propose convert AIRS to a unapodized SRF since the sinc() function
+  is a lon-local function. That is, all AIRS channels would be
+  necessary to produce a CrIS sinc() function. Alternatively, if one
+  were to convert the AIRS channels to CrIS Hamming channels then
+  each CrIS channel would be reconstructed from a small and local
+  set of AIRS channels. The Hamming apodized radiances could then be
+  converted to unapodized via a transformation as suggested in
+  Barnet, C.D., J.M. Blaisdell and J.  Susskind 2000. Practical
+  methods for rapid and accurate computation of interferometric
+  spectra for remote sensing applications. IEEE
+  Trans. Geosci. Remote Sens. v.38 p.169-183.
+
+  \reply: The short answer is that the deconvolution-based
+  translation is a two-step process, and the deconvolution is
+  entirely independent of the final translation target.  
+
+  For what we called ``direct regression'' discussed in section 5,
+  we did try a one-step translation from AIRS to apodized CrIS,
+  taking advantage of the relatively limited span of the apodized
+  response functions.  If that had worked better we could invert the
+  Hamming apodization and get unapodized radiances that way.  That
+  technique is very useful in other contexts; for example we use it
+  to get unapodized CrIS radiances from an apodized fast model.
+
+\item p.4 line 39-56 l.h.s.: this discussion adds confusion. It
+  looks like the 49 set will be used for training and the 7377 is
+  the independent set. Seems like this could be said most
+  succinctly.
+
+  \reply: Agreed, and we've rewritten this paragraph.  The 49
+  profile set is always used as the test or independent set, as it
+  makes for a more strict test.
+
+\item p.4 line 54-59 r.h.s. Could the authors give some explanation
+  as to the physical basis for the statistical correction they are
+  about to discuss. I was completely lost as to why this should be
+  necessary. One concern came to mind and I will share it here. It
+  seems like this ``ringing'' or ``regularity'' could be caused by
+  trying to compute a sinc() function from a regularly spaced
+  intermediate Gaussian (that also has side-lobes). The fact that it
+  is diminished by Hamming says it might be an artifact caused by
+  the sinc() side-lobes or band edges. Maybe this is a naïve idea
+  (or at least it might give you a clue how to improve this
+  discussion), but why did you not consider 0.1 cm-1 boxcars for the
+  intermediate spectrum that would have perfect localization?
+
+  \reply: the motivation for the statistical correction was simply
+  that the residuals showed some regular structure and the standard
+  deviation was relativly small.  The deconvolution is an imperfect
+  process, so it seemed at least possible that a correction might
+  help.
+
+  We emphasize again that the Gaussian basis was used to convolve
+  kcarta radiances in an attempt to get at least a rough reference
+  truth for the deconvolution; it is not actually used for either
+  the deconvolution or subsequent reconvolution to CrIS radiances.
+  We tried a number of functions for this reference truth, including
+  the 0.1 cm-1 boxcar you suggest.  0.2 cm-1 gave slightly smaller
+  residuals than 0.1 cm-1, but these were still larger than with the
+  generalized Gaussian.  We don't go into this in the paper because
+  we believe there is nothing surprising about getting significant
+  imperfections from the deconvolution.  The interesting thing is
+  that most of this dissapears with reconvolution, leaving us with a
+  translation that works well in comparison with other approaches.
+  
+\item p.6 line 48-55 l.h.s. and p.8 line 52-55: For most
+  applications the noise spectral correlation is something that
+  needs to be specified.  Since you have used linear transformations
+  you have potentially altered the amplitude of the random component
+  of NEDN and potentially added significant correlation (see Barnet
+  2000 reference for a discussion of this in the application of
+  apodization). Any data assimilation or retrieval application would
+  be strongly impacted by this correlation. Given that one
+  application of this methodology is for climate data records, it is
+  worth discussing if the NEDN can be accurately translated.  The
+  AIRS, IASI, and CrIS have similar information content in the
+  signal-to-noise; however, if only the signal (radiance spectra)
+  are transformed and not the noise than this process could, in
+  fact, alter the information content such that AIRS, IASI, and CrIS
+  cannot be combined in a meaningful manner. This thought is tied to
+  the comments given on p.3 line 45-50 r.h.s. above.
+
+  \reply: This is a good point, but a problem for any sounder 
+  to sounder translation.  I think the best we can do here is to
+  mention this and cite Barnet et al. 2000 again for this matter.
+  We could model the correlation and add correlated noise to the
+  CrIS radiances to better match the AIRS to CrIS translation, if
+  that seems desirable.  But that's a matter for future work.
+
+\item p.6 line 47-48 r.h.s.: see comment for p.3 line 45-50 r.h.s. –
+  this seems worthy of a bit more discussion given that this
+  approach has been advertised as a solution for a climate data
+  record.
+
+  \reply: Agreed, we've expanded this, as discussed earlier.
+
+\item p.10 line 38-58 l.h.s. (and p.4 line 47-49 r.h.s): this is a
+  trivial point. The conventional interpolation would be the wrong
+  thing to do. For interferometers an exact transformation could be
+  done via cosine transforms (presumably what you are doing for the
+  IASI-to-CrIS transformations). The issue here is what is the best
+  manner to transform a grating instrument with non-ideal SRF’s to
+  an interferometer system. Maybe this discussion is leading towards
+  an alternate solution – converting all instruments to an idealized
+  SRF which preserves the signal-to-noise as best as possible. This
+  would be an ideal localized function that is Nyquist sampled and
+  has minimum noise correlation (similar to the discussion on p.7
+  l.h.s., but with the noise component discussed also). The AIRS is
+  nearly a localized, Nyquist sampled, spectrum whereas the CrIS and
+  IASI unapodized (or more properly deapodized) spectrum is
+  not-ideal and introduces significant spectral distortion. The CrIS
+  and IASI apodized spectra is nearly localized by the Hamming
+  function has significant (1\%) side-lobes that diminish somewhat
+  slowly (see Barnet 2000 for discussion).
+
+  \reply: Some related applications do start from conventional
+  interpolation of AIRS data.  For example the JPL algorithm for
+  small frequency shifts uses a cubic spline augmented with a
+  statistical fit for the derivatives near the initial points.  
+  And in the past we have used spline interpolation to a regular
+  intermediate grid before reconvolution via the cosine transform;
+  that is, we used spline interpolation in exactly the same way we
+  use deconvolution here.
+  
+  The ``L1d basis'' was our take on the sort of idealized SRF you
+  are considering.  It started out as an attempt at finding an
+  approximate, relatively simple model for the AIRS SRFs.  It might
+  be hard to convince the interferometric community that something
+  like that is desireable as a common target, though.
+
+\end{itemize}
+\end{document}
+

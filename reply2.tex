@@ -1,0 +1,148 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{geometry}
+\geometry{top=2cm}
+
+\input{crisdefs.tex}
+
+\newcommand {\reply} {\mbox{\small REPLY}}
+
+\begin{document}
+
+\title{Author's Response to Reviewer \#2 }
+
+\author{AIRS Deconvolution and the \\
+       Translation of AIRS to CrIS Radiances \\ 
+       with Applications for the IR Climate Record \\
+       \\
+       Howard~E.~Motteler, L.~Larrabee~Strow}
+
+\maketitle
+
+\section{General Remarks}
+
+We thank the reviewers for their thoughtful comments, and have tried
+to incorporate all suggestions and respond to all questions.  The list
+below includes reviewer's comments followed by our responses.
+
+The discussion of reference truth for the deconvolution (starting on
+page 3 line 30 RHS of the original submission) was not clear.  We
+have updated the labels in figures 3 and 4 from ``gauss'' to ``decon
+ref'' to better indicate we are showing the deconvolution reference
+truth.  We updated the associated discussion to emphasize that the
+deconvolution reference truth is simply a check of the deconvolution
+step---we don't need it to do the deconvolution or for subsequent
+reconvolution to CrIS or other targets.
+
+We corrected the relationship of standard deviation and full-width
+half-max (FWHM), $s=\fwhm / (2\sqrt{2\ln 2})$ in the original
+submission, to $s=\fwhm / (2\sqrt{2}\,(\ln 2)^{1/(2p)})$.  The
+latter is correct for the generalized Gaussian.  The difference is
+small for the range of values $p$ we used.  As noted above this does
+not effect the accuracy of the translations, just (to a very small
+degree) the consistency of reference truth for the deconvolution and
+the basis functions for our L1d ``idealized grating model''.
+
+\section{Response to Comments}
+
+\begin{itemize}
+  \item 1.~Page 2 right column, line 26, $||r_0||_2$ should be
+    $||r_0||^2$, there are several other places need to be
+    corrected.
+
+    \reply:  $||r_0||^2$ would be the square of the Euclidian
+    distance.  That would be harmless in our inequality $||r_0||_2
+    \le ||r_j||_2$ but not what we want for condition number
+    $||S_b||_2||S_b^{-1}||_2$ in the next sentence.  $||r||_2$ is a
+    common notation for the $L^2$ norm, and for vectors is simply
+    Euclidian distance.  The notation used in the paper is taken
+    from the Wikipedia articles for the Moore-Penrose inverse and
+    mathematical norm, and we've added both as citations.
+
+%   Strang (our other reference for generalized inverse and a common
+%   linear algebra text and reference) uses $||r||$ for Euclidian
+%   distance and $||r||^2$ for distance squared.  Since we don't
+%   want to imply the square of the norm, we have left this notation
+%   as-is.
+
+  \item 2.~Page 2, right column, lines 36-39 in the generalized
+    Gaussian equation, please replace $c$ with other symbol.
+
+    \reply: Agreed, we replaced this with $s$.
+
+  \item In Fig 3 subplots 2 and 3: why do we see some overshoot
+    and ringing in the deconvolution, especially at the shortwave
+    CO$_2$ absorption lines?
+
+    \reply: The ringing and overshoot at 2310~{\wn} appears to be
+    caused by a change in the L1c channel spacing from 1.02~{\wn} to
+    0.92~{\wn}.  These jumps occur at the AIRS focal plane module
+    boundaries.  The first subplot of figure 2 shows channel spacing
+    as a function of frequency, and the jump at 2310~{\wn} is one of
+    several such discontinuities.  The deconvolution is sensitive to
+    such changes in channel spacing; thus the ringing.  These
+    artifacts are acceptable because we do not propose using the
+    deconvolved radiances directly; they are an intermediate step
+    before reconvolution to a lower resolution.  
+
+%   Significant detail
+%   is lost in the convolution of AIRS channel radiances and this
+%   detail can only partially be recovered by a deconvolution.
+
+  \item 4. The AIRS L1c channel spacing and resolving power R is
+    around 1200 in Fig 2 (after deconvolution), why the direct
+    convolution choose a resolving power of 2000 instead of 1200?
+    The generalize Gaussian function could be adjusted to use a
+    resolving power of 1200 to better match the deconvolved
+    radiances.
+
+    \reply: The direct convolution is reference truth for the
+    deconvolution, and is now labeled ``decon ref'' in the plots.
+    We choose 2000 because this is an approximate match to the
+    resolving power of the deconvolution.  Resolving power of the
+    deconvolution is a property of the deconvolution---we just want
+    to measure it.  We compared the deconvolution with reference
+    truth for a range of resolving powers from 1200 to 2400 and
+    chose 2000 because the residuals do not decrease much beyond
+    that point.
+
+    We don't use the Gaussian basis for the AIRS deconvolution or
+    the AIRS to CrIS translation---it is just a measure to see how
+    well the deconvolution step alone works.  The deconvolution
+    reference truth for a resolving power of 1200 is a very close
+    match to the original AIRS radiances.
+
+  \item 5. Page 4 right column, line 46, ``The constant or DC bias
+    is...''  What is DC?
+
+    \reply: DC is direct current.  We dropped this because we are
+    doing statistics, not signal processing, and now just say ``the
+    constant bias''.
+
+  \item 6. Page 4 right column, lines 53-54, ``Up to this point
+    there as been no statistical...'' please correct this sentence
+
+    \reply: OK, fixed.
+
+  \item 7. Page 5, regarding the NEdN. I am not clear how do you
+    measure the AIRS-to-CrIS NEdN. If you know AIRS NEdN at 280 K,
+    how do you translate that NEdN to CrIS observation? I don’t
+    understand the sentence: ``This is done repeatedly and the noise
+    after translation is measured''.
+
+    \reply: in outline, the steps are (1) generate ``true AIRS''
+    spectra without noise, (2) for each spectra from step (1)
+    generate a set of $n$ noise vectors at the AIRS NEdN spec and
+    add them to the noise-free spectra, giving a set of $n$ noisy
+    spectra, (3) translate this set from AIRS to CrIS, and (4)
+    measure the standard deviation of the translation.  As a check
+    we also measure the standard deviation before the translation,
+    to verify that it agrees with our AIRS NEdN spec.
+
+\end{itemize}
+
+\end{document}
+

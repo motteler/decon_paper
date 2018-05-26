@@ -29,3 +29,17 @@ decon_talk.pdf: decon_talk.tex crisdefs.tex figures/*.pdf Makefile
 show_talk: decon_talk.pdf
 	evince decon_talk.pdf 2> /dev/null &
 
+reply1: reply1.pdf
+	evince reply1.pdf 2> /dev/null &
+
+reply1.pdf: reply1.tex crisdefs.tex figures/*.pdf
+	pdflatex reply1.tex -interaction nonstopmode || \
+	rm reply1.pdf 2> /dev/null || true
+
+reply2: reply2.pdf
+	evince reply2.pdf 2> /dev/null &
+
+reply2.pdf: reply2.tex crisdefs.tex figures/*.pdf
+	pdflatex reply2.tex -interaction nonstopmode || \
+	rm reply2.pdf 2> /dev/null || true
+

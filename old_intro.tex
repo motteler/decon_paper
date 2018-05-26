@@ -1,0 +1,42 @@
+
+Upwelling infrared radiation as measured by the {\airs} \cite{airs1}
+and {\cris} \cite{cris1,cris2} sounders is a significant part of the
+long term climate record.  {\airs} and {\cris} have similar sampling
+patterns \cite{git:acsamp}.  We often want to compare radiances, and
+would like to treat this as a single data set for the analysis of
+long term trends.  However the instruments have different spectral
+resolutions, channel response functions, and band spans.  As a step
+in addressing this problem we consider the translation of channel
+radiances from {\airs} to standard resolution {\cris}.
+
+In addition to our {\airs} to {\cris} translation we make regular
+use of an {\iasi} to {\cris} translation for evaluating simultaneous
+nadir overpasses (SNOs) \cite{sno1}, and have implemented and tested
+{\iasi} to {\airs} and {\cris} to {\airs} translations as well.  The
+translations from {\iasi} includes deapodization (a form of
+deconvolution) before reconvolution to the translation target, and
+work very well.  Ranking these translations by accuracy in
+comparison with calculated reference truth, we have {\iasi} to
+{\cris}, {\iasi} to {\airs}, {\airs} to {\cris}, and finally {\cris}
+to {\airs} \cite{git:decon}.  But aside from {\airs} to {\cris} the
+methods used are for the most part conventional.
+
+Our translation from {\airs} to {\cris} has some novel features.
+{\airs} is a grating spectrometer with a distinct response function
+for each channel determined by the focal plane geometery, while
+{\cris} is a Michaelson interferometer with a sinc response
+function after calibration and corrections.  In section \ref{decon}
+we show how to take advantage of our detailed knowledge of the
+{\airs} spectral response functions (SRFs) and their overlap to
+deconvolve channel radiances to a resolution-enhanced intermediate
+representation, typically a $0.1$~\wn\ grid, the approximate
+resolution of the tabulated {\airs} SRFs.  
+This intermediate representation can then be reconvolved to an
+alternate instrument specification.  Section \ref{airs2cris} gives
+details and validation tests for the {\airs} to {\cris} translation
+and section \ref{airsL1d} for translation to an idealized grating
+model.  For both cases deconvolution followed by reconvolution is
+shown to work significantly better than conventional interpolation.
+Both methods can be further improved with a statistical correction.
+In section \ref{dregr} we consider a purely statistical approach to
+such translations, and compare this with deconvolution.

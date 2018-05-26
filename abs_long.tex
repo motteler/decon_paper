@@ -1,0 +1,27 @@
+
+Spectra of the earth's thermal emission as measured by the {\airs},
+{\cris}, and {\iasi} hyper-spectral sounders is a significant part
+of the long term climate record.  These instruments have broadly
+similar spatial sampling, spectral resolution, channel response
+functions, and band spans.  However the channel response functions
+vary in detail, leading to significant differences in observed
+spectra.  For applications such as calibaration and validation,
+retrievals, and the construction of a long term climate record we
+would like to work with single set of spectral response functions.
+This is can be done by translating channel radiances from one
+sounder to another, including simulation of the response functions
+of the translation target.  
+
+We make regular use such of translations from {\airs} to 
+{\cris} and {\iasi} to {\cris}, and have implemented and tested
+{\iasi} to {\airs} and {\cris} to {\airs} translations as well.  
+Our translation from {\airs} to {\cris} has some novel features.
+{\airs} is a grating spectrometer with a distinct response function
+for each channel, while {\cris} is a Michaelson interferometer with
+a sinc response function after calibration and corrections.  We use
+our detailed knowledge of the {\airs} spectral response functions to
+deconvolve {\airs} channel radiances to a resolution enhanced
+intermediate representation.  This is reconvolved to {\cris} or
+other instrument specifications.  The resulting translation is shown
+to be more accurate than interpolation or conventional regression.
+

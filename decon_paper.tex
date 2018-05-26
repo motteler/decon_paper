@@ -142,20 +142,31 @@ channel frequency.
 
 Figure \ref{srfs1} shows typical {\airs} SRFs from the low and high
 ends of the band.  Note the significant overlap in the wings.  This
-can allow for a deconvolution to recover resolution beyond that of
+allows the deconvolution to recover resolution beyond that of
 the response functions considered individually.  The SRFs are not
-necessarily symmetrical, especially at the high end of the band.
-The SRFs are not necessarily symmetrical due to fringing in the AIRS
-entrance filters, especially at the high end of the band.  The
-dashed line on top of the third SRF in each group is a fit for a
-generalized Gaussian, which we consider in more detail later in this
-section.  Figure \ref{chan1} shows channel spacing and resolving
-power for the {\airs} L1c channel set \cite{a1c:atbd}.  The variable
-channel spacing and resolving power are due to the modular structure
-of the focal plane.  Although not entirely regular---that is, not a
-simple function of frequency---the L1c channel set is more regular
-than the L1b channel set from which it is derived, and we mainly
-consider the L1c set here.
+necessarily symmetrical, especially at the high end of the band, due
+to fringing from the AIRS entrance filters.  The dashed line on top of
+the third SRF in each group is a fit for a generalized Gaussian
+\cite{wiki:gauss} of the form
+\[w(v, v_0, \fwhm) = 
+\exp\left(-\left(\frac{(v - v_0)^2}{2s^2}\right)^p\right), \] where
+$s=\fwhm / (2\sqrt{2}\,(\ln 2)^{1/(2p)})$.  Parameters $v$, $v_0$
+and $\fwhm$ are frequency, desired channel center, and desired full
+width half max.  We chose $p = 1.4$ to give an approximate match to
+{\airs} SRFs, though without the variation or extended tails of the
+measured \srf s.  We will use this analytic representation to
+calculate reference truth for the deconvolution and in section
+\ref{airsL1d} as the basis for an idealized grating model.
+
+% with the same {\FWHM} and channel centers,
+
+Figure \ref{chan1} shows channel spacing and resolving power for the
+{\airs} L1c channel set \cite{a1c:atbd}.  The variable channel
+spacing and resolving power are due to the modular structure of the
+focal plane.  Although not entirely regular---that is, not a simple
+function of frequency---the L1c channel set is more regular than the
+L1b channel set from which it is derived, and we mainly consider the
+L1c set here.
 
 Suppose we have $n$ channels and a frequency grid $\vec v$ of $k$
 points spanning the union of the domains of the functions
@@ -192,54 +203,50 @@ to~1.  If $r$ is radiance at the $\vec v_b$ grid, then $c = S_b r$
 is still a reasonable approximation of $\int\sigma_i(v)r(v)\,dv$.
 
 For our application we want to start with $c$ and find $r$, that is
-to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$, the
-system is underdetermined.  We take the Moore-Penrose pseudoinverse
-\cite{strang:linalg} of $S_b$ to get $r_0 = S_b^{-1} c$.  This gives a
-minimal solution, in the sense that $||r_0||_2 \le ||r_j||_2$ for
-all $r_j$ satisfying $S_b r_j = c$.  The condition number for $S_b$
-as built from the L1c channels is $||S_b||_2||S_b^{-1}||_2 = 115$,
-which is tolerable.
+to deconvolve $c$ by solving $S_b r = c$ for $r$.  Since $n < m$,
+the system is underdetermined.  We take the Moore-Penrose
+pseudoinverse \cite{wiki:pinv, strang:linalg} of $S_b$ to get $r_0 =
+S_b^{-1} c$.  This gives a minimal solution, in the sense that
+$||r_0||_2 \le ||r_j||_2$ for all $r_j$ satisfying $S_b r_j = c$.
+The condition number for $S_b$ as built from the L1c channels is
+$||S_b||_2||S_b^{-1}||_2 = 115$, which is tolerable.\footnote{The
+  notation $||S||_2$ is the $L^2$ norm of $S$, and is simply
+  Euclidian distance for vectors.\cite{wiki:norm}.}
 
-Although our main goal is to reconvolve the $0.1~\wn$ intermediate
-representation to the {\cris} or other user grids, we first compare
-the deconvolved radiance with reference truth from a direct
-convolution of {\kcarta} radiance to the intermediate grid.  The
-choice of response functions for the direct convolution is not
-obvious, since the deconvolution is undoing---at least to some
-extent---the effects of the {\airs} SRF convolutions.  We chose a
-generalized Gaussian \cite{wiki:gauss} of the form
-\[w(v, v_0, \fwhm) = 
-\exp\left(-\left(\frac{(v - v_0)^2}{2c^2}\right)^{1.5}\right) \]
-where $c=\fwhm / (2\sqrt{2\ln 2})$ and $v_0$ is the desired channel
-center.  The exponent $1.5$ was chosen to give an approximate match
-to {\airs} SRFs with the same {\FWHM} and channel centers, though
-without the fine structure and variation of the measured \srf s.
-Figure \ref{srfs1} shows two such generalized Gaussians paired with
-the corresponding {\airs} SRFs.  We used the generalized Gaussian as
-reference truth for the $0.1~\wn$ intermediate grid with ${\fwhm} =
-v_i / 2000$, where $v_i$ are the grid frequencies.  This represents
-a hypothetical grating spectrometer with a resolving power of 2000,
-oversampled to the 0.1~\wn\ grid.  The value of 2000 was chosen to
-give an approximate fit to the deconvolved radiances.  We also tried
-a generalized Gaussian with a fixed {\FWHM} for values $0.4$, $0.6$,
-and $0.8$ and a sinc basis with a spacing of $0.2$~\wn, all of which
-gave larger residuals.
+Although our main goal is to reconvolve the deconvolved {\airs}
+radiances to the {\cris} or other user grids, as a check we first
+compare the deconvolved radiances with reference truth from a direct
+convolution of {\kcarta} radiance to the $0.1~\wn$ grid.  The
+response function we use for this is the generalized Gaussian above
+with ${\fwhm} = v_i / 2000$, where $v_i$ are the grid frequencies.
+This represents a hypothetical grating spectrometer with a resolving
+power of 2000, oversampled to the 0.1~\wn\ grid.
+
+% The choice of basis functions for a deconvolution reference truth is
+% perhaps not obvious, since the deconvolution is undoing---at least
+% to some extent---the effects of the {\airs} SRF convolutions.
+
+% The value of 2000 was chosen to give an approximate fit to the
+% deconvolved radiances.  We also tried a generalized Gaussian with a
+% fixed {\FWHM} for values $0.4$, $0.6$, and $0.8$ and a sinc basis
+% with a spacing of $0.2$~\wn, all of which gave larger residuals.
 
 \begin{figure} % source decon_test1.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
-  \caption{Spectra from fitting profile 1 for direct convolution to
-    the $0.1$~\wn\ grid and for deconvolved {\airs}.  We see some
-    overshoot and ringing in the deconvolution.}
+  \caption{Spectra from fitting profile 1 for deconvolved {\airs}
+    and the reference convolution to the $0.1$~\wn\ grid.  We see
+    some overshoot and ringing in the deconvolution.}
   \label{dspec}
 \end{figure}
 
 \begin{figure} % source decon_test1.m 
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_zoom.pdf}
-  \caption{Details from fitting profile 1 for {\kcarta}, direct
-    convolution to the $0.1$~\wn\ grid, deconvolved {\airs}, and
-    true {\airs}.  The deconvolution restores some detail.}
+  \caption{Details from fitting profile 1 for {\kcarta}, the
+    reference convolution to the $0.1$~\wn\ grid, deconvolved
+    {\airs}, and true {\airs}.  The deconvolution restores some
+    detail.}
   \label{dzoom}
 \end{figure}
 
@@ -253,24 +260,24 @@ gave larger residuals.
 
 The {\airs} deconvolution gives a modest resolution enhancement, at
 the cost of added artifacts and noise.  Figure \ref{dspec} shows the
-full spectra from fitting profile~1, along with sample details from
-the low and high ends of the band, for the deconvolution and direct
-convolution to the intermediate grid.  In the details we see some
-overshoot and ringing in the deconvolution.  Figure \ref{dzoom}
-shows details of {\kcarta}, direct convolution to the
-$0.1$~\wn\ grid, deconvolution, and AIRS spectra for fitting
-profile~1 \cite{sarta1,sarta2}.  In the first subplot we see the
-deconvolution is capturing some of the fine structure in the
-{\kcarta} data that is present in the direct convolution but not in
-the AIRS data.  In the second subplot we see the deconvolution (and
-direct convolution) resolving a pair of close lines that are not
-resolved at the {\airs} L1c resolution.  But we also see some
-ringing that is not present in the direct convolution.  This is to
-be expected; significant detail is lost in the convolution to
-{\airs} channel radiances and this can only partially be recovered
-by the deconvolution.  The artifacts are acceptable because we do
-not propose using the deconvolved radiances directly; they are an
-intermediate step before reconvolution to a lower resolution.
+full spectra from fitting profile~1 \cite{sarta1,sarta2}, along with
+sample details from the low and high ends of the band, for {\airs}
+deconvolution and our reference convolution to the $0.1$~\wn\ grid.
+In the details we see some overshoot and ringing in the
+deconvolution.  Figure \ref{dzoom} shows details of {\kcarta}, the
+reference convolution, deconvolution, and AIRS spectra for fitting
+profile~1.  In the first subplot we see the deconvolution is
+capturing some of the fine structure in the {\kcarta} data that is
+present in the direct convolution but not in the AIRS data.  In the
+second subplot we see the deconvolution (and reference convolution)
+resolving a pair of close lines that are not resolved at the {\airs}
+L1c resolution.  But we also see some ringing that is not present in
+the reference convolution.  This is to be expected; significant
+detail is lost in the convolution to {\airs} channel radiances and
+this can only partially be recovered by the deconvolution.  The
+artifacts are acceptable because we do not propose using the
+deconvolved radiances directly; they are an intermediate step before
+reconvolution to a lower resolution.
 
 % \begin{figure} % source decon_test1.m
 %   \centering
@@ -342,11 +349,11 @@ difference between true {\cris} and {\airs} {\cris} is hard to see
 here, and in subsequent plots we mainly show explicit differences.
 
 Comparisons are done both with and without apodization.  Hamming
-apodization \cite{wiki:wind} sacrifices some resolution but gives a
-significant reduction in the residuals and is convenient for many
-applications.  Convolution, deconvolution, and apodization are done
-with radiances, while spectra are presented and statistics are done
-after conversion to brightness temperatures.
+apodization \cite{barn2000, wiki:wind} sacrifices some resolving
+power but gives a significant reduction in the residuals and is
+convenient for many applications.  Convolution, deconvolution, and
+apodization are done with radiances, while spectra are presented and
+statistics are done after conversion to brightness temperatures.
 
 \begin{figure} % source a2cris_test1
   \centering
@@ -392,24 +399,20 @@ after conversion to brightness temperatures.
   \label{meanAll}
 \end{figure}
 
-For most tests we use a set of 49 fitting profiles spanning a wide
-range of clear atmospheric conditions, initially chosen for testing
-radiative transfer codes \cite{sarta1,sarta2}.  The set is largely
-uncorrelated; reducing the reconstruction residual to 0.02~K
+We use radiance from a set of 49 fitting profiles spanning a wide
+range of clear atmospheric conditions as our test set, and as the
+independent set for statistical sets.  This set was initially chosen
+for testing radiative transfer codes \cite{sarta1,sarta2} and is
+highly uncorrelated; reducing the reconstruction residual to 0.02~K
 requires 48 left-singular vectors.  (Details of this correlation
-measure are given in an appendix.)  For the statistical correction
-described later in this section and the direct regression of section
-\ref{dregr} we also use a set of 7377 radiances calculated from
-all-sky (clear and cloudy) AIRS profiles spanning several
-consecutive days.  This set is more correlated; reducing the
-reconstruction residual to 0.02~K requires 260 left-singular
-vectors.  Splitting the 7377 profile set into dependent and
-independent subsets and comparing residuals from the independent
-subset with residuals from the 49-profile set, residuals from the
-latter are consistently larger, suggesting it makes for a stricter
-test.  So for the results shown here the test or independent set is
-always the 49-profile set, while for tests requiring fitting the
-7377 profile is used as the dependent set.
+measure are given in an appendix.)  For regression tests we use
+radiance from a set of 7377 all-sky (clear and cloudy) AIRS profiles
+spanning several consecutive days as our dependent set.  This set is
+more correlated; reducing the reconstruction residual to 0.02~K
+requires 260 left-singular vectors.  We did try splitting the 7377
+profile set into dependent and independent subsets.  Residuals from
+this larger independent set were consistently smaller than from the
+49-profile set, suggesting the latter makes for a stricter test.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
@@ -430,7 +433,7 @@ conventional interpolation, as shown in the appendix.
 
 The relatively small standard deviation of the residuals suggests
 some regularity, and we can see an oscillation with a period of two
-channel steps in several places.  Up to this point there as been no
+channel steps in several places.  Up to this point there has been no
 statistical component to our translation, beyond the choice of test
 set for validation.  We feel it is important to be clear about any
 steps that require statistical fitting.  That said, we can use a
@@ -534,15 +537,24 @@ NEdT (for the first fitting profile), as we show next.
 We can give a good estimate of noise equivalent differential
 radiance (NEdN) for the translation by adding noise with a normal
 distribution at the {\airs} NEdN to blackbody radiance at 280K and
-translating this to {\cris}.  This is done repeatedly and the noise
-after translation is measured.  As a check, noise before translation
-is also measured and compared with the {\airs} value.  Figure
-\ref{nedn} shows the measured {\airs}-to-{\cris} NEdN together with
-{\airs} and {\cris} NEdN for both apodized and unapodized radiances.
-The {\airs} and {\cris} values are averages over a full day, 4 Dec
-2016.  NEdN for the L1c synthetic channels is interpolated.  The
-first subplot of figure \ref{nedt} is NEdT for apodized radiances,
-for fitting profile 1.
+translating this to {\cris}.  Figure \ref{nedn} shows the measured
+{\airs}-to-{\cris} NEdN together with {\airs} and {\cris} NEdN for
+both apodized and unapodized radiances.  The {\airs} and {\cris}
+values are averages over a full day, 4 Dec 2016.  NEdN for the L1c
+synthetic channels is interpolated.  The first subplot of figure
+\ref{nedt} is NEdT for apodized radiances, for fitting profile 1.
+
+Such modeling with normally distributed noise does not take into
+account correlation in the {\airs} noise.  The sources of such noise
+might be vibration, radiation, or any common-mode effect.  Details
+concerning correlation sources are beyond the scope of this paper,
+except to note that noise for L1c channels with more than one L1b
+parent may not be well-defined.  In practice this is a relatively
+small set that we may want to use with caution.
+
+% This is done repeatedly and the noise after translation is measured.
+% As a check, noise before translation is also measured and compared
+% with the {\airs} value.
 
 The {\airs} channel-to-channel NEdN variation is significant; in the
 upper half of the LW and most of the MW it is of the same order as
@@ -558,17 +570,28 @@ common record we might want to add noise on a channel-by-channel
 basis to whichever NEdN value---{\airs} {\cris} or true {\cris}---is
 lower.  NEdN for the combined record would then be max of the
 {\airs} {\cris} and true {\cris} NEdN values, as shown in the second
-subplot of figure \ref{nedt}.
+subplot of figure \ref{nedt}.  In the same spirit we could add
+{\airs} correlation, to the extent that this is well-defined.
 
-In addition to the standard resolution described at the beginning 
-of this section, {\cris} has a high resolution mode with a channel
-spacing of $0.625~\wn$ for all three bands.  We can do a translation
-from {\airs} to high-resolution {\cris} but the residuals are quite
-large; {\airs} does not have sufficient resolution as a starting
-point.  The high resolution mode does allow for a {\cris} to {\airs}
-translation as described in \cite{git:decon}.  The residuals are
-larger in the LW than for our translation from {\airs} to standard
-resolution {\cris}, but may be acceptable for some applications.
+In addition to the standard resolution described above, in December
+2014 {\cris} switched to a high resolution mode with a nominal
+{\opd} of $0.8$~cm for all three bands, while continuing to support
+the standard resolution product.  {\airs} does not have the
+resolving power to properly support a translation for the {\cris}
+high resolution MW and SW bands, so the residuals for that are
+relatively large.  For a long-term common record one solution might
+be a compromise {\cris} resolution of $0.6$~cm for the MW and
+$0.4$~cm for the SW, to roughly match the {\airs} resolving power.
+
+As an alternative, in the next section we consider translation from
+{\airs} to an idealized grating model.  This requires a translation
+from both {\airs} and {\cris}, but so would the compromise {\cris}
+resolutions.  The {\cris} high resolution mode allows for a {\cris}
+to {\airs} translation, as described in \cite{git:decon}.  The
+residuals are larger in the LW than for our translation from {\airs}
+to {\cris}, but may be acceptable for some applications.  A {\cris}
+translation to the proposed idealized grating model should work at
+least as well.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
