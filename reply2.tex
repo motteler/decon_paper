@@ -24,9 +24,10 @@
 
 \section{General Remarks}
 
-We thank the reviewers for their thoughtful comments, and have tried
-to incorporate all suggestions and respond to all questions.  The list
-below includes reviewer's comments followed by our responses.
+We thank the reviewers for their thoughtful comments, and have 
+tried to incorporate all suggestions and respond to all questions.
+Section~2 below includes reviewer's comments followed by our
+responses.
 
 The discussion of reference truth for the deconvolution (starting on
 page 3 line 30 RHS of the original submission) was not clear.  We
@@ -53,14 +54,15 @@ the basis functions for our L1d ``idealized grating model''.
     $||r_0||^2$, there are several other places need to be
     corrected.
 
-    \reply:  $||r_0||^2$ would be the square of the Euclidian
-    distance.  That would be harmless in our inequality $||r_0||_2
-    \le ||r_j||_2$ but not what we want for condition number
-    $||S_b||_2||S_b^{-1}||_2$ in the next sentence.  $||r||_2$ is a
-    common notation for the $L^2$ norm, and for vectors is simply
-    Euclidian distance.  The notation used in the paper is taken
-    from the Wikipedia articles for the Moore-Penrose inverse and
-    mathematical norm, and we've added both as citations.
+    \reply: $||r_0||^2$ would typically be the square of the
+    Euclidian distance.  That would be harmless in our inequality
+    $||r_0||_2 \le ||r_j||_2$ but not what we want for condition
+    number $||S_b||_2||S_b^{-1}||_2$ in the next sentence.
+    $||r||_2$ is a common notation for the $L^2$ norm, and for
+    vectors is simply Euclidian distance.  The notation used in the
+    paper is taken from the Wikipedia articles for the Moore-Penrose
+    inverse and mathematical norm, and we've added both as
+    citations.
 
 %   Strang (our other reference for generalized inverse and a common
 %   linear algebra text and reference) uses $||r||$ for Euclidian
@@ -77,20 +79,13 @@ the basis functions for our L1d ``idealized grating model''.
     and ringing in the deconvolution, especially at the shortwave
     CO$_2$ absorption lines?
 
-    \reply: The ringing and overshoot at 2310~{\wn} appears to be
-    caused by a change in the L1c channel spacing from 1.02~{\wn} to
-    0.92~{\wn}.  These jumps occur at the AIRS focal plane module
-    boundaries.  The first subplot of figure 2 shows channel spacing
-    as a function of frequency, and the jump at 2310~{\wn} is one of
-    several such discontinuities.  The deconvolution is sensitive to
-    such changes in channel spacing; thus the ringing.  These
-    artifacts are acceptable because we do not propose using the
-    deconvolved radiances directly; they are an intermediate step
-    before reconvolution to a lower resolution.  
-
-%   Significant detail
-%   is lost in the convolution of AIRS channel radiances and this
-%   detail can only partially be recovered by a deconvolution.
+    \reply: The ringing or overshoot at 2310~{\wn} is caused by a
+    change in the L1c channel spacing from 1.02~{\wn} to 0.92~{\wn}
+    at that point.  We added a comment in the paper to that effect.
+    These jumps occur at the AIRS focal plane module boundaries.
+    The first subplot of figure 2 shows channel spacing as a
+    function of frequency, and the jump at 2310~{\wn} is one of
+    several such discontinuities.  
 
   \item 4. The AIRS L1c channel spacing and resolving power R is
     around 1200 in Fig 2 (after deconvolution), why the direct
@@ -110,8 +105,8 @@ the basis functions for our L1d ``idealized grating model''.
     that point.
 
     We don't use the Gaussian basis for the AIRS deconvolution or
-    the AIRS to CrIS translation---it is just a measure to see how
-    well the deconvolution step alone works.  The deconvolution
+    the AIRS to CrIS translation---it is used as a measure to see
+    how well the deconvolution step alone works.  The deconvolution
     reference truth for a resolving power of 1200 is a very close
     match to the original AIRS radiances.
 
@@ -141,6 +136,13 @@ the basis functions for our L1d ``idealized grating model''.
     measure the standard deviation of the translation.  As a check
     we also measure the standard deviation before the translation,
     to verify that it agrees with our AIRS NEdN spec.
+
+    We dropped the quoted sentence and now just say
+    ``We can give a good estimate of noise equivalent differential
+    radiance (NEdN) for the translation by adding noise with a
+    normal distribution at the {\airs} NEdN to blackbody radiance at
+    280K and translating this to {\cris},'' without getting into
+    details of the implementation.
 
 \end{itemize}
 

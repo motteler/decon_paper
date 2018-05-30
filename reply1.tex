@@ -24,9 +24,10 @@
 
 \section{General Remarks}
 
-We thank the reviewers for their thoughtful comments, and have tried
-to incorporate all suggestions and respond to all questions.  The list
-below includes reviewer's comments followed by our responses.
+We thank the reviewers for their thoughtful comments, and have 
+tried to incorporate all suggestions and respond to all questions.
+Section~2 below includes reviewer's comments followed by our
+responses.
 
 The discussion of reference truth for the deconvolution (starting on
 page 3 line 30 RHS of the original submission) was not clear.  We
@@ -61,20 +62,23 @@ the basis functions for our L1d ``idealized grating model''.
   \reply: We agree this info should be added, but in section 3 the
   (AIRS to CrIS translation) rather than the introduction.  There is
   a limit to what fits in a sensible introduction---for example we
-  do not get into other significant detail, such as AIRS L1b vs L1c,
-  there.  The key idea of the paper is that we can get a modest
-  resolution enhancement from the deconvolution, and we do say that
-  in the introduction.  As it turns out this is good enough for NSR
-  but probably not FSR, but again the CrIS section is the natural
-  place for that discussion
+  do not get into other significant details, such as AIRS L1b vs
+  L1c, there.  The key idea of the paper is that we can get a modest
+  resolution enhancement from the AIRS deconvolution and we do say
+  that in the introduction.  As it turns out this is good enough for
+  NSR but probably not FSR, but again the CrIS section is the
+  natural place for that discussion.
   
+% For this paper the CrIS and L1d translations are sample
+% applications, not the main story.
+
 \item p.1 Line.60 r.h.s.: ``The SRFs are not necessarily
   symmetrical, especially at the high end of the band.''  The SRFs
   are not necessarily symmetrical due to fringing in the AIRS
   entrance filters, especially at the high end of the band” is
   repetitive and can be combined into one sentence.
 
-  \reply: right, we fixed this.
+  \reply: Right, we fixed this.
 
 \item p.1 Section 1: It might be best to simply include a table of
   significant instrument attributes for AIRS, IASI, and CrIS. Things
@@ -86,8 +90,10 @@ the basis functions for our L1d ``idealized grating model''.
   discussing IASI here, and AIRS and CrIS are different enough that
   the differences are not easily summed up in a table.  A short
   descriptive paragraph, expanding a bit on what we have now, is
-  probably best.
-  
+  probably best.  The suggested table would fit better in in a paper
+  dealing with the many questions beyond response functions that
+  come up in building a common data set.
+
 \item p.2 Fig.1: It might be worth plotting this on a vertical log
   scale. The real AIRS SRF’s have a long tail that is not adequately
   demonstrated in a linear vertical scale. The “significant overlap”
@@ -104,17 +110,17 @@ the basis functions for our L1d ``idealized grating model''.
   aren't proposing to use the approximation as an alternative to the
   tabulated SRFS.  The applications are (1) reference truth for the
   deconvolved radiances at a different spacing and resolving power,
-  used for validation of the deconvolution, and (2) basis functions
+  used for understanding the deconvolution, and (2) basis functions
   for the idealized grating model of section~4.
 
 \item p.2 line 25 r.h.s.: on the first uses of the $||r||_2$ it
   would be helpful to let the reader know this is a Euclidian norm
   or even more obvious, a root sum square.
 
-  \reply: We've added a footnote to that effect.  The notation used
-  in the paper is taken from the Wikipedia articles for the
-  Moore-Penrose inverse and mathematical norm, and we've added both
-  as citations.
+  \reply: We've added a note to that effect.  The notation used in
+  the paper is taken from the Wikipedia articles for the
+  Moore-Penrose inverse and mathematical norm, and we added both as
+  citations.
 
 \item p.2 line 37-39 r.h.s.: The $c$ in this equation is not the
   same as the $c$ used above (in $S_b r = c$). Suggest that a
@@ -140,23 +146,18 @@ the basis functions for our L1d ``idealized grating model''.
   with.  The effective resolution of deconvolved AIRS does not take
   us quite to CrIS FSR for the MW and SW bands.  You can still do a
   translation but the residuals are relatively large in comparison
-  with what we are showing in the paper.
+  with those shown in the paper.
 
   One solution might be to pick an intermediate resolution for CrIS,
   for example 0.6 \wn\ in the MW, that roughly corresponds to the
-  AIRS effective resolution.  This is easy to do for both regular
-  CrIS processing (at least the way we do it) and for our AIRS to
-  CrIS translation.  In both cases we have an intermediate
+  AIRS effective resolution, and we've added a note to that effect.
+  This is easy to do for both regular CrIS processing and our AIRS
+  to CrIS translation.  In both cases we have an intermediate
   representation---sensor grid for CrIS and our deconvolution grid
   for AIRS---that can be resampled to any nominal resolution we
-  like.  (We do CrIS calibration processing at FSR for the sensor
-  grid, when that mode is available, and resample to the user grid
-  NSR and FSR to produce those products.)
-
-  We've expanded a brief discussion of NSR and FSR at the end of
-  translation section.  But we would say that beyond suggesting it,
-  adding a new CrIS resolution mode is beyond the scope of this
-  paper.
+  like.  We've expanded the discussion of NSR and FSR at the end of
+  the CrIS translation section and used this topic as a lead-in to
+  the next section, translation to an idealized grating model.
 
 \item p.3 Fig.4: I had a tough time understanding exactly what was
   plotted here and I think the text and caption could be improved.
@@ -215,15 +216,19 @@ the basis functions for our L1d ``idealized grating model''.
 
   \reply: The short answer is that the deconvolution-based
   translation is a two-step process, and the deconvolution is
-  entirely independent of the final translation target.  
+  independent of the final translation target.  The Gaussian basis
+  is used to convolve kcarta radiances in an attempt to get a rough
+  reference truth for the deconvolution; it is not actually used 
+  for either the deconvolution or subsequent reconvolution to CrIS
+  radiances.
 
   For what we called ``direct regression'' discussed in section 5,
   we did try a one-step translation from AIRS to apodized CrIS,
   taking advantage of the relatively limited span of the apodized
   response functions.  If that had worked better we could invert the
-  Hamming apodization and get unapodized radiances that way.  That
-  technique is very useful in other contexts; for example we use it
-  to get unapodized CrIS radiances from an apodized fast model.
+  Hamming apodization and get unapodized radiances that way.  We use
+  that technique in other contexts, for example to get unapodized
+  CrIS radiances from an apodized fast model.
 
 \item p.4 line 39-56 l.h.s.: this discussion adds confusion. It
   looks like the 49 set will be used for training and the 7377 is
@@ -231,8 +236,8 @@ the basis functions for our L1d ``idealized grating model''.
   succinctly.
 
   \reply: Agreed, and we've rewritten this paragraph.  The 49
-  profile set is always used as the test or independent set, as it
-  makes for a more strict test.
+  profile set is always the test or independent set, as it makes for
+  a more strict test.
 
 \item p.4 line 54-59 r.h.s. Could the authors give some explanation
   as to the physical basis for the statistical correction they are
@@ -250,8 +255,7 @@ the basis functions for our L1d ``idealized grating model''.
   \reply: the motivation for the statistical correction was simply
   that the residuals showed some regular structure and the standard
   deviation was relativly small.  The deconvolution is an imperfect
-  process, so it seemed at least possible that a correction might
-  help.
+  process, so it seemed plausible that a correction might help.
 
   We emphasize again that the Gaussian basis was used to convolve
   kcarta radiances in an attempt to get at least a rough reference
@@ -319,17 +323,21 @@ the basis functions for our L1d ``idealized grating model''.
   \reply: Some related applications do start from conventional
   interpolation of AIRS data.  For example the JPL algorithm for
   small frequency shifts uses a cubic spline augmented with a
-  statistical fit for the derivatives near the initial points.  
-  And in the past we have used spline interpolation to a regular
-  intermediate grid before reconvolution via the cosine transform;
-  that is, we used spline interpolation in exactly the same way we
-  use deconvolution here.
+  statistical fit for the derivatives near the initial channel
+  frequencies.  And in the past we have used spline interpolation to
+  a regular intermediate grid before reconvolution via the cosine
+  transform; that is, we used spline interpolation in exactly the
+  same way we use deconvolution here.
   
-  The ``L1d basis'' was our take on the sort of idealized SRF you
-  are considering.  It started out as an attempt at finding an
-  approximate, relatively simple model for the AIRS SRFs.  It might
-  be hard to convince the interferometric community that something
-  like that is desireable as a common target, though.
+  The ``L1d basis'' was our take on the idealized SRF you suggest.
+  It started out as an attempt at finding an approximate, relatively
+  simple model for the AIRS SRFs.  We agree this is an interesting
+  alternative as the target for a common data set.  A key point of
+  the paper that the AIRS deconvolution could be useful for more
+  than one final target.
+
+% It might be hard to convince the interferometric community that
+%  something like that is desireable as a common target, though.
 
 \end{itemize}
 \end{document}

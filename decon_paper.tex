@@ -259,25 +259,30 @@ power of 2000, oversampled to the 0.1~\wn\ grid.
 \end{figure}
 
 The {\airs} deconvolution gives a modest resolution enhancement, at
-the cost of added artifacts and noise.  Figure \ref{dspec} shows the
-full spectra from fitting profile~1 \cite{sarta1,sarta2}, along with
-sample details from the low and high ends of the band, for {\airs}
-deconvolution and our reference convolution to the $0.1$~\wn\ grid.
-In the details we see some overshoot and ringing in the
-deconvolution.  Figure \ref{dzoom} shows details of {\kcarta}, the
-reference convolution, deconvolution, and AIRS spectra for fitting
-profile~1.  In the first subplot we see the deconvolution is
-capturing some of the fine structure in the {\kcarta} data that is
-present in the direct convolution but not in the AIRS data.  In the
-second subplot we see the deconvolution (and reference convolution)
-resolving a pair of close lines that are not resolved at the {\airs}
-L1c resolution.  But we also see some ringing that is not present in
-the reference convolution.  This is to be expected; significant
-detail is lost in the convolution to {\airs} channel radiances and
-this can only partially be recovered by the deconvolution.  The
-artifacts are acceptable because we do not propose using the
-deconvolved radiances directly; they are an intermediate step before
-reconvolution to a lower resolution.
+the cost of added artifacts and noise.  Figure \ref{dspec} shows
+spectra from fitting profile~1 \cite{sarta1,sarta2} for the {\airs}
+deconvolution together with reference truth, with sample details
+from the low and high ends of the band.  The ringing or overshoot at
+2310~{\wn} is due to a change in the L1c channel spacing from
+1.02~{\wn} to 0.92~{\wn} at that point.
+% These changes occur at the AIRS focal plane module boundaries.
+% The first subplot of Figure \ref{chan1} shows channel spacing as a
+% function of frequency, and we see the jump at 2310~{\wn} is one of
+% several such discontinuities.
+Figure \ref{dzoom} shows details of {\kcarta}, the reference
+convolution, deconvolution, and AIRS spectra for fitting profile~1.
+In the first subplot we see the deconvolution is capturing some of
+the fine structure in the {\kcarta} data that is present in the
+reference convolution but not the AIRS data.  In the second subplot
+we see the deconvolution (and reference convolution) resolving a
+pair of close lines that are not resolved at the {\airs} L1c
+resolution.  But we also see some ringing that is not present in the
+reference convolution.  This is to be expected; significant detail
+is lost in the convolution to {\airs} channel radiances and this can
+only partially be recovered by the deconvolution.  The artifacts are
+acceptable because we do not propose using the deconvolved radiances
+directly; they are an intermediate step before reconvolution to a
+lower resolution.
 
 % \begin{figure} % source decon_test1.m
 %   \centering
@@ -311,10 +316,9 @@ adjacent rows of the matrix $S_d \cdot S_b^{-1}$, which takes L1c to
 L1d channel radiances.  (The L1d radiances are discussed in a later
 section; here they are of interest mainly as a typical
 reconvolution.)  Both matrices are banded but the bands are narrower
-in the second, with three to five L1c channels contributing
-significantly to each L1d channel.  The range of influence is
-significant since we may want to know which L1d channels are derived
-in part from the synthetic L1c channels.
+in the second, with three to five L1c channels contributing to each
+L1d channel.  This span of influence gives us the set of parents for
+each translated channel.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
@@ -578,10 +582,11 @@ In addition to the standard resolution described above, in December
 {\opd} of $0.8$~cm for all three bands, while continuing to support
 the standard resolution product.  {\airs} does not have the
 resolving power to properly support a translation for the {\cris}
-high resolution MW and SW bands, so the residuals for that are
-relatively large.  For a long-term common record one solution might
-be a compromise {\cris} resolution of $0.6$~cm for the MW and
-$0.4$~cm for the SW, to roughly match the {\airs} resolving power.
+high resolution MW and SW bands, and the residuals for that
+translation are relatively large.  For a long-term common record one
+solution might be a compromise {\cris} resolution of $0.6$~cm for
+the MW and $0.4$~cm for the SW, to roughly match the {\airs}
+resolving power.
 
 As an alternative, in the next section we consider translation from
 {\airs} to an idealized grating model.  This requires a translation
@@ -609,14 +614,13 @@ resolving power of the L1d basis (defined below) makes it a more
 natural translation target for {\airs} than the constant channel
 spacing of {\cris}.  It could be considered as the next step in
 regularization of the {\airs} product, following the partial
-regularization from L1b to L1c.  If there were other operational
-hyperspectral grating spectrometers it would be a logical target 
-for a common record.
+regularization from L1b to L1c, and as a potential alternative
+target for a long-term common record.
 
 Define an {\airs} L1d basis with resolving power $R$ using the
 generalized Gaussian response function of section \ref{decon} as
 follows.  Let $v_0$ be the frequency of the first channel and for
-$i\ge0$ $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} =
+$i\ge0$, $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} =
 v_i + dv_i$.  As with tests of the {\airs} to {\cris} translation,
 true L1c is calculated by convolving {\kcarta} radiances with
 {\airs} L1c SRFs and true L1d by convolving with an L1d basis at the
@@ -724,22 +728,22 @@ dimension (as defined in the appendix) is only 260.
   \label{dreg3}
 \end{figure}
 
-One fix is to add noise.  Recall that we generate true {\airs} 
-and true {\cris} by convolving a common set of high-resolution
-radiances.  For true {\airs} we can simply add noise at the {\airs}
-NEdN.  But for regression or testing of an {\airs} to {\cris}
-translation we want {\cris} radiances with actual translated {\airs}
-noise, not simply true {\cris} with noise added as per the {\cris}
-NEdN specification.  The latter does reduce correlations but
-increases residuals for the independent set significantly.
-To model NEdN for the {\airs} to {\cris} translation of section
-\ref{airs2cris} we synthesize noise at the {\airs} NEdN, add that 
-to the signal, run signal plus noise through the translation, and
-measure the noise.  But to get an {\airs} to {\cris} translation by
-regression with added noise we need a reference translation of each
-noisy {\airs} spectra.  We don't want to use the translation of
-section \ref{airs2cris} for that, at least not if our goal is to
-give each translation method an independent test.
+% One fix is to add noise.  Recall that we generate true {\airs} 
+% and true {\cris} by convolving a common set of high-resolution
+% radiances.  For true {\airs} we can simply add noise at the {\airs}
+% NEdN.  But for regression or testing of an {\airs} to {\cris}
+% translation we want {\cris} radiances with actual translated {\airs}
+% noise, not simply true {\cris} with noise added as per the {\cris}
+% NEdN specification.  The latter does reduce correlations but
+% increases residuals for the independent set significantly.
+% To model NEdN for the {\airs} to {\cris} translation of section
+% \ref{airs2cris} we synthesize noise at the {\airs} NEdN, add that 
+% to the signal, run signal plus noise through the translation, and
+% measure the noise.  But to get an {\airs} to {\cris} translation by
+% regression with added noise we need a reference translation of each
+% noisy {\airs} spectra.  We don't want to use the translation of
+% section \ref{airs2cris} for that, at least not if our goal is to
+% give each translation method an independent test.
 
 \begin{figure} % source slackfigs a2cris_regr5.m
   \centering
@@ -774,20 +778,22 @@ give each translation method an independent test.
   \label{dreg9}
 \end{figure}
 
-As an alternative to adding noise, we can use a form of principal
-component regression.  As above let $r_a$ and $r_c$ be $m \times k$
-and $n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
-S_a\,V_a^T$ be the singular value decomposition with singular values
-in descending order and $U_a^i$ the first $i$ columns of $U_a$.
-Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
-decomposition with singular values in descending order and $U_c^j$
-the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
-$\hat r_c = (U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with
-respect to the bases $U_a^i$ and $U_c^j$.  (Since the bases are
-orthonormal, the transpose is the inverse.)  Then as before find $X$
-by regression to minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives
-us $R = U_c^j X (U_a^i)^T$, an {\airs} to {\cris} transform
-parameterized by the basis sizes $i$ and $j$.
+One fix is to add noise to the dependent set.  However this
+increased residuals for the independent set significantly.  As an
+alternative we tried a form of principal component regression.  As
+above let $r_a$ and $r_c$ be $m \times k$ and $n \times k$ {\airs}
+and {\cris} radiance sets.  Let $r_a = U_a S_a\,V_a^T$ be the
+singular value decomposition with singular values in descending
+order and $U_a^i$ the first $i$ columns of $U_a$.  Similarly let
+$r_c = U_c S_c\,V_c^T$ be a singular value decomposition with
+singular values in descending order and $U_c^j$ the first $j$
+columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and $\hat r_c =
+(U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with respect to the
+bases $U_a^i$ and $U_c^j$.  (Since the bases are orthonormal, the
+transpose is the inverse.)  Then as before find $X$ by regression to
+minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives us $R = U_c^j X
+(U_a^i)^T$, an {\airs} to {\cris} transform parameterized by the
+basis sizes $i$ and $j$.
 
 % Then as before find $X$ to minimize $\|X \hat r_a - \hat r_c\|_2$
 % by solving $\hat r_a^T X^T = \hat r_c^T$ for $X$ by regression.
@@ -923,7 +929,9 @@ residual for translation with deconvolution.
 
 \subsection{Source code}
 
-The translation and test code used here is available at Github:
+Matlab code for the translations and tests described here (including
+the {\iasi} to {\cris}, {\iasi} to {\airs}, and {\cris} to {\airs}
+translations mentioned in the introduction) is available at GitHub:
 
 \begin{itemize}
 %  \item \url{https://github.com/motteler/decon_paper}
