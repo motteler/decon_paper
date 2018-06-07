@@ -125,8 +125,8 @@ channel frequency.
 \begin{figure} % source plot_SRF2.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_sample_SRF.pdf}
-  \caption{sample {\airs} spectral response functions from the low
-    and high ends of the band.   The dashed line is a generalized
+  \caption{Sample AIRS spectral response functions from the low
+    and high ends of the band.  The dashed line is a generalized
     Gaussian function.}
   \label{srfs1}
 \end{figure}
@@ -134,7 +134,7 @@ channel frequency.
 \begin{figure} % source plot_SRF2.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_L1c_res.pdf}
-  \caption{{\airs} L1c channel spacing and resolving power, $R =
+  \caption{AIRS L1c channel spacing and resolving power, $R =
     v_i/\fwhm_i$.  The relatively regular L1c channel spacing aids
     the deconvolution.}
   \label{chan1}
@@ -234,7 +234,7 @@ power of 2000, oversampled to the 0.1~\wn\ grid.
 \begin{figure} % source decon_test1.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_spec.pdf}
-  \caption{Spectra from fitting profile 1 for deconvolved {\airs}
+  \caption{Spectra from fitting profile 1 for deconvolved AIRS
     and the reference convolution to the $0.1$~\wn\ grid.  We see
     some overshoot and ringing in the deconvolution.}
   \label{dspec}
@@ -245,7 +245,7 @@ power of 2000, oversampled to the 0.1~\wn\ grid.
   \includegraphics[width=\linewidth]{figures/airs_decon_zoom.pdf}
   \caption{Details from fitting profile 1 for {\kcarta}, the
     reference convolution to the $0.1$~\wn\ grid, deconvolved
-    {\airs}, and true {\airs}.  The deconvolution restores some
+    AIRS, and true AIRS.  The deconvolution restores some
     detail.}
   \label{dzoom}
 \end{figure}
@@ -253,7 +253,7 @@ power of 2000, oversampled to the 0.1~\wn\ grid.
 \begin{figure} % source plot_Binv.m
   \centering
   \includegraphics[width=\linewidth]{figures/airs_decon_basis.pdf}
-  \caption{sample adjacent rows for the deconvolution and L1c to L1d
+  \caption{Sample adjacent rows for the deconvolution and L1c to L1d
     transforms}
   \label{dbasis}
 \end{figure}
@@ -362,9 +362,9 @@ statistics are done after conversion to brightness temperatures.
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_spec_LW.pdf}
-  \caption{true {\airs}, deconvolved {\airs}, true {\cris}, and {\airs}
-    {\cris}.  Differences between true {\cris} and {\airs} {\cris} are too
-    small to be visible in this figure.}
+  \caption{True AIRS, deconvolved AIRS, true CrIS, and AIRS CrIS.
+    Differences between true CrIS and AIRS CrIS are too small to be
+    visible in this figure.}
   \label{specLW}
 \end{figure}
 
@@ -372,8 +372,7 @@ statistics are done after conversion to brightness temperatures.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_diff_LW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} LW
-    band}
+    apodized AIRS CrIS minus true CrIS, for the LW band.}
   \label{diffLW}
 \end{figure}
 
@@ -381,8 +380,7 @@ statistics are done after conversion to brightness temperatures.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_diff_MW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} MW
-    band.}
+    apodized AIRS CrIS minus true CrIS, for the MW band.}
   \label{diffMW}
 \end{figure}
 
@@ -390,16 +388,15 @@ statistics are done after conversion to brightness temperatures.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_diff_SW.pdf}
   \caption{Mean and standard deviation of unapodized and Hamming
-    apodized {\airs} {\cris} minus true {\cris}, for the {\cris} SW
-    band.}
+    apodized AIRS CrIS minus true CrIS, for the SW band.}
   \label{diffSW}
 \end{figure}
 
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_diff_all.pdf}
-  \caption{Mean of apodized residuals for all three {\cris} bands,
-    showing the residuals in greater detail.}
+  \caption{Summary plot of the mean of apodized residuals for all
+    three CrIS bands, showing the residuals in greater detail.}
   \label{meanAll}
 \end{figure}
 
@@ -475,31 +472,32 @@ NEdT (for the first fitting profile), as we show next.
 \begin{figure} % source a2cris_regr2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_regr_LW.pdf}
-  \caption{Mean and standard deviation of LW corrected apodized
-    residuals}
+  \caption{Mean and standard deviation of corrected apodized AIRS
+    CrIS minus true CrIS, for the LW band.}
   \label{statLW}
 \end{figure}
 
 \begin{figure} % source a2cris_regr2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_coef_LW.pdf}
-  \caption{LW $a$ and $b$ weights for the linear correction $ax+b$}
+  \caption{Weights for the linear correction $ax+b$, for the LW
+    band.}
   \label{coefLW}
 \end{figure}
 
 \begin{figure} % source a2cris_regr2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_regr_MW.pdf}
-  \caption{Mean and standard deviation of MW corrected apodized
-    residuals.}
+  \caption{Mean and standard deviation of corrected apodized AIRS
+    CrIS minus true CrIS, for the MW band.}
   \label{statMW}
 \end{figure}
 
 \begin{figure} % source a2cris_regr2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_regr_SW.pdf}
-  \caption{Mean and standard deviation of SW corrected apodized
-    residuals.}
+  \caption{Mean and standard deviation of corrected apodized AIRS
+    CrIS minus true CrIS, for the SW band.}
   \label{statSW}
 \end{figure}
 
@@ -523,8 +521,8 @@ NEdT (for the first fitting profile), as we show next.
 \begin{figure} % source nedn_test2.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_nedn.pdf}
-  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} NEdN.
-    Apodization reduces the {\cris} and {\airs}-to-{\cris} NEdN by a
+  \caption{AIRS, AIRS-to-CrIS, and CrIS NEdN.
+    Apodization reduces the CrIS and AIRS-to-CrIS NEdN by a
     factor of $0.63$.}
   \label{nedn}
 \end{figure}
@@ -532,9 +530,9 @@ NEdT (for the first fitting profile), as we show next.
 \begin{figure} % source nedt_test1.m
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_nedt.pdf}
-  \caption{{\airs}, {\airs}-to-{\cris}, and {\cris} apodized NEdT,
-    and the max of {\cris} and {\airs}-to-{\cris} NEdN (shown as
-    NEdT) with {\cris} NEdT shown as a reference.}
+  \caption{AIRS, AIRS-to-CrIS, and CrIS apodized NEdT,
+    and the max of CrIS and AIRS-to-CrIS NEdN (shown as
+    NEdT) with CrIS NEdT shown as a reference.}
   \label{nedt}
 \end{figure}
 
@@ -654,18 +652,16 @@ a linear correction.  Residuals for L1d with a resolving power of
 \begin{figure} % source L1d_regr1.m
   \centering
   \includegraphics[width=\linewidth]{figures/L1d_cor1_1200.pdf}
-  \caption{Mean and standard deviation over the 49 fitting profiles
-    for the L1c to L1d translation minus true L1d for a resolving
-    power of 1200.}
+  \caption{Mean and standard deviation for the AIRS L1c to L1d
+    translation minus true L1d, for a resolving power of 1200.}
   \label{L1d1200}
 \end{figure}
 
 \begin{figure} % source L1d_regr1.m
   \centering
   \includegraphics[width=\linewidth]{figures/L1d_cor1_700.pdf}
-  \caption{Mean and standard deviation over the 49 fitting profiles
-    for the L1c to L1d translation minus true L1d for a resolving
-    power of 700.}
+  \caption{Mean and standard deviation for the AIRS L1c to L1d
+    translation minus true L1d, for a resolving power of 700.}
   \label{L1d700s}
 \end{figure}
 
@@ -716,7 +712,7 @@ dimension (as defined in the appendix) is only 260.
   \centering
   \includegraphics[width=\linewidth]{figures/ap_dir_regr.pdf}
   \caption{Mean residuals over the 49 profile independent set for
-    {\airs} to apodized {\cris} direct regression.}
+    AIRS to apodized CrIS direct regression.}
   \label{dreg1}
 \end{figure}
 
@@ -749,7 +745,7 @@ dimension (as defined in the appendix) is only 260.
   \centering
   \includegraphics[width=\linewidth]{figures/ap_pc_regr.pdf}
   \caption{Mean residuals over the 49 profile independent set for
-    {\airs} to apodized {\cris} principal component regression.}
+    AIRS to apodized CrIS principal component regression.}
   \label{dreg6}
 \end{figure}
 
@@ -823,31 +819,41 @@ for the MW and SW bands.
 
 We have been using the {\airs} to {\cris} and {\iasi} to {\cris}
 translations to analyze simultaneous nadir overpasses (SNOs)
-\cite{wang2015, sno1}.  We hope to create a long-term climate record
-spanning observations of the individual sounders.  The initial steps
-are validation with SNOs, validation of uniform geographic sampling
-and subsetting, and showing consistency of global statistics.
-Radiance translation to a common subset might include added noise,
-as discussed in section \ref{airs2cris}.  The radiance translations
-could be explicit or implicit---that is, run once and saved as a
-dataset, or run as needed on existing data.  Translations are fast
-relative to read times.
+\cite{wang2015, sno1} and hope to create a long-term climate record
+spanning observations from multiple sounders.  The translation of
+response functions as discussed here is just one part of such a
+project.  To build a common record we must choose a target format.
+This might be CrIS standard resolution, a CrIS intermediate
+resolution as proposed in section \ref{airs2cris}, or the
+generalized Gaussian basis of section \ref{airsL1d}.  The choice
+constrains which sounders or resolution modes can be included.  For
+example, our proposed {\cris} 0.8/0.6/0.4 \wn\ intermediate
+resolution would mean dropping two and a half years (April 2012 to
+November 2014) of overlap of AIRS and CrIS standard resolution data.
+This sort of problem is inherent in building a common record---over
+time resolving power and band spans typically increase.  But a
+target format is constrained by what is available from the start.
 
-The translations allows a retrieval algorithm to use the same fast
-forward radiative transfer model, minimizing any differential effect
-of forward model errors between the two instrument retrievals.  
-An interesting potential application is to revisit the {\airs} SRF
+Uniform spatial sampling is a key part of a long-term record.
+{\airs} and {\cris} sampling is similar but not identical.  Details
+are beyond the scope of this paper, but some subsetting is typically
+necessary.  For example most of our sampling analysis is downstream
+from a ``latitude weighted subset'', the selection of all
+observations such that $X < |\cos(\hbox{latitude})|$, where $X$ is a
+random variable from the uniform distribution $[0, 1]$
+\cite{git:acsamp}.  Further subsetting, to correct for sampling
+biases or simply to save space, may be desirable.
+
+For some applications these translations allow the use of a common
+radiative transfer model and retrieval algorithm.  For applications
+such as assimilation and physical retrievals the translation would
+need added noise, as discussed in section \ref{airs2cris}.  Finally,
+a possible future application is to revisit the {\airs} SRF
 measurements, to see if adjustments (within the original measurement
 uncertainty) can reduce the translation residuals.
 
-The translations presented here have been implemented and tested
-extensively, with the associated Matlab code published on Github.
-The {\airs} to {\cris} translation is I/O bound, with the in-core
-time divided into roughly 25 percent for the deconvolution and 75
-percent for reconvolution, taking about 22 seconds to process our
-7377 profile cloudy test set on one compute node.  Calculating the
-pseudo-inverse adds another 12 seconds, but that only needs to be
-done when the translation parameters change.
+% Given the work that goes into developing and refining models, that
+% could be a significant advantage.
 
 % \FloatBarrier
 \section{Appendix}
@@ -903,7 +909,7 @@ significantly less than interpolation for all three bands.
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
   \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the {\cris} LW band.}
+    and deconvolution with convolution for the CrIS LW band.}
   \label{intpLW}
 \end{figure}
 
@@ -911,7 +917,7 @@ significantly less than interpolation for all three bands.
   \centering
   \includegraphics[width=\linewidth]{figures/CtoD_interp_diff.pdf}
   \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the {\airs} L1c to L1d
+    and deconvolution with convolution for the AIRS L1c to L1d
     translation with $v_0=649.822$~\wn\ and a resolving power of 700}
   \label{interpL1d}
 \end{figure}
@@ -938,6 +944,16 @@ translations mentioned in the introduction) is available at GitHub:
    \item \url{https://github.com/strow/airs_deconv}
    \item \url{https://github.com/strow/iasi_decon}
 \end{itemize}
+
+The translations have been tested extensively.  Runtime for the
+{\airs} to {\cris} translation is split fairly evenly between
+deconvolution and reconvolution.  It takes about 30 seconds to
+translate our 7377 profile cloudy set running on one processor.
+Calculating the pseudo-inverse adds another 10 seconds, but that
+only needs to be done when the translation parameters change.
+
+% The translations can be explicit or implicit---that is, run once
+% and saved as a dataset, or run as needed on existing data.
 
 % \FloatBarrier
 % \bibliographystyle{abbrv}
