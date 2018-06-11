@@ -617,7 +617,7 @@ target for a long-term common record.
 
 Define an {\airs} L1d basis with resolving power $R$ using the
 generalized Gaussian response function of section \ref{decon} as
-follows.  Let $v_0$ be the frequency of the first channel and for
+follows.  Let $v_0$ be the frequency of the first channel, and for
 $i\ge0$, $\fwhm_i = v_i / R$, $dv_i = \fwhm_i / 2$, and $v_{i+1} =
 v_i + dv_i$.  As with tests of the {\airs} to {\cris} translation,
 true L1c is calculated by convolving {\kcarta} radiances with
@@ -670,6 +670,12 @@ a linear correction.  Residuals for L1d with a resolving power of
 \section{Direct and principal component regression}
 \label{dregr}
 
+We want to compare our deconvolution-based translations with other
+approaches to radiance translation, with an emphasis on methods we
+have used in the past.  In this section we consider regression-based
+translations, and in section \ref{interp} conventional
+interpolation.
+
 The {\airs} L1c to L1d translation can be done with a single 
 linear transform $S_d\cdot S_c^{-1}$, where $S_c$ and $S_d$ are the
 transforms taking the intermediate grid to L1c and L1d channels.
@@ -692,23 +698,24 @@ independently for each channel.
 
 Figures \ref{dreg1} shows residuals for direct regression from
 {\airs} to apodized {\cris} radiances.  As before we use the 7377
-profile set as the dependent and the 49 profile as the independent
-set.  The residuals are roughly comparable to the residuals from
-the deconvolution translation summarized in figure \ref{statAll1}.
-However the regression matrices show significant off-diagonal
-correlations.  Figure \ref{dreg3} shows this for the LW; the MW and
-SW bands are worse.  In addition the dependent set residuals are
-very small, much less than the residuals for the independent set.
-These are signs of over-fitting.  As noted in section \ref{airs2cris}
-the 7377 profile dependent set is highly correlated; the effective
-dimension (as defined in the appendix) is only 260.
+profile set as the dependent set and the 49 profile set as the
+independent set.  The residuals are roughly comparable to the
+residuals from the deconvolution translation summarized in figure
+\ref{statAll1}.  However the regression matrices show significant
+off-diagonal correlations.  Figure \ref{dreg3} shows this for the 
+MW band; correlations are less for the LW and larger for the SW.  
+In addition, the dependent set residuals are very small, much less
+than the residuals for the independent set.  These are signs of
+over-fitting.  As noted in section \ref{airs2cris} the 7377 profile
+dependent set is highly correlated; the effective dimension (as
+defined in the appendix) is only 260.
 
 % The LW residual is larger at the low end of the band for direct
 % regression and the high end for the deconvolved translation.
 % Deconvolution does better in the MW, and direct regression in 
 % the SW.
 
-\begin{figure} % source a2cris_regr4.m
+\begin{figure} % source a2cris_regr4X.m
   \centering
   \includegraphics[width=\linewidth]{figures/ap_dir_regr.pdf}
   \caption{Mean residuals over the 49 profile independent set for
@@ -716,11 +723,11 @@ dimension (as defined in the appendix) is only 260.
   \label{dreg1}
 \end{figure}
 
-\begin{figure} % source  a2cris_regr4.m
+\begin{figure} % source  a2cris_regr4X.m
   \centering
-  \includegraphics[width=\linewidth]{figures/LW_dir_regr_mat.png}
-  \caption{Regression coefficients from the 7377 profile dependent set for
-  the LW direct regression.}
+  \includegraphics[width=\linewidth]{figures/MW_dir_regr_mat.png}
+  \caption{Regression transform from the 7377 profile dependent set
+    for the MW apodized direct regression transform.}
   \label{dreg3}
 \end{figure}
 
@@ -749,68 +756,75 @@ dimension (as defined in the appendix) is only 260.
   \label{dreg6}
 \end{figure}
 
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/LW_pc_regr_mat.png}
-  \caption{Regression coefficients from the 7377 profile dependent
-    set for LW principal component regression with $i = j = 500$.}
-  \label{dreg7}
-\end{figure}
+% \begin{figure} % source slackfigs a2cris_regr5.m
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/LW_pc_regr_mat.png}
+%   \caption{Regression coefficients from the 7377 profile dependent
+%     set for LW principal component regression with $i = j = 500$.}
+%   \label{dreg7}
+% \end{figure}
 
-\begin{figure} % source slackfigs a2cris_regr5.m
+\begin{figure} % source slackfigs a2cris_regr5X.m
   \centering
   \includegraphics[width=\linewidth]{figures/MW_pc_regr_mat.png}
-  \caption{Regression coefficients from the 7377 profile dependent
-    set for MW principal component regression with $i = 500$ and $j
-    = 320$.}
+  \caption{Regression transform from the 7377 profile dependent set
+    for MW apodized principal component regression with $i = 500$
+    and $j = 320$.}
   \label{dreg8}
 \end{figure}
 
-\begin{figure} % source slackfigs a2cris_regr5.m
-  \centering
-  \includegraphics[width=\linewidth]{figures/SW_pc_regr_mat.png}
-  \caption{Regression coefficients from the 7377 profile dependent
-    set for SW principal component regression with $i = j = 100$.}
-  \label{dreg9}
-\end{figure}
+% \begin{figure} % source slackfigs a2cris_regr5.m
+%   \centering
+%   \includegraphics[width=\linewidth]{figures/SW_pc_regr_mat.png}
+%   \caption{Regression coefficients from the 7377 profile dependent
+%     set for SW principal component regression with $i = j = 100$.}
+%   \label{dreg9}
+% \end{figure}
 
-One fix is to add noise to the dependent set.  However this
-increased residuals for the independent set significantly.  As an
-alternative we tried a form of principal component regression.  As
-above let $r_a$ and $r_c$ be $m \times k$ and $n \times k$ {\airs}
-and {\cris} radiance sets.  Let $r_a = U_a S_a\,V_a^T$ be the
-singular value decomposition with singular values in descending
-order and $U_a^i$ the first $i$ columns of $U_a$.  Similarly let
-$r_c = U_c S_c\,V_c^T$ be a singular value decomposition with
-singular values in descending order and $U_c^j$ the first $j$
-columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and $\hat r_c =
-(U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with respect to the
-bases $U_a^i$ and $U_c^j$.  (Since the bases are orthonormal, the
-transpose is the inverse.)  Then as before find $X$ by regression to
-minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives us $R = U_c^j X
-(U_a^i)^T$, an {\airs} to {\cris} transform parameterized by the
-basis sizes $i$ and $j$.
+% As an alternative we tried a form of principal component regression.
+
+Common techniques for reducing such correlation include adding
+noise, restricting the solution to a banded matrix, or working with
+principal component decompositions of the data.  We had best results
+with the latter.  As above let $r_a$ and $r_c$ be $m \times k$ and
+$n \times k$ {\airs} and {\cris} radiance sets.  Let $r_a = U_a
+S_a\,V_a^T$ be the singular value decomposition with singular values
+in descending order and $U_a^i$ the first $i$ columns of $U_a$.
+Similarly let $r_c = U_c S_c\,V_c^T$ be a singular value
+decomposition with singular values in descending order and $U_c^j$
+the first $j$ columns of $U_c$.  Let $\hat r_a = (U_a^i)^T r_a$ and
+$\hat r_c = (U_c^j)^T r_c$ be $r_a$ and $r_c$ represented with
+respect to the bases $U_a^i$ and $U_c^j$.  (Since the bases are
+orthonormal, the transpose is the inverse.)  Then as before find $X$
+by regression to minimize $\|X \hat r_a - \hat r_c\|_2$.  This gives
+us $R = U_c^j X (U_a^i)^T$, an {\airs} to {\cris} transform
+parameterized by the basis sizes $i$ and $j$.
 
 % Then as before find $X$ to minimize $\|X \hat r_a - \hat r_c\|_2$
 % by solving $\hat r_a^T X^T = \hat r_c^T$ for $X$ by regression.
 
-Note that this sort of principal component regression is not the
-same as regression after principal component (or singular vector)
-filtering; for that we would take $\bar r_a = U_a^i (U_a^i)^T r_a$,
-$\bar r_c = U_c^j (U_c^j)^T r_c$, find $X$ to minimize $\|X \bar r_a
-- \bar r_c\|_2$, and have no need for a change of bases to apply
-$X$.  In practice this did not work as well as doing regression
-after the change of bases.
+Note that our principal component regression is not the same as
+regression after principal component (or singular vector) filtering;
+for that we would take $\bar r_a = U_a^i (U_a^i)^T r_a$, $\bar r_c =
+U_c^j (U_c^j)^T r_c$, find $X$ to minimize $\|X \bar r_a - \bar
+r_c\|_2$, and have no need for a change of bases to apply $X$.  In
+practice this did not work as well as doing regression after the
+change of bases.
 
-Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
-\ref{dreg8}, and \ref{dreg9} the transform $R$ for the {\cris} LW,
-MW, and SW bands.  We have chosen $i = j = 500$ for the LW, $i =
-500$ and $j = 320$ for the MW, and $i = j = 100$ for the SW for the
-basis sizes, to roughly balance unwanted correlation with residual
-size.  The residuals for principal component regression are larger
-than for the deconvolution translation with regression correction
-and there is still significant off-diagonal correlation, especially
-for the MW and SW bands.
+% Figure \ref{dreg6} shows residuals and figures \ref{dreg7},
+% \ref{dreg8}, and \ref{dreg9} the transform $R$ for the {\cris} LW,
+% MW, and SW bands.  
+
+Figure \ref{dreg6} shows residuals and figure \ref{dreg8} the
+transform $R$ for the {\cris} MW band.  We have chosen $i = j = 500$
+for the LW, $i = 500$ and $j = 320$ for the MW, and $i = j = 100$
+for the SW for the basis sizes, to roughly balance unwanted
+correlation with residual size.  The off-diagonal correlations are
+significantly reduced, but the residuals are now larger than for the
+deconvolution-based translation summarized in figure \ref{statAll1}.
+We conclude that principal component regression works fairly well,
+in comparison with regular regression or interpolation, but not
+quite as well as the deconvolution-based translation.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
@@ -889,49 +903,54 @@ the 7377 profile cloudy set we found $j=260$, which we interpret as
 highly correlated.
 
 \subsection{Conventional interpolation}
+\label{interp}
 
 The {\airs} to {\cris} translation via deconvolution works
-significantly better than conventional interpolation.  We consider
-two cases.  For the first, start with true {\airs} and interpolate
-radiances directly to the {\cris} user grid with a cubic spline.
-For the second, interpolate true {\airs} to the 0.1 {\wn}
-intermediate grid with a cubic spline and then convolve this to the
-use {\cris} user grid.  Figure~\ref{intpLW} shows interpolated
-{\cris} minus true {\cris} for the LW band, without apodization.
-The two-step interpolation works a little better than the simple
-spline, but both residuals are significantly larger than for the
-translation with deconvolution.  Results for the MW are similar,
-while the unapodized comparison is less clear for the SW.  With
-Hamming apodization, the residuals with deconvolution are
-significantly less than interpolation for all three bands.
+significantly better than conventional interpolation.  This is not
+surprising since the former makes use of both the source and target
+response functions.  We consider two cases.  For the first, start
+with true {\airs} and interpolate radiances directly to the {\cris}
+user grid with a cubic spline.  This makes no use of either the
+{\airs} or {\cris} response functions.  For the second, interpolate
+true {\airs} to the 0.1 {\wn} intermediate grid with a cubic spline
+and then convolve this to the {\cris} user grid.  This uses the
+{\cris} but not the {\airs} response functions.  Results for
+apodized {\cris} LW radiance are summarized in Figure~\ref{intpLW}.
+As expected, residuals for spline interpolation alone are larger
+that for spline interpolation followed by convolution to the {\cris}
+user grid, and both are significantly larger than residuals for
+{\airs} deconvolution followed by the {\cris} convolution.  Results
+for the MW and SW are similar.
 
 \begin{figure} % source a2cris_test1
   \centering
   \includegraphics[width=\linewidth]{figures/a2cris_interp_LW.pdf}
-  \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the CrIS LW band.}
+  \caption{The AIRS to apodized CrIS translation via spline
+    interpolation, interpolation followed by CrIS convolution, and AIRS
+    deconvolution followed by CrIS convolution.}
   \label{intpLW}
 \end{figure}
 
 \begin{figure} % source L1d_test2.m
   \centering
   \includegraphics[width=\linewidth]{figures/CtoD_interp_diff.pdf}
-  \caption{spline interpolation, interpolation with convolution, 
-    and deconvolution with convolution for the AIRS L1c to L1d
-    translation with $v_0=649.822$~\wn\ and a resolving power of 700}
+  \caption{The AIRS L1c to L1d translation via spline interpolation,
+    interpolation followed by CrIS convolution, and AIRS
+    deconvolution followed by CrIS convolution.}
   \label{interpL1d}
 \end{figure}
 
-For the {\airs} L1c to L1d translation, deconvolution again works
-significantly better than interpolation.  As before, we consider two
-cases.  For the first, start with true {\airs} and interpolate
+The {\airs} L1c to L1d translation via deconvolution also works
+significantly better than interpolation.  As before, we consider 
+two cases.  For the first, start with true {\airs} and interpolate
 radiances directly to the L1d grid with a cubic spline.  For the
-second, interpolate true L1c to the 0.1 {\wn} intermediate grid with
-a cubic spline and convolve this to the L1d channel set.
-Figure~\ref{interpL1d} shows interpolated L1d minus true L1d, for a
-resolving power of 700.  The two-step interpolation works a little
-better than the simple spline, but is still much larger than the
-residual for translation with deconvolution.
+second, interpolate true {\airs} to the 0.1 {\wn} intermediate grid
+with a cubic spline and convolve this to the L1d channel set.
+Results for a resolving power of 700 are summarized in
+Figure~\ref{interpL1d}.  Residuals for spline interpolation are
+larger that for spline interpolation followed by convolution to the
+L1d channel set, and both are significantly larger than residuals
+for {\airs} deconvolution followed by the L1d convolution.
 
 \subsection{Source code}
 
@@ -966,7 +985,7 @@ only needs to be done when the translation parameters change.
 % Purdue University, West Lafayette, Indiana, in 1983, and
 
 % hack for bio spacing
-\vspace{10cm}\vfill
+% \vspace{10cm}\vfill
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{motte.jpg}}]{Howard~E.~Motteler}
   (M~'87) received the Ph.D. degree in computer science from the
@@ -983,7 +1002,7 @@ only needs to be done when the translation parameters change.
 \end{IEEEbiography}
 
 % hack for bio spacing
-\vspace{-14cm}
+% \vspace{-14cm}
 
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{strow.jpg}}]{L.~Larrabee~Strow}
   received the Ph.D. degree in physics from the University of
