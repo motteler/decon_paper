@@ -24,19 +24,21 @@
 
 \section{General Remarks}
 
-We thank the reviewers for their thoughtful comments, and have 
-tried to incorporate all suggestions and respond to all questions.
-Section~2 below includes reviewer's comments followed by our
-responses.
+We thank the reviewers for their thoughtful comments and have tried
+to incorporate or respond to all suggestions and questions.  In the
+remainder of this section we summarize the main changes we've made.
+Section~2 consists of reviewer's comments followed by our responses.
+
+% Most other changes were as requested by the reviewers.  
 
 The discussion of reference truth for the deconvolution (starting on
 page 3 line 30 RHS of the original submission) was not clear.  We
 have updated the labels in figures 3 and 4 from ``gauss'' to ``decon
 ref'' to better indicate we are showing the deconvolution reference
 truth.  We updated the associated discussion to emphasize that the
-deconvolution reference truth is simply a check of the deconvolution
-step---we don't need it to do the deconvolution or for subsequent
-reconvolution to CrIS or other targets.
+deconvolution reference truth is intended as validation of the
+deconvolution---we don't need it to do the deconvolution or for
+subsequent reconvolution to CrIS or other targets.
 
 We corrected the relationship of standard deviation and full-width
 half-max (FWHM), $s=\fwhm / (2\sqrt{2\ln 2})$ in the original
@@ -44,8 +46,17 @@ submission, to $s=\fwhm / (2\sqrt{2}\,(\ln 2)^{1/(2p)})$.  The
 latter is correct for the generalized Gaussian.  The difference is
 small for the range of values $p$ we used.  As noted above this does
 not effect the accuracy of the translations, just (to a very small
-degree) the consistency of reference truth for the deconvolution and
-the basis functions for our L1d ``idealized grating model''.
+degree) reference truth for the deconvolution and the basis
+functions for our L1d ``idealized grating model''.
+
+The section on regression translation has been revised and
+shortened.  We dropped the paragraph on adding noise since we don't
+show those results.  The direct and principal component regression
+matrices are now shown only for the MW, enough for an overview.  
+The regression matrices are are now for apodized radiance, matching
+the residuals.  The interpolation section in the appendix has been
+revised to show apodized residuals and to emphasize the advantage of
+using both the source and target response functions.
 
 \section{Response to Comments}
 
@@ -59,11 +70,11 @@ the basis functions for our L1d ``idealized grating model''.
   (after bit-trim mask upgrade, depending how much detail you want
   to cover here.
 
-  \reply: We agree this info should be added, but in section 3 the
+  \reply: We agree this info should be given, but in section 3 the
   (AIRS to CrIS translation) rather than the introduction.  There is
-  a limit to what fits in a sensible introduction---for example we
-  do not get into other significant details, such as AIRS L1b vs
-  L1c, there.  The key idea of the paper is that we can get a modest
+  a limit to what belongs in the introduction---for example we do
+  not get into other significant details, such as AIRS L1b vs L1c,
+  there.  The key idea of the paper is that we can get a modest
   resolution enhancement from the AIRS deconvolution and we do say
   that in the introduction.  As it turns out this is good enough for
   NSR but probably not FSR, but again the CrIS section is the
@@ -87,17 +98,17 @@ the basis functions for our L1d ``idealized grating model''.
   frequencies.
 
   \reply: This would be interesting, but we can't really justify
-  discussing IASI here, and AIRS and CrIS are different enough that
-  the differences are not easily summed up in a table.  A short
-  descriptive paragraph, expanding a bit on what we have now, is
-  probably best.  The suggested table would fit better in in a paper
-  dealing with the many questions beyond response functions that
-  come up in building a common data set.
+  discussing IASI here in any detail, and AIRS and CrIS are
+  different enough that the differences are not easily summed up in
+  a table.  A short descriptive paragraph, expanding a bit on what
+  we have now, is probably best.  The suggested table would find a
+  better home in in a paper dealing with the many questions beyond
+  response functions that come up in building a common data set.
 
 \item p.2 Fig.1: It might be worth plotting this on a vertical log
   scale. The real AIRS SRF’s have a long tail that is not adequately
   demonstrated in a linear vertical scale. The “significant overlap”
-  mentioned on p.1 was by design as a Nyquist sampled spectrum was
+  mentioned on p.~1 was by design as a Nyquist sampled spectrum was
   desired (as is IASI and CrIS) but there is additional significant
   overlap caused by the long-tail. These details should be briefly
   mentioned so the reader is not misled into thinking that AIRS can
@@ -108,9 +119,9 @@ the basis functions for our L1d ``idealized grating model''.
   note the Gaussian approximation does not have the long tails of
   the tabulated SRFs.  We've added a comment to this effect.  But we
   aren't proposing to use the approximation as an alternative to the
-  tabulated SRFS.  The applications are (1) reference truth for the
-  deconvolved radiances at a different spacing and resolving power,
-  used for understanding the deconvolution, and (2) basis functions
+  tabulated AIRS SRFS.  Our applications are reference truth for the
+  deconvolved radiances (where they are used at a different spacing
+  and higher resolving power than AIRS L1c), and as basis functions
   for the idealized grating model of section~4.
 
 \item p.2 line 25 r.h.s.: on the first uses of the $||r||_2$ it
@@ -150,7 +161,7 @@ the basis functions for our L1d ``idealized grating model''.
 
   One solution might be to pick an intermediate resolution for CrIS,
   for example 0.6 \wn\ in the MW, that roughly corresponds to the
-  AIRS effective resolution, and we've added a note to that effect.
+  AIRS resolving power, and we've added a note to that effect.  
   This is easy to do for both regular CrIS processing and our AIRS
   to CrIS translation.  In both cases we have an intermediate
   representation---sensor grid for CrIS and our deconvolution grid
@@ -214,21 +225,33 @@ the basis functions for our L1d ``idealized grating model''.
   spectra for remote sensing applications. IEEE
   Trans. Geosci. Remote Sens. v.38 p.169-183.
 
-  \reply: The short answer is that the deconvolution-based
-  translation is a two-step process, and the deconvolution is
-  independent of the final translation target.  The Gaussian basis
-  is used to convolve kcarta radiances in an attempt to get a rough
-  reference truth for the deconvolution; it is not actually used 
-  for either the deconvolution or subsequent reconvolution to CrIS
-  radiances.
+  \reply: The deconvolution-based translation is a two-step process:
+  (1) deconvolution from AIRS L1c channels to a regularly spaced
+  $0.1$~\wn\ grid spanning the AIRS channels, or an AIRS and CrIS
+  band intersection, followed by (2) a conventional convolution 
+  (via resampling or a zero-filled double Fourier transform) to the
+  CrIS user grid, followed by optional Hamming or other apodization.
+  So all AIRS channels are in fact available (in the sense of
+  contributing to the $0.1$~\wn\ grid) to produce a CrIS sinc
+  response function.
 
-  For what we called ``direct regression'' discussed in section 5,
-  we did try a one-step translation from AIRS to apodized CrIS,
-  taking advantage of the relatively limited span of the apodized
-  response functions.  If that had worked better we could invert the
-  Hamming apodization and get unapodized radiances that way.  We use
-  that technique in other contexts, for example to get unapodized
-  CrIS radiances from an apodized fast model.
+  For the regression of section 5, if we regress against unapodized
+  radiances and then apply apodization we get results very close to
+  regression against apodized radiances, and if we regress against
+  apodized radiances and apply a deapodization, we get results very
+  close to regression against unapodized radiances.  So for both
+  regular and principal component regression it doesn't seem to
+  matter if the target is apodized or unapodized CrIS radiances.
+
+  We have found an apodized target as suggested in your citation is
+  a powerful tool for doing fast transmittance radiative transfer
+  models---it was much easer to do the coefficient fitting with
+  apodized transmittances, and deapodize radiances as needed.
+  
+%  The Gaussian basis is used to convolve kcarta radiances in an
+%  attempt to get a rough reference truth for the deconvolution; it
+%  is not actually used for either the deconvolution or subsequent
+%  reconvolution to CrIS radiances.
 
 \item p.4 line 39-56 l.h.s.: this discussion adds confusion. It
   looks like the 49 set will be used for training and the 7377 is
@@ -257,20 +280,24 @@ the basis functions for our L1d ``idealized grating model''.
   deviation was relativly small.  The deconvolution is an imperfect
   process, so it seemed plausible that a correction might help.
 
-  We emphasize again that the Gaussian basis was used to convolve
-  kcarta radiances in an attempt to get at least a rough reference
-  truth for the deconvolution; it is not actually used for either
-  the deconvolution or subsequent reconvolution to CrIS radiances.
-  We tried a number of functions for this reference truth, including
-  the 0.1 cm-1 boxcar you suggest.  0.2 cm-1 gave slightly smaller
-  residuals than 0.1 cm-1, but these were still larger than with the
-  generalized Gaussian.  We don't go into this in the paper because
-  we believe there is nothing surprising about getting significant
-  imperfections from the deconvolution.  The interesting thing is
-  that most of this dissapears with reconvolution, leaving us with a
-  translation that works well in comparison with other approaches.
-  
-\item p.6 line 48-55 l.h.s. and p.8 line 52-55: For most
+  The Gaussian basis was used to convolve kcarta radiances to get
+  reference truth for the deconvolution; it is not actually used for
+  either the deconvolution or subsequent reconvolution to CrIS
+  radiances.  We did try a number of other functions for this
+  reference truth, including the 0.1 cm-1 boxcar you suggest.  As I
+  recall 0.2 cm-1 gave slightly smaller residuals, but both were
+  larger than for the generalized Gaussian.
+
+  Figure 5 shows two adjacent rows of the deconvolution transform,
+  $S_b^{-1}$.  This is applied to channel radiances $c$ to get
+  deconvolved radiances $r = S_b^{-1} c$ at the 0.1 cm-1 grid.  Each
+  deconvolution point is a linear combination of several AIRS
+  channels.  So it seems at least plausible that a generalized
+  Gaussian would work as basis functions for reference truth.
+
+% We are undoing the AIRS convolution, but only imperfectly.
+
+\item p.6 line 48-55 l.h.s.~and p.~8 line 52-55: For most
   applications the noise spectral correlation is something that
   needs to be specified.  Since you have used linear transformations
   you have potentially altered the amplitude of the random component
@@ -287,12 +314,36 @@ the basis functions for our L1d ``idealized grating model''.
   cannot be combined in a meaningful manner. This thought is tied to
   the comments given on p.3 line 45-50 r.h.s. above.
 
-  \reply: This is a good point, but a problem for any sounder 
-  to sounder translation.  I think the best we can do here is to
-  mention this and cite Barnet et al. 2000 again for this matter.
-  We could model the correlation and add correlated noise to the
-  CrIS radiances to better match the AIRS to CrIS translation, if
-  that seems desirable.  But that's a matter for future work.
+  \reply: The AIRS instrument does have some noise correlation,
+  mainly within modules.  The question of correlation becomes more
+  complex with the translation to L1c.  In contrast CrIS instrument
+  noise is largely uncorrelated.
+
+  The translation adds noise correlation to exactly the extent 
+  that it adds signal correlation.  This is characterized by the
+  transform matrix.  Sample rows are shown in figure 5b for the L1c
+  to L1d (idealized grating) transform, and sample matrices in the
+  regression section.  We don't have an explicit transform matrix
+  for the AIRS to CrIS translation but did check cross correlation
+  for translated data, staring from normally distributed simulated
+  AIRS noise at the AIRS NEdN spec.  The measured correlation matrix
+  looks like a slightly fuzzy version of a transform matrix.
+
+  The overall effect for the deconvolution-based translations is 
+  a slight spreading (across channels) of any correlation in the
+  original data.  This would be a problem for the translated data at
+  least to the extent it is a problem for the original AIRS data.
+  We have proposed adding noise to either AIRS or CrIS as needed for
+  a common product, and it should be possible to add correlations to
+  the CrIS noise to roughly match the AIRS.  But that's a matter for
+  future work.
+
+%   \reply: This is a good point, but a problem for any sounder 
+%   to sounder translation.  I think the best we can do here is to
+%   mention this and cite Barnet et al. 2000 again for this matter.
+%   We could model the correlation and add correlated noise to the
+%   CrIS radiances to better match the AIRS to CrIS translation, if
+%   that seems desirable.  But that's a matter for future work.
 
 \item p.6 line 47-48 r.h.s.: see comment for p.3 line 45-50 r.h.s. –
   this seems worthy of a bit more discussion given that this
