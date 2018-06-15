@@ -29,8 +29,6 @@ to incorporate or respond to all suggestions and questions.  In the
 remainder of this section we summarize the main changes we've made.
 Section~2 consists of reviewer's comments followed by our responses.
 
-% Most other changes were as requested by the reviewers.  
-
 The discussion of reference truth for the deconvolution (starting on
 page 3 line 30 RHS of the original submission) was not clear.  We
 have updated the labels in figures 3 and 4 from ``gauss'' to ``decon
@@ -70,10 +68,10 @@ using both the source and target response functions.
   (after bit-trim mask upgrade, depending how much detail you want
   to cover here.
 
-  \reply: We agree this info should be given, but in section 3 the
-  (AIRS to CrIS translation) rather than the introduction.  There is
-  a limit to what belongs in the introduction---for example we do
-  not get into other significant details, such as AIRS L1b vs L1c,
+  \reply: We agree this info should be given, but in section 3 (the
+  AIRS to CrIS translation) rather than the introduction.  There is
+  a limit to what fits in the introduction---for example we do not
+  get into other significant details, such as AIRS L1b vs L1c,
   there.  The key idea of the paper is that we can get a modest
   resolution enhancement from the AIRS deconvolution and we do say
   that in the introduction.  As it turns out this is good enough for
@@ -317,33 +315,52 @@ using both the source and target response functions.
   \reply: The AIRS instrument does have some noise correlation,
   mainly within modules.  The question of correlation becomes more
   complex with the translation to L1c.  In contrast CrIS instrument
-  noise is largely uncorrelated.
+  noise is largely uncorrelated.  
 
-  The translation adds noise correlation to exactly the extent 
-  that it adds signal correlation.  This is characterized by the
-  transform matrix.  Sample rows are shown in figure 5b for the L1c
-  to L1d (idealized grating) transform, and sample matrices in the
-  regression section.  We don't have an explicit transform matrix
-  for the AIRS to CrIS translation but did check cross correlation
-  for translated data, staring from normally distributed simulated
-  AIRS noise at the AIRS NEdN spec.  The measured correlation matrix
-  looks like a slightly fuzzy version of a transform matrix.
+  In the paper we give reasonable estimates of NEdN for the AIRS to
+  CrIS translation, assuming normally distributed AIRS noise.  These
+  estimates (which are measured noise of the translation) do take
+  into account correlations arising from the translation.  The
+  translation to apodized CrIS reduces NEdN significantly for all 3
+  bands.  Translation to unapodized CrIS also reduces NEdN for the
+  MW and SW bands.  For the LW NEdN is similar up to about 900 cm-1
+  and then a little higher past that.
 
-  The overall effect for the deconvolution-based translations is 
-  a slight spreading (across channels) of any correlation in the
-  original data.  This would be a problem for the translated data at
-  least to the extent it is a problem for the original AIRS data.
-  We have proposed adding noise to either AIRS or CrIS as needed for
-  a common product, and it should be possible to add correlations to
-  the CrIS noise to roughly match the AIRS.  But that's a matter for
-  future work.
+  The effect of the deconvolution-based translation is similar to a
+  mild apodization, and so should have a generally similar effect on
+  the correlated component of AIRS noise.  Since we are reducing
+  NEdN in the translation (except for the LW unapodized case), it
+  seems unlikely we are increasing problems with the correlated
+  component, except perhaps relative to the reduced NEdN.  But to
+  prove that we'd need a plausible model of L1c noise correlation,
+  which we do not have at the present time.
 
-%   \reply: This is a good point, but a problem for any sounder 
-%   to sounder translation.  I think the best we can do here is to
-%   mention this and cite Barnet et al. 2000 again for this matter.
-%   We could model the correlation and add correlated noise to the
-%   CrIS radiances to better match the AIRS to CrIS translation, if
-%   that seems desirable.  But that's a matter for future work.
+%   So the problem of correlation in the translation is likely no
+%   worse that the problem of correlation in the original data.
+
+%   \reply: The AIRS instrument does have some noise correlation,
+%   mainly within modules.  The question of correlation becomes more
+%   complex with the translation to L1c.  In contrast CrIS instrument
+%   noise is largely uncorrelated.
+% 
+%   The translation adds noise correlation to exactly the extent 
+%   that it adds signal correlation.  This is characterized by the
+%   transform matrix.  Sample rows are shown in figure 5b for the L1c
+%   to L1d (idealized grating) transform, and sample matrices in the
+%   regression section.  We don't have an explicit transform matrix
+%   for the AIRS to CrIS translation but did check cross correlation
+%   for translated data, staring from normally distributed simulated
+%   AIRS noise at the AIRS NEdN spec.  The measured correlation matrix
+%   looks like a slightly fuzzy version of a transform matrix.
+% 
+%   The overall effect for the deconvolution-based translations is 
+%   a slight spreading (across channels) of any correlation in the
+%   original data.  This would be a problem for the translated data at
+%   least to the extent it is a problem for the original AIRS data.
+%   We have proposed adding noise to either AIRS or CrIS as needed for
+%   a common product, and it should be possible to add correlations to
+%   the CrIS noise to roughly match the AIRS.  But that's a matter for
+%   future work.
 
 \item p.6 line 47-48 r.h.s.: see comment for p.3 line 45-50 r.h.s. –
   this seems worthy of a bit more discussion given that this
@@ -371,24 +388,34 @@ using both the source and target response functions.
   function has significant (1\%) side-lobes that diminish somewhat
   slowly (see Barnet 2000 for discussion).
 
-  \reply: Some related applications do start from conventional
+  \reply: Some non-trivial algorithms do start from conventional
   interpolation of AIRS data.  For example the JPL algorithm for
   small frequency shifts uses a cubic spline augmented with a
   statistical fit for the derivatives near the initial channel
-  frequencies.  And in the past we have used spline interpolation to
-  a regular intermediate grid before reconvolution via the cosine
-  transform; that is, we used spline interpolation in exactly the
-  same way we use deconvolution here.
+  frequencies.  This works better than deconvolution followed by
+  reconvolution to a shifted grid, but only for the very small
+  shifts characteristic of AIRS frequency drift.
+
+  The main point of the interpolation section is the significance 
+  of taking both source and target response function into account.
+  Residuals for spline interpolation alone are shown to be larger
+  that for spline interpolation to an intermediate grid followed by
+  convolution to the CrIS user grid, and residuals for both are
+  significantly larger than for AIRS deconvolution followed by the
+  CrIS convolution.  Before switching to the deconvolution based
+  translation we sometimes did use spline interpolation to a regular
+  intermediate grid before reconvolution to the CrIS, thought this
+  was never really satisfactory.  Our take on the relevance of all
+  this was to demote the interpolation section to an appendix.
   
-  The ``L1d basis'' was our take on the idealized SRF you suggest.
+  The ``L1d basis'' is our version of the idealized SRF you suggest.
   It started out as an attempt at finding an approximate, relatively
   simple model for the AIRS SRFs.  We agree this is an interesting
-  alternative as the target for a common data set.  A key point of
-  the paper that the AIRS deconvolution could be useful for more
-  than one final target.
-
-% It might be hard to convince the interferometric community that
-%  something like that is desireable as a common target, though.
+  alternative to some kind of intermediate CrIS resolution as the
+  target for a common data set.  A key point of the paper that the
+  AIRS deconvolution is useful for more than one final target; from
+  that point of view the intermediate CrIS resolution and L1d basis
+  are just sample applications.
 
 \end{itemize}
 \end{document}

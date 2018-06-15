@@ -24,19 +24,19 @@
 
 \section{General Remarks}
 
-We thank the reviewers for their thoughtful comments, and have 
-tried to incorporate all suggestions and respond to all questions.
-Section~2 below includes reviewer's comments followed by our
-responses.
+We thank the reviewers for their thoughtful comments and have tried
+to incorporate or respond to all suggestions and questions.  In the
+remainder of this section we summarize the main changes we've made.
+Section~2 consists of reviewer's comments followed by our responses.
 
 The discussion of reference truth for the deconvolution (starting on
 page 3 line 30 RHS of the original submission) was not clear.  We
 have updated the labels in figures 3 and 4 from ``gauss'' to ``decon
 ref'' to better indicate we are showing the deconvolution reference
 truth.  We updated the associated discussion to emphasize that the
-deconvolution reference truth is simply a check of the deconvolution
-step---we don't need it to do the deconvolution or for subsequent
-reconvolution to CrIS or other targets.
+deconvolution reference truth is intended as validation of the
+deconvolution---we don't need it to do the deconvolution or for
+subsequent reconvolution to CrIS or other targets.
 
 We corrected the relationship of standard deviation and full-width
 half-max (FWHM), $s=\fwhm / (2\sqrt{2\ln 2})$ in the original
@@ -44,8 +44,17 @@ submission, to $s=\fwhm / (2\sqrt{2}\,(\ln 2)^{1/(2p)})$.  The
 latter is correct for the generalized Gaussian.  The difference is
 small for the range of values $p$ we used.  As noted above this does
 not effect the accuracy of the translations, just (to a very small
-degree) the consistency of reference truth for the deconvolution and
-the basis functions for our L1d ``idealized grating model''.
+degree) reference truth for the deconvolution and the basis
+functions for our L1d ``idealized grating model''.
+
+The section on regression translation has been revised and
+shortened.  We dropped the paragraph on adding noise since we don't
+show those results.  The direct and principal component regression
+matrices are now shown only for the MW, enough for an overview.  
+The regression matrices are are now for apodized radiance, matching
+the residuals.  The interpolation section in the appendix has been
+revised to show apodized residuals and to emphasize the advantage of
+using both the source and target response functions.
 
 \section{Response to Comments}
 

@@ -538,25 +538,42 @@ NEdT (for the first fitting profile), as we show next.
 
 We can give a good estimate of noise equivalent differential
 radiance (NEdN) for the translation by adding noise with a normal
-distribution at the {\airs} NEdN to blackbody radiance at 280K and
-translating this to {\cris}.  Figure \ref{nedn} shows the measured
+distribution at the {\airs} NEdN to blackbody radiance at 280K,
+translating this to {\cris}, and measuring the noise of the
+translation.  Figure \ref{nedn} shows the measured
 {\airs}-to-{\cris} NEdN together with {\airs} and {\cris} NEdN for
 both apodized and unapodized radiances.  The {\airs} and {\cris}
 values are averages over a full day, 4 Dec 2016.  NEdN for the L1c
 synthetic channels is interpolated.  The first subplot of figure
 \ref{nedt} is NEdT for apodized radiances, for fitting profile 1.
+The translation to apodized {\cris} reduces NEdN significantly for
+all three bands.  Translation to unapodized {\cris} reduces NEdN
+slightly for the MW and SW bands, while LW NEdN is similar up to
+about 900 cm-1 and then a little higher past that.
 
-Such modeling with normally distributed noise does not take into
-account correlation in the {\airs} noise.  The sources of such noise
-might be vibration, radiation, or any common-mode effect.  Details
-concerning correlation sources are beyond the scope of this paper,
-except to note that noise for L1c channels with more than one L1b
-parent may not be well-defined.  In practice this is a relatively
-small set that we may want to use with caution.
+% correlation for L1c synthetic channels, and channels with more
+% than one L1b parent, may not be well-defined.
 
-% This is done repeatedly and the noise after translation is measured.
-% As a check, noise before translation is also measured and compared
-% with the {\airs} value.
+Our modeling with normally distributed noise does not take into
+account potential correlation of the {\airs} noise.  The AIRS L1b
+data does have some noise correlation, mainly within modules.  The
+question of correlation becomes more complex with the translation to
+L1c.  In contrast {\cris} instrument noise is largely uncorrelated.
+The effect of the deconvolution-based translation is similar to a
+mild apodization, and so should have a generally similar effect on
+the correlated component of {\airs} noise.  Since we are reducing
+NEdN in the translation (except for the LW unapodized case), it
+seems unlikely we are increasing problems with the correlated
+component, except perhaps relative to the reduced NEdN.  But to
+prove that we’d need a plausible model of L1c noise correlation,
+which we do not have at the present time.
+
+% The sources of such noise might be vibration, radiation, or any
+% common-mode effect.  Details concerning correlation sources are
+% beyond the scope of this paper, except to note that noise for L1c
+% channels with more than one L1b parent may not be well-defined.  In
+% practice this is a relatively small set that we may want to use with
+% caution.
 
 The {\airs} channel-to-channel NEdN variation is significant; in the
 upper half of the LW and most of the MW it is of the same order as
@@ -572,29 +589,27 @@ common record we might want to add noise on a channel-by-channel
 basis to whichever NEdN value---{\airs} {\cris} or true {\cris}---is
 lower.  NEdN for the combined record would then be max of the
 {\airs} {\cris} and true {\cris} NEdN values, as shown in the second
-subplot of figure \ref{nedt}.  In the same spirit we could add
-{\airs} correlation, to the extent that this is well-defined.
+subplot of figure \ref{nedt}.
 
 In addition to the standard resolution described above, in December
 2014 {\cris} switched to a high resolution mode with a nominal
 {\opd} of $0.8$~cm for all three bands, while continuing to support
 the standard resolution product.  {\airs} does not have the
-resolving power to properly support a translation for the {\cris}
-high resolution MW and SW bands, and the residuals for that
-translation are relatively large.  For a long-term common record one
-solution might be a compromise {\cris} resolution of $0.6$~cm for
-the MW and $0.4$~cm for the SW, to roughly match the {\airs}
-resolving power.
+resolving power to properly support a translation to the {\cris}
+high resolution MW and SW bands---the residuals for that case are
+relatively large.  One solution for a common record might be a
+compromise {\cris} resolution of $0.6$~cm for the MW and $0.4$~cm
+for the SW, to roughly match the {\airs} resolving power.
 
 As an alternative, in the next section we consider translation from
-{\airs} to an idealized grating model.  This requires a translation
-from both {\airs} and {\cris}, but so would the compromise {\cris}
-resolutions.  The {\cris} high resolution mode allows for a {\cris}
-to {\airs} translation, as described in \cite{git:decon}.  The
-residuals are larger in the LW than for our translation from {\airs}
-to {\cris}, but may be acceptable for some applications.  A {\cris}
-translation to the proposed idealized grating model should work at
-least as well.
+{\airs} to an idealized grating model.  For use as a common record
+this would require translations from both {\airs} and {\cris}.  
+The {\cris} high resolution mode allows for a {\cris} to {\airs}
+translation, as described in \cite{git:decon}.  The residuals are
+larger in the LW than for our translation from {\airs} to {\cris},
+but may be acceptable for some applications.  A {\cris} translation
+to the proposed idealized grating model should work at least as
+well.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
