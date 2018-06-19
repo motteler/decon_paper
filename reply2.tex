@@ -96,6 +96,20 @@ using both the source and target response functions.
     function of frequency, and the jump at 2310~{\wn} is one of
     several such discontinuities.  
 
+    Of course then you can ask why should a change in the channel
+    spacing cause ringing or overshoot.  We see this at band edges
+    and bigger channel gaps, too---any time the L1c channels are not
+    regularly spaced.  This is simply a limitation of the
+    deconvolution.  We start with channel radiances and our
+    tabulated SRFs $S_b$ and deconvolve $c$ by solving $S_b r = c$
+    for $r$.  Since $n < m$, the system is underdetermined, and we
+    might get some $r$ that we don't want.  We tried some different
+    smoothing constraints and found the Moore-Penrose property of
+    giving $r_0$ such that $||r_0||_2 \le ||r_j||_2$ for all $r_j$
+    satisfying $S_b r_j = c$ worked best.  There are still some
+    problems but these are reduced significantly by the subsequent
+    reconvolution, and so probably acceptable for our application.
+
   \item 4. The AIRS L1c channel spacing and resolving power R is
     around 1200 in Fig 2 (after deconvolution), why the direct
     convolution choose a resolving power of 2000 instead of 1200?
@@ -117,7 +131,7 @@ using both the source and target response functions.
     the AIRS to CrIS translation---it is used as a measure to see
     how well the deconvolution step alone works.  The deconvolution
     reference truth for a resolving power of 1200 is a very close
-    match to the original AIRS radiances.
+    match to the AIRS radiances before deconvolution.
 
   \item 5. Page 4 right column, line 46, ``The constant or DC bias
     is...''  What is DC?
@@ -137,21 +151,20 @@ using both the source and target response functions.
     understand the sentence: ``This is done repeatedly and the noise
     after translation is measured''.
 
-    \reply: in outline, the steps are (1) generate ``true AIRS''
-    spectra without noise, (2) for each spectra from step (1)
-    generate a set of $n$ noise vectors at the AIRS NEdN spec and
-    add them to the noise-free spectra, giving a set of $n$ noisy
-    spectra, (3) translate this set from AIRS to CrIS, and (4)
-    measure the standard deviation of the translation.  As a check
-    we also measure the standard deviation before the translation,
-    to verify that it agrees with our AIRS NEdN spec.
+    \reply: We modified the sentence to say ``We can give a good
+    estimate of noise equivalent differential radiance (NEdN) for
+    the translation by adding noise with a normal distribution at
+    the {\airs} NEdN to blackbody radiance at 280K, translating this
+    to {\cris}, and measuring the noise of the translation.''
 
-    We dropped the quoted sentence and now just say
-    ``We can give a good estimate of noise equivalent differential
-    radiance (NEdN) for the translation by adding noise with a
-    normal distribution at the {\airs} NEdN to blackbody radiance at
-    280K and translating this to {\cris},'' without getting into
-    details of the implementation.
+    For a little more detail, the steps are (1) generate blackbody
+    radiance at 280 K, at the AIRS channel set, (2) generate a set
+    of $n$ normally distributed noise vectors at the AIRS NEdN spec
+    and add these to the noise-free 280 K spectra, giving a set of
+    $n$ noisy spectra, (3) translate this set from AIRS to CrIS, and
+    (4) measure the standard deviation of the translation.  As a
+    sanity check we also measure the standard deviation before the
+    translation, to verify that it agrees with our AIRS NEdN spec.
 
 \end{itemize}
 

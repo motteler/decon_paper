@@ -233,6 +233,14 @@ using both the source and target response functions.
   contributing to the $0.1$~\wn\ grid) to produce a CrIS sinc
   response function.
 
+  The deconvolution is done by starting with is real measured AIRS
+  SRFs tabulated at a $0.1~\wn$ grid.  This is our matrix $S_b$.  We
+  invert this and apply it as a linear transform $r = S_b^{-1} c$ to
+  get deconvolved radiances at the $0.1~\wn$ grid.  Both $S_b$ and 
+  $S_b^{-1}$ are banded transforms, and this is the locality that
+  matters for the deconvolution.  Figure 5a shows some sample rows of
+  $S_b^{-1}$.
+
   For the regression of section 5, if we regress against unapodized
   radiances and then apply apodization we get results very close to
   regression against apodized radiances, and if we regress against
@@ -279,8 +287,8 @@ using both the source and target response functions.
   process, so it seemed plausible that a correction might help.
 
   The Gaussian basis was used to convolve kcarta radiances to get
-  reference truth for the deconvolution; it is not actually used for
-  either the deconvolution or subsequent reconvolution to CrIS
+  reference truth for the deconvolution; it is not actually used 
+  for either the deconvolution or subsequent reconvolution to CrIS
   radiances.  We did try a number of other functions for this
   reference truth, including the 0.1 cm-1 boxcar you suggest.  As I
   recall 0.2 cm-1 gave slightly smaller residuals, but both were
@@ -288,10 +296,11 @@ using both the source and target response functions.
 
   Figure 5 shows two adjacent rows of the deconvolution transform,
   $S_b^{-1}$.  This is applied to channel radiances $c$ to get
-  deconvolved radiances $r = S_b^{-1} c$ at the 0.1 cm-1 grid.  Each
-  deconvolution point is a linear combination of several AIRS
+  deconvolved radiances $r = S_b^{-1} c$ at the 0.1 cm-1 grid.  
+  Each deconvolution point is a linear combination of several AIRS
   channels.  So it seems at least plausible that a generalized
-  Gaussian would work as basis functions for reference truth.
+  Gaussian would work as a basis function for the deconvoltuion
+  reference truth.
 
 % We are undoing the AIRS convolution, but only imperfectly.
 
@@ -312,10 +321,11 @@ using both the source and target response functions.
   cannot be combined in a meaningful manner. This thought is tied to
   the comments given on p.3 line 45-50 r.h.s. above.
 
-  \reply: The AIRS instrument does have some noise correlation,
+  \reply: We've expanded the subsection on NEdN with the following
+  comments.  The AIRS instrument does have some noise correlation,
   mainly within modules.  The question of correlation becomes more
   complex with the translation to L1c.  In contrast CrIS instrument
-  noise is largely uncorrelated.  
+  noise is largely uncorrelated.
 
   In the paper we give reasonable estimates of NEdN for the AIRS to
   CrIS translation, assuming normally distributed AIRS noise.  These
@@ -415,7 +425,7 @@ using both the source and target response functions.
   target for a common data set.  A key point of the paper that the
   AIRS deconvolution is useful for more than one final target; from
   that point of view the intermediate CrIS resolution and L1d basis
-  are just sample applications.
+  are sample applications.
 
 \end{itemize}
 \end{document}

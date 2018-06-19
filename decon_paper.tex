@@ -210,8 +210,8 @@ S_b^{-1} c$.  This gives a minimal solution, in the sense that
 $||r_0||_2 \le ||r_j||_2$ for all $r_j$ satisfying $S_b r_j = c$.
 The condition number for $S_b$ as built from the L1c channels is
 $||S_b||_2||S_b^{-1}||_2 = 115$, which is tolerable.\footnote{The
-  notation $||S||_2$ is the $L^2$ norm of $S$, and is simply
-  Euclidian distance for vectors.\cite{wiki:norm}.}
+  notation $||S||_2$ is the $L^2$ norm of $S$, which is Euclidian
+  distance for vectors.\cite{wiki:norm}.}
 
 Although our main goal is to reconvolve the deconvolved {\airs}
 radiances to the {\cris} or other user grids, as a check we first
@@ -411,17 +411,20 @@ radiance from a set of 7377 all-sky (clear and cloudy) AIRS profiles
 spanning several consecutive days as our dependent set.  This set is
 more correlated; reducing the reconstruction residual to 0.02~K
 requires 260 left-singular vectors.  We did try splitting the 7377
-profile set into dependent and independent subsets.  Residuals from
-this larger independent set were consistently smaller than from the
-49-profile set, suggesting the latter makes for a stricter test.
+profile set into dependent and independent subsets.  Residuals for
+the independent set from this split were consistently smaller than
+from the 49-profile set, suggesting the latter makes for a stricter
+test.
+
+% and all residuals shown here are from the 49-profile set.
 
 Figures \ref{diffLW}, \ref{diffMW}, and \ref{diffSW} show the mean
 and standard deviation of true {\cris} minus {\airs} {\cris} for the
 49 fitting profiles, for each {\cris} band.  The Hamming apodization
 gives a significant reduction in the residuals.  Figure
 \ref{meanAll} summarizes results all three bands, for apodized
-radiances.  The constant or DC bias is very close to zero for the
-apodized residuals.  Both the apodized and unapodized residuals are
+radiances.  The constant bias is very close to zero for the apodized
+residuals.  Both the apodized and unapodized residuals are
 significantly less than the corresponding residuals from
 conventional interpolation, as shown in the appendix.
 
@@ -463,11 +466,12 @@ from figure \ref{statLW}.  The $a$ weights are very close to 1 and
 the $b$ weight to the bias.  Figures \ref{statMW} and \ref{statSW}
 show the linear correction giving a similar improvement in the MW
 and a small improvement in the SW, where the quadratic correction is
-noticably worse.  Figure \ref{statAll1} shows the residuals for the
-apodized linear correction for all three bands.  The residuals are
-significantly reduced in comparison with the apodized uncorrected
-radiances shown in figure \ref{meanAll} and are generally less than
-NEdT (for the first fitting profile), as we show next.
+noticably worse.  Figure \ref{statAll1} summarizes the residuals for
+the apodized linear correction for all three bands.  The residuals
+are significantly reduced in comparison with the apodized
+uncorrected radiances shown in figure \ref{meanAll} and are
+generally less than NEdT (for the first fitting profile), as we show
+next.
 
 \begin{figure} % source a2cris_regr2.m
   \centering
@@ -544,12 +548,12 @@ translation.  Figure \ref{nedn} shows the measured
 {\airs}-to-{\cris} NEdN together with {\airs} and {\cris} NEdN for
 both apodized and unapodized radiances.  The {\airs} and {\cris}
 values are averages over a full day, 4 Dec 2016.  NEdN for the L1c
-synthetic channels is interpolated.  The first subplot of figure
-\ref{nedt} is NEdT for apodized radiances, for fitting profile 1.
-The translation to apodized {\cris} reduces NEdN significantly for
-all three bands.  Translation to unapodized {\cris} reduces NEdN
-slightly for the MW and SW bands, while LW NEdN is similar up to
-about 900 cm-1 and then a little higher past that.
+synthetic channels is interpolated.  The translation to apodized
+{\cris} reduces NEdN significantly for all three bands.  Translation
+to unapodized {\cris} reduces NEdN slightly for the MW and SW bands,
+while LW NEdN is similar up to about 900 cm-1 and then a little
+higher past that.  The first subplot of figure \ref{nedt} is NEdT
+for apodized radiances, for fitting profile 1.
 
 % correlation for L1c synthetic channels, and channels with more
 % than one L1b parent, may not be well-defined.
@@ -565,7 +569,7 @@ the correlated component of {\airs} noise.  Since we are reducing
 NEdN in the translation (except for the LW unapodized case), it
 seems unlikely we are increasing problems with the correlated
 component, except perhaps relative to the reduced NEdN.  But to
-prove that we’d need a plausible model of L1c noise correlation,
+prove that we would need a plausible model of L1c noise correlation,
 which we do not have at the present time.
 
 % The sources of such noise might be vibration, radiation, or any
@@ -599,17 +603,9 @@ resolving power to properly support a translation to the {\cris}
 high resolution MW and SW bands---the residuals for that case are
 relatively large.  One solution for a common record might be a
 compromise {\cris} resolution of $0.6$~cm for the MW and $0.4$~cm
-for the SW, to roughly match the {\airs} resolving power.
-
-As an alternative, in the next section we consider translation from
-{\airs} to an idealized grating model.  For use as a common record
-this would require translations from both {\airs} and {\cris}.  
-The {\cris} high resolution mode allows for a {\cris} to {\airs}
-translation, as described in \cite{git:decon}.  The residuals are
-larger in the LW than for our translation from {\airs} to {\cris},
-but may be acceptable for some applications.  A {\cris} translation
-to the proposed idealized grating model should work at least as
-well.
+for the SW, to roughly match the {\airs} resolving power.  As an
+alternative, in the next section we consider translation from
+{\airs} to an idealized grating model.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
@@ -679,6 +675,20 @@ a linear correction.  Residuals for L1d with a resolving power of
     translation minus true L1d, for a resolving power of 700.}
   \label{L1d700s}
 \end{figure}
+
+To use the L1d basis as a common record requires translations from
+both {\airs} and {\cris}.  Our focus here is primarily translations
+from {\airs}, and details of a {\cris} to L1d translation are beyond
+the scope of this paper.  But we note that the {\cris} high
+resolution mode allows for a {\cris} to {\airs} translation, as
+described in \cite{git:decon}.  The residuals are larger in the LW
+than for our translation from {\airs} to {\cris}, but may be
+acceptable for some applications.  The regularity and definable
+resolving power of the L1d basis should allow a translation from
+{\cris} to work at least as well.
+
+% to the proposed L1d basis to work at least as well as the {\cris}
+% to {\airs} translation.
 
 %---------------------------------------------------------------------
 % \FloatBarrier
@@ -894,16 +904,17 @@ We want to measure the correlation of a set of radiances.  One such
 measure is dimension of a spanning set.  For an approximation we use
 the basis size needed to get reconstruction residuals below some
 fixed threshold.  Let $r_0$ be an $m \times n$ array of radiances,
-one row per channel and one column per observation.  Let $r_1 = U
-S\,V^T$ be a singular value decomposition with singular values in
-descending order and $U_k$ the first $k$ columns of $U$.  Let $r_k =
-U_k U_k^T r_0$; then $r_k \approx r_0$.  The approximation improves
-as $k$ increases and becomes exact for some $k <= m$.  This is the
-analog of principal component filtering using left-singular rather
-than eigenvectors and is useful as a form of compression when $k$ is
-small relative to $n$.  For that case we save $U_k$ and $U_k^T r_0$
-separately.  Applications include compression of IASI radiance data
-and the {\kcarta} absorption coefficient database.
+one row per channel and one column per observation.  Let $r_0 = U
+S\,V^T$ be the singular value decomposition of $r_0$ with singular
+values in descending order, and $U_k$ the first $k$ columns of $U$.
+Let $r_k = U_k U_k^T r_0$; then $r_k \approx r_0$.  The
+approximation improves as $k$ increases and becomes exact for some
+$k <= m$.  This is the analog of principal component filtering using
+left-singular rather than eigenvectors and is useful as a form of
+compression when $k$ is small relative to $m$.  For that case we
+save $U_k$ and $U_k^T r_0$ separately.  Applications include
+compression of IASI radiance data and the {\kcarta} absorption
+coefficient database.
 
 We use a threshold for equivalence that is relevant for our
 applications.  Let $B^{-1}$ be the inverse Planck function and
